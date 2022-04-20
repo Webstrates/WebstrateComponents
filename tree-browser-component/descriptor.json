@@ -6,7 +6,7 @@
         "/wpm_js_libs/?raw #material-design-icons",
         "/wpm_js_libs/?raw #CaviDraggableHTML5",
         "/wpm_js_libs/?raw #CaviTouch",
-        "/wpm_common/?raw #UUIDGenerator",
+        "/wpm_js_libs/?raw #UUIDGenerator",
         "#WebstrateComponents_Tools",
         "#wsc-icon-registry",
         "/codestrates-repos/?raw #EventSystem"
