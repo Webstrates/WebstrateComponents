@@ -24,7 +24,8 @@ window.WSIconProvider = class WSIconProvider {
             "webstrates:logo",
             "webstrates:wpm-package-open",
             "webstrates:wpm-package-closed",
-            "webstrates:cauldron"
+            "webstrates:cauldron",
+            "webstrates:varv"
         ];
     }
     
@@ -35,7 +36,7 @@ window.WSIconProvider = class WSIconProvider {
     createIcon(iconIdentifier) {
             let icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             let link = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-            link.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#'+iconIdentifier.replace(/webstrates:/g, ''));
+            link.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#'+iconIdentifier.replace(/webstrates:/g, '')+"-icon");
             icon.appendChild(link);
             return icon;
     }

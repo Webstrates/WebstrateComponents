@@ -61,6 +61,8 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
 
         if (mimeType==="wpm/descriptor"){
             return IconRegistry.createIcon("mdc:list_alt");
+        } else if (mimeType==="text/varv"){
+            return IconRegistry.createIcon("webstrates:varv");
         }
         
         return null;

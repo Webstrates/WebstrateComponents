@@ -187,6 +187,8 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
 
         if (mimeType==="wpm/descriptor"){
             return IconRegistry.createIcon("mdc:list_alt");
+        } else if (mimeType==="text/varv"){
+            return IconRegistry.createIcon("webstrates:varv");
         }
         
         return null;
@@ -389,7 +391,8 @@ window.WSIconProvider = class WSIconProvider {
             "webstrates:logo",
             "webstrates:wpm-package-open",
             "webstrates:wpm-package-closed",
-            "webstrates:cauldron"
+            "webstrates:cauldron",
+            "webstrates:varv"
         ];
     }
     
@@ -400,7 +403,7 @@ window.WSIconProvider = class WSIconProvider {
     createIcon(iconIdentifier) {
             let icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             let link = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-            link.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#'+iconIdentifier.replace(/webstrates:/g, ''));
+            link.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#'+iconIdentifier.replace(/webstrates:/g, '')+"-icon");
             icon.appendChild(link);
             return icon;
     }
@@ -413,7 +416,7 @@ IconRegistry.registerProvider(new WSIconProvider());
                 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 595.3 841.9" enable-background="new 0 0 595.3 841.9" xml:space="preserve">
-    <symbol id="logo" viewBox="0 0 265.000000 265.000000" preserveAspectRatio="xMidYMid meet">
+    <symbol id="logo-icon" viewBox="0 0 265.000000 265.000000" preserveAspectRatio="xMidYMid meet">
         <!-- License:
             Copyright (c) 2020, 2021 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
             Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
@@ -446,7 +449,7 @@ IconRegistry.registerProvider(new WSIconProvider());
     154 -27z"/>
     </g>
     </symbol>
-    <symbol id="wpm-package-open" viewBox="0 0 195 195" enable-background="new 0 0 195 195" xml:space="preserve">
+    <symbol id="wpm-package-open-icon" viewBox="0 0 195 195" enable-background="new 0 0 195 195" xml:space="preserve">
         <!-- License:
             Copyright (c) 2020, 2021 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
             Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
@@ -491,7 +494,7 @@ IconRegistry.registerProvider(new WSIconProvider());
                 <polygon fill="#A67C52" points="83.6,72.2 163.2,51.3 193.2,81.2 111.8,112.5 	"/>
             </g>
     </symbol>
-    <symbol id="wpm-package-closed" viewBox="0 0 195 195" enable-background="new 0 0 195 195" xml:space="preserve">
+    <symbol id="wpm-package-closed-icon" viewBox="0 0 195 195" enable-background="new 0 0 195 195" xml:space="preserve">
         <!-- License:
             Copyright (c) 2020, 2021 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
             Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
@@ -531,7 +534,7 @@ IconRegistry.registerProvider(new WSIconProvider());
                 </g>
         </g>
     </symbol>
-    <symbol id="cauldron" viewBox="0 0 121.1 121.1" enable-background="new 0 0 121.1 121.1" xml:space="preserve">
+    <symbol id="cauldron-icon" viewBox="0 0 121.1 121.1" enable-background="new 0 0 121.1 121.1" xml:space="preserve">
         <!-- License:
             Copyright (c) 2020, 2021 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
             Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
@@ -592,6 +595,7 @@ IconRegistry.registerProvider(new WSIconProvider());
         <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M36.2,19.1C24.5,7.8,12.7,7.8,12.7,7.8"/>
         <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M40.2,13.1C28.8,1,12.7,1,12.7,1"/>
     </symbol>
+    <symbol id="varv-icon" viewBox="0 0 567 567"><path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="50" d="M39 56h503M6 147h503M95 238h472M26 329h416M1 420h503M39 511h485"/></symbol>    
 </svg>
 
             </div>
