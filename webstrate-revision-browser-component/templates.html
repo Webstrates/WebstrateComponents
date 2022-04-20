@@ -1,0 +1,76 @@
+<template id="revision-browser-base">
+    <div class="revision-browser-base">
+
+        <!-- Selector List -->
+        <div class="revision-browser-scrollable">
+            <div>
+                <label class="mdc-text-field mdc-text-field--filled revision-input-spinner" data-mdc-auto-init="MDCTextField">
+                    <span class="mdc-text-field__ripple"></span>
+                    <input type="number" min="1" class="mdc-text-field__input revisionSelector" value="0">
+                    <span class="mdc-floating-label">Browse revision</span>
+                    <span class="mdc-line-ripple"></span>                    
+                </label>
+            </div>
+            <ul class="mdc-list mdc-list--two-line" data-mdc-auto-init="MDCList">
+                <!-- entries -->
+            </ul>
+        </div>
+        <div class="mdc-card revision_framecontainer">
+            <!-- Preview UI card-->
+        </div>
+    </div>    
+</template>
+
+<template id="revisionBrowserSelfItem">
+    <li class="mdc-list-item" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text revision-name">&lt;Current Revision&gt;
+            </span>
+            <span class="mdc-list-item__secondary-text revision-subtext">Secondary text</span>
+        </span>
+    </li>
+</template>
+
+<template id="revisionBrowserListItem">
+    <li class="mdc-list-item" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text revision-name">Two-line item
+            </span>
+            <span class="mdc-list-item__secondary-text revision-subtext">Secondary text</span>
+        </span>
+    </li>
+</template>
+
+<template id="revisionBrowserPresentationCard">
+    <div class="mdc-card">
+        <div class="revision-card__primary">
+            <h2 class="mdc-typography mdc-typography--headline6 revision-name">The Title</h2>
+            <h3 class="mdc-typography mdc-typography--subtitle2 revision-author">by</h3>
+        </div>
+        <div class="revision-framescaler mdc-elevation--z3">
+            <iframe class="mdc-card__media"></iframe>
+        </div>
+        <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+                <button class="mdc-button mdc-card__action mdc-card__action--button deleteButton" data-mdc-auto-init="MDCRipple">Delete<span class="mdc-button__ripple"></span></button>
+                <button class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button restoreButton" data-mdc-auto-init="MDCRipple">Restore<span class="mdc-button__ripple"></span></button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="revisionBrowserTaggingCard">
+    <div class="mdc-card">
+        <div class="revision-card__primary">
+            <h2 class="mdc-typography mdc-typography--headline6 revision-name">Tags and Revisions</h2>
+            <h3 class="mdc-typography mdc-typography--subtitle2 revision-author">Store a tagged revision of the current webstrate - restore it from the list later</h3>
+        </div>
+        <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+                <button class="mdc-button mdc-button--raised mdc-card__action mdc-card__action--button tagButton" data-mdc-auto-init="MDCRipple">Tag this<span class="mdc-button__ripple"></span></button>
+            </div>
+        </div>
+    </div>
+</template>

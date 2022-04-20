@@ -1,0 +1,17 @@
+{
+    "friendlyName": "Manage WPMv2 packages in your webstrate",
+    "description": "Easily install, update or remove packages in your webstrate with a visual UI",
+    "dependencies": [
+        "#WebstrateComponents_Tools"
+    ],
+    "optionalDependencies": [
+        "/wpm_js_libs/?raw #material-design-components",
+        "/wpm_js_libs/?raw #material-design-icons"        
+    ],
+    "assets": [],
+    "version": "1.0",
+    "license": "Apache 2.0",
+    "changelog": {
+        "1.0": "Initial version"
+    }
+}

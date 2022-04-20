@@ -1,0 +1,13 @@
+{
+    "friendlyName": "Webstrates Default Icon Set",
+    "description": "Provides Icons for Webstrate features",
+    "dependencies": [
+        "#wsc-icon-registry"
+    ],
+    "assets": [],
+    "version": "0.1",
+    "license": "Apache 2.0 + CC-BY",
+    "changelog": {
+        "0.1": "Initial version"
+    }
+}

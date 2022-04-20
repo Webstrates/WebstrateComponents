@@ -1,0 +1,161 @@
+/**
+ *  TreeBrowser Styles
+ * 
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Center for Advanced Visualization and Interacion, Aarhus University
+ *    
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+**/
+
+@keyframes tree-browser-children-appear {
+    from {
+        opacity: 0;
+        transform: translateX(-1em);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+@keyframes tree-browser-hoveractions-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+ul.tree-browser {
+    padding: 0;
+    user-select: none;
+
+    .tree-browser-children {
+        display: none;
+        padding-left: 0.75em;
+        padding-bottom: 0.1em;
+    }
+}
+.tree-browser-node {        
+    height: 1.5em;
+    align-items: center;
+    padding: 0;
+    contain: paint;
+    overflow: hidden;
+    
+    .rippley {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        height: 100%;
+        top: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .mdc-list-item__graphic {
+        margin-right: 0em;
+
+        .tree-browser-custom-icon {
+            max-width: 24px;
+            max-height: 80%;
+            
+            .wsc-registry-icon {
+                height: auto;
+            }
+        }
+    }
+
+    .tree-browser-navigator {
+        transition: transform 0.1s ease-out;
+    }        
+
+    .mdc-list-item__text {
+        font-size: 0.8em;
+        margin-left: 0.4em;
+    }
+
+    .tree-browser-hoveractions {
+        display: none;
+        width: initial;
+        animation: 0.1s tree-browser-hoveractions-appear ease-out;
+    }
+
+    &:hover, &:focus {
+        &>.tree-browser-hoveractions {
+            display: block;                     
+        }
+    }
+    
+    .tree-browser-icons {
+        display: flex;
+        position: relative;
+    }
+
+    .tree-browser-icon {
+        display: flex;
+        margin: 0.1em;
+
+        .tree-browser-icon-unfolded {
+            display: none;
+        }
+    }
+
+    &.tree-browser-unfolded {
+        &>.tree-browser-navigator {
+            transform: rotate(90deg);
+        }
+        &+li.tree-browser-children {
+            display: block;
+            //animation: tree-browser-children-appear 0.3s ease-out;
+        }
+        .tree-browser-icon {
+            .tree-browser-icon-unfolded {
+                display: initial;
+            }
+            .tree-browser-icon-closed {
+                display: none;
+            }
+        }
+    }
+    
+    &.tree-browser-node-hidden {
+        display: none;
+        &+li.tree-browser-children {
+            padding-left: 0;
+        }
+    }
+}
+
+.tree-browser-modifier {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: drop-shadow(1px 1px 2px white);
+    
+    &.tree-browser-modifier-a {
+        transform: translate(45%,-30%) scale(0.4);
+    }
+    &.tree-browser-modifier-b {
+        transform: translate(-50%,-30%) scale(0.4);
+    }
+}
+
+/* Playground */
+
+//Fix for ripple element covering navigator
+.mdc-list-item::before {
+    pointer-events: none;
+}

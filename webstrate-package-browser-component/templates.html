@@ -1,0 +1,237 @@
+<template id="packageBrowserBase">
+    <div class="package-browser-base">
+        <div class="mdc-tab-bar package-browser-tabs" role="tablist" data-mdc-auto-init="MDCTabBar">
+            <div class="mdc-tab-scroller">
+                <div class="mdc-tab-scroller__scroll-area">
+                    <div class="mdc-tab-scroller__scroll-content">
+                        <button class="mdc-tab" role="tab">
+                            <span class="mdc-tab__content">
+                                <span class="mdc-tab__icon material-icons" aria-hidden="true">inventory</span>
+                                <span class="mdc-tab__text-label">Browse Repositories</span>
+                            </span>
+                            <span class="mdc-tab-indicator">
+                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                            </span>
+                            <span class="mdc-tab__ripple"></span>
+                        </button>        
+                        <button class="mdc-tab" role="tab">
+                            <span class="mdc-tab__content">
+                                <span class="mdc-tab__icon material-icons" aria-hidden="true">settings</span>
+                                <span class="mdc-tab__text-label">System Setup</span>
+                            </span>
+                            <span class="mdc-tab-indicator">
+                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                            </span>
+                            <span class="mdc-tab__ripple"></span>
+                        </button>                           
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="packageBrowserMain"></div>
+    </div>    
+</template>
+
+<template id="packageBrowserPackageList">
+    <!-- Package list -->
+    <div class="mdc-data-table">
+        <div class="mdc-data-table__table-container">
+            <table class="mdc-data-table__table">
+                <thead>
+                    <tr class="mdc-data-table__header-row">
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox" role="columnheader" scope="col">
+                            <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+                                <input type="checkbox" class="mdc-checkbox__native-control" aria-label="Toggle all rows"/>
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                        </th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Type</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="mdc-data-table__content package-browser-package-rows">
+                    <!-- rows -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+
+<template id="packageBrowserSystem">
+    <div>
+        <div id="wpm-info">
+            <h2>Webstrate Package Manager</h2>
+            <table>
+                <tr><th>Name</th><th>API</th><th>Specific Revision</th><th></th></tr>
+                <tr>
+                    <td class="name">Unknown Platform</td>
+                    <td class="version">Legacy</td>
+                    <td class="revision">?</td>
+                    <td class="options">
+                        <button class="update">Check For Updates</button>
+                    </td>
+                </tr>
+            </table>
+            <div class="wpm-version-warning">
+                <h2>Warning!</h2>
+                <p>
+                    The version of WPM you are running may not be compatible with this package manager or the required bootloader script.<br />
+                    Please consider upgrading before continuing!
+                </p>
+            </div>
+        </div>
+
+        <div id="bootloader-config">
+            <h2>Boot Config</h2>
+            <p>
+                You may manually edit the boot configuration JSON here if you like.<br />
+                <b>Be careful, you were warned!</b>
+            </p>
+
+            <div class="editor">            
+            </div>
+        </div>            
+    </div>
+</template>
+
+<template id="packageBrowserBootloaderSyntaxError">
+    <div class="bootconfig-missing-warning">
+        <h2>Syntax Error!</h2>
+        <p class="error"></p>
+        <p>
+            The boot configuration contains a syntax error and is guaranteed to crash the page!<br />
+            Please correct the errors before saving.
+        </p>
+    </div>       
+</template>
+
+<template id="packageBrowserPackageItemError">
+    <tr class="mdc-data-table__row">
+        <td>
+           ? 
+        </td>
+    </tr>
+</template>
+
+<template id="packageBrowserPackageItem">
+    <tr class="mdc-data-table__row">
+        <td class="mdc-data-table__cell mdc-data-table__cell--checkbox package-required">
+            <div class="mdc-checkbox mdc-data-table__row-checkbox" data-mdc-auto-init="MDCCheckbox">
+                <input type="checkbox" class="mdc-checkbox__native-control" />
+                <div class="mdc-checkbox__background">
+                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                    </svg>
+                    <div class="mdc-checkbox__mixedmark"></div>
+                </div>
+                <div class="mdc-checkbox__ripple"></div>
+            </div>
+        </td>        
+        <td class="mdc-data-table__cell mdc-data-table__cell--checkbox package-embedded">
+            <div class="mdc-checkbox mdc-data-table__row-checkbox" data-mdc-auto-init="MDCCheckbox">
+                <input type="checkbox" class="mdc-checkbox__native-control" />
+                <div class="mdc-checkbox__background">
+                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                    </svg>
+                    <div class="mdc-checkbox__mixedmark"></div>
+                </div>
+                <div class="mdc-checkbox__ripple"></div>
+            </div>
+        </td>   
+        <th class="mdc-data-table__cell package-name" scope="row">[unnamed]</th>
+        <td class="mdc-data-table__cell package-version">[version-less]</td>
+        <td class="mdc-data-table__cell package-license"></td>
+        <td class="mdc-data-table__cell package-description"></td>
+        <td class="mdc-data-table__cell package-options"></td>
+    </tr>    
+</template>
+
+<template id="packageBrowserRepositoryItem_header">
+    <thead>
+        <tr>
+            <th colspan="7"><h2 class="repository-url">...</h2></th>
+        </tr>            
+    </thead>
+</template>
+<template id="packageBrowserRepositoryItem_repository">    
+    <thead>        
+        <tr class="mdc-data-table__header-row">
+            <th role="columnheader" scope="col" title="Automatically require at boot">
+                <i class="material-icons">play_arrow</i>
+            </th>
+            <th role="columnheader" scope="col"  title="Embed locally into webstrate">
+                <i class="material-icons">archive</i>
+            </th>                        
+        </tr>
+        <tr>
+            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+                    <input type="checkbox" class="mdc-checkbox__native-control"/>
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                    <div class="mdc-checkbox__ripple"></div>
+                </div>                                      
+            </th>
+            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+                    <input type="checkbox" class="mdc-checkbox__native-control" disabled/>
+                    <div class="mdc-checkbox__background">
+                        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                        <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                        </svg>
+                        <div class="mdc-checkbox__mixedmark"></div>
+                    </div>
+                    <div class="mdc-checkbox__ripple"></div>
+                </div>                            
+            </th>            
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">License</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Description</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
+            </th>
+        </tr>
+    </thead>
+</template>
+
+<template id="packageBrowserRepositoryItem_body">
+    <tbody class="mdc-data-table__content package-browser-package-rows">
+        <!-- rows -->
+    </tbody>
+</template>
+
+<!-- Repository List -->
+<template id="packageBrowserRepositoryList">
+    <div>
+        <div class="mdc-touch-target-wrapper add-repository">
+          <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__touch"></span>
+            <span class="mdc-button__label">More Respositories...</span>
+          </button>
+        </div>        
+        
+        <div class="mdc-data-table">
+            <div class="mdc-data-table__table-container">
+                <table class="mdc-data-table__table repository-list">
+                    <!-- repositories -->
+                </table>
+            </div>
+        </div>
+    </div>
+</template>

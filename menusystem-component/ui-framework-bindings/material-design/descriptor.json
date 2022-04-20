@@ -1,0 +1,16 @@
+{
+    "friendlyName": "MaterialMenu",
+    "description": "MDC bindings for MenuSystem visualization",
+    "dependencies": [
+        "/wpm_js_libs/?raw #material-design-components",
+        "/wpm_js_libs/?raw #material-design-icons",
+        "#wsc-icon-registry",
+        "MenuSystem"
+    ],
+    "assets": [],
+    "version": "0.1",
+    "license": "Apache 2.0",
+    "changelog": {
+        "0.1": "Initial version"
+    }
+}

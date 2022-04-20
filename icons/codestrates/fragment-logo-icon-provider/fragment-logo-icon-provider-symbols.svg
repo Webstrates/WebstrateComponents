@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 595.3 841.9">
+    <symbol id="text-html" viewBox="0 0 512 512">
+        <!-- License: Creative Commons Attribution 3.0: W3C -->
+        <path d="M108.4 0h23v22.8h21.2V0h23v69h-23V46h-21v23h-23.2M206 23h-20.3V0h63.7v23H229v46h-23M259.5 0h24.1l14.8 24.3L313.2 0h24.1v69h-23V34.8l-16.1 24.8l-16.1-24.8v34.2h-22.6M348.7 0h23v46.2h32.6V69h-55.6"/>
+        <path fill="#e44d26" d="M107.6 471l-33-370.4h362.8l-33 370.2L255.7 512"/>
+        <path fill="#f16529" d="M256 480.5V131H404.3L376 447"/>
+        <path fill="#ebebeb" d="M142 176.3h114v45.4h-64.2l4.2 46.5h60v45.3H154.4M156.4 336.3H202l3.2 36.3 50.8 13.6v47.4l-93.2-26"/>
+        <path fill="#fff" d="M369.6 176.3H255.8v45.4h109.6M361.3 268.2H255.8v45.4h56l-5.3 59-50.7 13.6v47.2l93-25.8"/>
+    </symbol>
+    <symbol id="text-css" viewBox="0 0 362.73 512">
+        <!-- License: Creative Commons Attribution 3.0: Rudloff -->
+        <g transform="translate(-193.63 -276.36)">
+            <g transform="translate(119 276.36)">
+                <polygon points="437.37 100.62 404.32 470.82 255.78 512 107.64 470.88 74.633 100.62" fill="#264de4"/>
+                <polygon points="376.03 447.25 404.27 130.89 256 130.89 256 480.52" fill="#2965f1"/>
+                <g fill="#ebebeb">
+                    <polygon points="150.31 268.22 154.38 313.63 256 313.63 256 268.22"/>
+                    <polygon points="256 176.3 255.84 176.3 142.13 176.3 146.26 221.72 256 221.72"/>
+                    <polygon points="256 433.4 256 386.15 255.8 386.21 205.23 372.55 201.99 336.33 177.42 336.33 156.41 336.33 162.77 407.63 255.79 433.46"/>
+                </g>
+                <path d="m160 0h55v23h-32v23h32v23h-55z"/>
+                <path d="m226 0h55v20h-32v4h32v46h-55v-21h32v-4h-32z"/>
+                <path d="m292 0h55v20h-32v4h32v46h-55v-21h32v-4h-32z"/>
+                <polygon points="311.76 313.63 306.49 372.52 255.84 386.19 255.84 433.44 348.94 407.63 349.62 399.96 360.29 280.41 361.4 268.22 369.6 176.3 255.84 176.3 255.84 221.72 319.83 221.72 315.7 268.22 255.84 268.22 255.84 313.63" fill="#fff"/>
+            </g>
+        </g>
+    </symbol>
+    <symbol id="text-javascript" viewBox="0 0 630 630">
+        <!-- License: MIT: Copyright (c) 2011 Christopher Williams -->
+        <rect width="630" height="630" fill="#f7df1e"/>
+        <path d="m423.2 492.19c12.69 20.72 29.2 35.95 58.4 35.95 24.53 0 40.2-12.26 40.2-29.2 0-20.3-16.1-27.49-43.1-39.3l-14.8-6.35c-42.72-18.2-71.1-41-71.1-89.2 0-44.4 33.83-78.2 86.7-78.2 37.64 0 64.7 13.1 84.2 47.4l-46.1 29.6c-10.15-18.2-21.1-25.37-38.1-25.37-17.34 0-28.33 11-28.33 25.37 0 17.76 11 24.95 36.4 35.95l14.8 6.34c50.3 21.57 78.7 43.56 78.7 93 0 53.3-41.87 82.5-98.1 82.5-54.98 0-90.5-26.2-107.88-60.54zm-209.13 5.13c9.3 16.5 17.76 30.45 38.1 30.45 19.45 0 31.72-7.61 31.72-37.2v-201.3h59.2v202.1c0 61.3-35.94 89.2-88.4 89.2-47.4 0-74.85-24.53-88.81-54.075z"/>
+    </symbol>
+    <symbol id="text-x-latex" viewBox="0 0 1200 500">
+        <path d="M285.7 238h-11.25c-4.5 45.9-10.8 101.7-90 101.7H148c-21.15 0-22.05-3.15-22.05-18V82.75c0-15.3 0-21.6 42.3-21.6h14.85v-13.5C166.9 49 126.4 49 107.95 49 90.4 49 55.3 49 40 47.65v13.5h10.35C85 61.15 85.9 66.1 85.9 82.3v236.25c0 16.2-.9 21.15-35.55 21.15H40v13.95h233.55L285.7 238z"/>
+        <path d="M278.05 47.2c-1.8-5.4-2.7-7.2-8.55-7.2-5.85 0-7.2 1.8-9 7.2l-72.45 183.6c-3.15 7.65-8.55 21.6-36.45 21.6v11.25h69.75V252.4c-13.95 0-22.5-6.3-22.5-15.3 0-2.25.45-3.15 1.35-6.3l15.3-38.7h89.1l18 45.9c.9 1.8 1.8 4.05 1.8 5.4 0 9-17.1 9-25.65 9v11.25h88.65V252.4h-6.3c-21.15 0-23.4-3.15-26.55-12.15L278.05 47.2zm-18 31.95l40.05 101.7H220l40.05-101.7z"/>
+        <path d="M638.5 50.35H364.45l-8.1 100.8h10.8c6.3-72.45 13.05-87.3 81-87.3 8.1 0 19.8 0 24.3.9 9.45 1.8 9.45 6.75 9.45 17.1V318.1c0 15.3 0 21.6-47.25 21.6h-18v13.95c18.45-1.35 63.9-1.35 84.6-1.35 20.7 0 67.05 0 85.5 1.35V339.7h-18c-47.25 0-47.25-6.3-47.25-21.6V81.85c0-9 0-15.3 8.1-17.1 4.95-.9 17.1-.9 25.65-.9 67.5 0 74.25 14.85 80.55 87.3h11.25l-8.55-100.8z"/>
+        <path d="M879.7 339.25h-11.25c-11.25 68.85-21.6 101.7-98.55 101.7h-59.4c-21.15 0-22.05-3.15-22.05-18v-119.7h40.05c43.65 0 48.6 14.4 48.6 52.65h11.25V237.1H777.1c0 38.25-4.95 52.2-48.6 52.2h-40.05V181.75c0-14.85.9-18 22.05-18h57.6c68.85 0 80.55 24.75 87.75 87.3h11.25l-12.6-100.8h-252v13.5h10.35c34.65 0 35.55 4.95 35.55 21.15v234.9c0 16.2-.9 21.15-35.55 21.15H602.5v13.95h258.3l18.9-115.65z"/>
+        <path d="M1015.15 180.4l61.65-90c9.45-14.4 24.75-28.8 64.8-29.25v-13.5h-107.1v13.5c18 .45 27.9 10.35 27.9 20.7 0 4.5-.9 5.4-4.05 10.35l-51.3 75.6-57.6-86.4c-.9-1.35-3.15-4.95-3.15-6.75 0-5.4 9.9-13.05 28.8-13.5v-13.5C959.8 49 926.95 49 909.85 49c-13.95 0-41.85-.45-58.5-1.35v13.5h8.55c24.75 0 33.3 3.15 41.85 15.75l82.35 124.65L910.75 310c-6.3 9-19.8 29.7-64.8 29.7v13.95h107.1V339.7c-20.7-.45-28.35-12.6-28.35-20.7 0-4.05 1.35-5.85 4.5-10.8l63.45-94.05 71.1 107.1c.9 1.8 2.25 3.6 2.25 4.95 0 5.4-9.9 13.05-29.25 13.5v13.95c15.75-1.35 48.6-1.35 65.25-1.35 18.9 0 39.6.45 58.5 1.35V339.7h-8.55c-23.4 0-32.85-2.25-42.3-16.2l-94.5-143.1z"/>
+    </symbol>
+    <symbol id="text-x-typescript" viewBox="0 0 400 400">
+        <path fill="#007acc" d="M0 200V0h400v400H0"/>
+        <path d="M87.7 200.7V217h52v148h36.9V217h52v-16c0-9 0-16.3-.4-16.5 0-.3-31.7-.4-70.2-.4l-70 .3v16.4l-.3-.1zM321.4 184c10.2 2.4 18 7 25 14.3 3.7 4 9.2 11 9.6 12.8 0 .6-17.3 12.3-27.8 18.8-.4.3-2-1.4-3.6-4-5.2-7.4-10.5-10.6-18.8-11.2-12-.8-20 5.5-20 16 0 3.2.6 5 1.8 7.6 2.7 5.5 7.7 8.8 23.2 15.6 28.6 12.3 41 20.4 48.5 32 8.5 13 10.4 33.4 4.7 48.7-6.4 16.7-22 28-44.3 31.7-7 1.2-23 1-30.5-.3-16-3-31.3-11-40.7-21.3-3.7-4-10.8-14.7-10.4-15.4l3.8-2.4 15-8.7 11.3-6.6 2.6 3.5c3.3 5.2 10.7 12.2 15 14.6 13 6.7 30.4 5.8 39-2 3.7-3.4 5.3-7 5.3-12 0-4.6-.7-6.7-3-10.2-3.2-4.4-9.6-8-27.6-16-20.7-8.8-29.5-14.4-37.7-23-4.7-5.2-9-13.3-11-20-1.5-5.8-2-20-.6-25.7 4.3-20 19.4-34 41-38 7-1.4 23.5-.8 30.4 1l-.2.2z"/>
+    </symbol>
+    <symbol id="text-markdown" viewBox="0 0 208 128">
+        <!-- License: Creative Commons CC0 1.0 Universal Public Domain Dedication -->
+        <rect width="198" height="118" x="5" y="5" ry="10" stroke="currentColor" stroke-width="10" fill="none"/>
+        <path d="M30 98V30h20l20 25 20-25h20v68H90V59L70 84 50 59v39zm125 0l-30-33h20V30h20v35h20z"/>
+    </symbol>
+        
+    <symbol id="text-x-scss" viewBox="0 0 548 548">
+        <!-- License: Creative Commons CC0 1.0 Universal Public Domain Dedication, (c) Jonas Oxenbøll Petersen -->            
+        <g fill="#D465A7">
+            <path d="M199 370c-31 0-55 15-51 35 5 21 41 36 84 36 17 0 34-1 48-4 6-35-23-67-81-67zm125-206c-8 12-14 26-15 42-2 20 7 34 19 34 9 0 15-9 17-20s4-35-21-56z"/>
+            <path d="M274 0a274 274 0 1 0 0 548 274 274 0 0 0 0-548zm143 109c-3 11-12 17-21 17-16 0-32 6-47 16a82 82 0 0 1 22 78c-4 24-24 46-47 46-25 0-45-23-43-60 1-17 7-37 16-52l-24-3c-71 0-101 45-97 82 4 38 36 52 86 70 49 17 106 37 92 91-6 23-27 42-60 51a69 69 0 0 1-47 38c-5 0-8-2-8-5 0-2 1-4 5-5 11-3 23-11 30-23a308 308 0 0 1-42 3c-50 0-96-18-103-48-7-28 22-52 68-52 63 0 105 36 101 78 19-7 33-21 36-37 8-37-26-53-80-71-47-15-96-31-105-90-8-54 32-118 126-118 18 0 33 4 46 8 23-21 52-35 84-35 9 0 15 9 12 21z"/>
+        </g>
+    </symbol>
+    <symbol id="text-p5js" viewBox="0 0 202 202">
+        <!-- License: Creative Commons CC0 1.0 Universal Public Domain Dedication, (c) Jonas Oxenbøll Petersen -->            
+        <g fill="#E83B71">
+            <path d="M0 0v202h202V0H0zm66 157c-9 5-26 6-35-6v38H16V98h14v9l1-1c16-17 42-11 49 11 4 16-1 33-14 40zm62 2c-14 5-31 2-39-10l-2-2 11-10c3 7 8 11 16 12 12 0 20-9 18-21-2-9-8-14-17-15l-12 1-12 4 1-48h51v13h-36l-1 18c7 1 14 0 20 2 13 3 20 12 21 25 1 14-6 26-19 31zm56-66-5 4-6-8-6 7-5-4 6-7-9-3 2-7 9 3v-9h6v9l9-2 2 6-8 3 5 8z"/>
+            <path d="M45 109c-10 2-17 13-14 24 2 10 10 16 20 15 9-1 15-9 15-20 0-12-9-21-21-19z"/>
+        </g>
+    </symbol>
+    <symbol id="image-svg-xml" viewBox="0 0 966 966">
+        <!-- License: Creative Commons CC0 1.0 Universal Public Domain Dedication, (c) Jonas Oxenbøll Petersen -->            
+        <path fill="#000100" d="M825 0H141C63 0 0 63 0 141v684c0 78 63 141 141 141h684c78 0 141-63 141-141V141C966 63 903 0 825 0z"/>
+        <path fill="#FAAE3C" d="M659 217a34 34 0 0 0-48 0h-70l49-49a34 34 0 1 0-34-34l-49 49v-69a34 34 0 1 0-48 0v69l-49-49a34 34 0 1 0-34 34l49 49h-70a34 34 0 1 0 0 49h70l-49 49a34 34 0 1 0 34 34l49-49v69a34 34 0 1 0 48 0v-69l49 49a34 34 0 1 0 34-34l-49-49h70a34 34 0 1 0 48-49z"/>
+        <path fill="#FFF" d="M144 687a125 125 0 0 1 89-213c69 0 125 56 125 125h-74a52 52 0 1 0-88 36c9 10 17 13 37 16 34 3 65 14 88 36a125 125 0 0 1-88 214c-69 0-126-56-126-125h74a52 52 0 1 0 88-37c-9-9-23-12-36-15-34-5-66-14-89-37zm464-213-88 427h-74l-88-427h73l52 250 52-250h73zm125 177h126v125a125 125 0 0 1-251 0V599a125 125 0 0 1 251 0h-74a52 52 0 0 0-103 0v177a52 52 0 0 0 103 0v-52h-52v-73z"/>
+    </symbol>        
+    <symbol id="text-ruby" viewBox="0 0 384.9 369">
+        <!-- License: Creative Commons CC0 1.0 Universal Public Domain Dedication, (c) Jonas Oxenbøll Petersen -->            
+        <path fill="#D5181D" d="M274 223 106 331l254 35-86-143zM384 63l-23 34-77 116c-1 3-3 4-1 8l74 123 13 19 15-299-1-1zM44 191c1 2 4 2 6 2l71-36c8-5 13-12 20-18l65-60 4-4 23-46-28-10c-1-1-3 0-4 1l-63 36c-10 6-18 15-27 24a3253 3253 0 0 0-53 52l-30 43 16 16zm88-19L96 323l168-108-132-43zm94-84 49 118 94-142-143 24zm-92 74 130 42-49-117-81 75zm-88 59L1 329l86-2-41-106zm42 81 1-1 32-131-69 36 36 96zM352 57l-42-11-59-16c-3-1-5-1-6 2l-21 43-1 2 129-19v-1zm-80-33 112 31-18-53-94 21v1zm34 344-93-13-115-15c-14-2-28-1-43 0a2033 2033 0 0 0-38 2l288 27 1-1zM3 296l37-86c1-3 1-5-2-7l-15-17L0 300h1l2-3zM247 17l63-15 4-1V0l-91 12c9 4 15 7 24 5z"/>
+    </symbol>
+        
+    <symbol id="application-x-lua" viewBox="0 0 946.5 946.5">
+        <!-- License:
+            Copyright © 1998 Lua.org. Graphic design by Alexandre Nakonechnyj.
+
+            Permission is hereby granted, without written agreement and without license or royalty fees, to use, copy, and distribute this logo for any purpose, including commercial applications, subject to the following conditions:
+           
+            The origin of this logo must not be misrepresented; you must not claim that you drew the original logo.
+            The only modification you can make is to adapt the orbiting text to your product name.
+            The logo can be used in any scale as long as the relative proportions of its elements are maintained. 
+        -->
+        <path fill="navy" d="M835 473a362 362 0 1 0-724 1 362 362 0 0 0 724-1"/>
+        <path fill="#fff" d="M729 323a106 106 0 1 0-212 0 106 106 0 0 0 212 0"/>
+        <path fill="navy" d="M941 111a106 106 0 1 0-212 0 106 106 0 0 0 212 0"/>
+        <path fill="#fff" d="M258 628h117v26H228V417h30zm257 26v-24c-16 23-32 32-57 32-33 0-54-18-54-47V484h27v120c0 21 14 34 35 34 28 0 47-23 47-58v-96h27v170zm223 5-18 3c-18 0-27-8-28-25a81 81 0 0 1-58 25c-35 0-56-20-56-51 0-22 10-37 30-45 10-5 16-6 54-11 22-2 29-7 29-19v-7c0-16-14-25-39-25s-37 9-40 30h-27c1-17 4-27 12-35 11-13 32-20 56-20 42 0 65 16 65 46v101c0 8 5 13 14 13l6-1zm-47-89c-10 4-15 5-44 9s-41 14-41 32c0 17 12 27 33 27 16 0 30-5 41-15 8-8 11-13 11-23z"/>
+        <path fill="none" stroke="gray" stroke-dasharray="40.8" stroke-miterlimit="10" stroke-width="10.9" d="M890 261A468 468 0 1 1 709 69"/>
+    </symbol>
+    
+    <defs>
+        <linearGradient id="application-json-linearGradient8385">
+            <stop offset="0"/>
+            <stop stop-color="#fff" offset="1"/>
+        </linearGradient>
+        <linearGradient id="application-json-linearGradient3002" x1="-553.27" x2="-666.12" y1="525.91" y2="413.05" gradientTransform="matrix(.99884 0 0 .9987 689.01 -388.84)" gradientUnits="userSpaceOnUse" xlink:href="#application-json-linearGradient8385"/>
+        <linearGradient id="application-json-linearGradient3005" x1="-666.12" x2="-553.27" y1="413.04" y2="525.91" gradientTransform="matrix(.99884 0 0 .9987 689.01 -388.84)" gradientUnits="userSpaceOnUse" xlink:href="#application-json-linearGradient8385"/>
+    </defs>            
+    <symbol id="application-json" viewBox="0 0 160 160">
+        <!-- License:
+            Douglas Crockford
+            This logo image consists only of simple geometric shapes or text. It does not meet the threshold of originality needed for copyright protection, and is therefore in the public domain. Although it is free of copyright restrictions, this image may still be subject to other restrictions - Wikimedia Commons
+        -->
+        <path d="m79.865 119.1c35.398 48.255 70.04-13.469 69.989-50.587-0.0602-43.886-44.541-68.414-70.018-68.414-40.892 0-79.836 33.796-79.836 80.036 0 51.396 44.64 79.865 79.836 79.865-7.9645-1.1468-34.506-6.834-34.863-67.967-0.23987-41.347 13.488-57.866 34.805-50.599 0.47743 0.17707 23.514 9.2645 23.514 38.951 0 29.56-23.427 38.715-23.427 38.715z" color="#000000" fill="url(#application-json-linearGradient3005)" fill-rule="evenodd"/>
+        <path d="m79.823 41.401c-23.39-8.0619-52.043 11.216-52.043 49.829 0 63.048 46.721 68.77 52.384 68.77 40.892 0 79.836-33.796 79.836-80.036 0-51.396-44.64-79.865-79.836-79.865 9.7481-1.35 52.541 10.55 52.541 69.037 0 38.141-31.953 58.905-52.735 50.033-0.47743-0.17707-23.514-9.2645-23.514-38.951 0-29.56 23.367-38.818 23.367-38.818z" color="#000000" fill="url(#application-json-linearGradient3002)" fill-rule="evenodd"/>
+    </symbol>
+
+    <defs>
+        <linearGradient id="text-python-b" x1="89.1" x2="147.8" y1="111.9" y2="168.1" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffe052"/>
+            <stop offset="1" stop-color="#ffc331"/>
+        </linearGradient>
+        <linearGradient id="text-python-a" x1="55.5" x2="110.2" y1="77.1" y2="131.8" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#387eb8"/>
+            <stop offset="1" stop-color="#366994"/>
+        </linearGradient>
+    </defs>
+    <symbol id="text-python" viewBox="0 0 110.4 109.8">
+        <!-- License:  
+            https://www.python.org/psf/trademarks/
+            Use of Python Two-Snakes trademarked logo (version 1.5.0):
+
+            [...] stating accurately that software is written in the Python programming language, 
+        that it is compatible with the Python programming language, or that it contains the Python 
+        programming language, is always allowed. In those cases, you may use the word "Python" 
+        or the unaltered logos to indicate this, without our prior approval. This is true 
+        both for non-commercial and commercial uses.
+
+        This clause overrides other clauses of this policy
+
+            [...]-->        
+
+        <g color="#000">
+            <path fill="url(#text-python-a)" d="M100 67c-28 0-27 13-27 13l1 12h26v4H63s-18-2-18 26c0 29 16 28 16 28h9v-14s-1-15 15-15h27s15 0 15-15V82s2-15-27-15zm-15 9a5 5 0 1 1 0 10 5 5 0 0 1 0-10z" transform="translate(-45 -67)"/>
+            <path fill="url(#text-python-b)" d="M101 177c28 0 26-12 26-12v-12h-27v-4h37s18 2 18-26c0-29-15-28-15-28h-10v13s1 16-15 16H88s-14 0-14 14v25s-3 14 27 14zm14-8a5 5 0 1 1 0-10 5 5 0 0 1 0 10z" transform="translate(-45 -67)"/>
+        </g>            
+</svg>

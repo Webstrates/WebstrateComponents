@@ -1,0 +1,14 @@
+{
+    "friendlyName": "Fragment Logo Icon Set",
+    "description": "Provides Icons for Fragments based on their logos",
+    "dependencies": [
+        "#wsc-icon-registry"
+    ],
+    "assets": [
+    ],
+    "version": "0.1",
+    "license": "Apache 2.0 + Various",
+    "changelog": {
+        "0.1": "Initial version"
+    }
+}

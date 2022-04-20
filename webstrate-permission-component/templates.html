@@ -1,0 +1,183 @@
+<template id="webstrate-components-permission-ui-tpl">
+    <div class="webstrate-components-permission-ui">
+        <table class="mdc-data-table__table" aria-label="User permissions">
+            <thead>
+                <tr class="mdc-data-table__header-row">
+                    <th></th>
+                    <th colspan="4" class="" role="columnheader" scope="col">Permissions</th>
+                    <th class="mdc-data-table__header-cell" role="columnheader" scope="col"></th>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="mdc-data-table__header-cell wcp-user-column" role="columnheader" scope="col">User</th>                                        
+                    <th class="mdc-data-table__header-cell wcp-permission-column">Admin</th>
+                    <th class="mdc-data-table__header-cell wcp-permission-column">Write&nbsp;&amp; Read</th>
+                    <th class="mdc-data-table__header-cell wcp-permission-column">Read Only</th>
+                    <th class="mdc-data-table__header-cell wcp-permission-column">No Access</th>
+                </tr>
+            </thead>
+            <tbody class="mdc-data-table__content">
+            </tbody>
+            <tfoot>
+                <tr class="mdc-data-table__row mdc-data-table__footer-row">
+                    <td colspan='6'>
+                        <button class="mdc-button mdc-button--touch addPermission">
+                            <div class="mdc-button__ripple"></div>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">person_add</i>
+                            <span class="mdc-button__label">Add User</span>
+                            <div class="mdc-button__touch"></div>
+                        </button>                        
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="mdc-dialog__actions">
+            <button class="mdc-button mdc-button--touch mdc-button--raised savePermissions" tabindex="1">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Save</span>
+                <div class="mdc-button__touch"></div>
+            </button>
+        </div>
+    </div>
+</template>
+
+<template id="webstrate-components-permission-user-tpl">
+    <tr class="mdc-data-table__row">
+        <td class="mdc-data-table__cell username"></td>
+        <td class="mdc-data-table__cell">
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="admin" value="a" name="permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+            </div>
+        </td><td class="mdc-data-table__cell">
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="write" value="w" name="permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+            </div>
+        </td><td class="mdc-data-table__cell">
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="read" value="r" name="permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+            </div>
+        </td><td class="mdc-data-table__cell">
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="none" value="" name="permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+            </div>
+        </td>
+        <td class="mdc-data-table__cell">
+            <button class="mdc-button mdc-button--touch deletePermission">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Delete</span>
+                <div class="mdc-button__touch"></div>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="webstrate-components-permission-adduser-tpl">
+    <tr class="mdc-data-table__row">
+        <td class="mdc-data-table__cell username">
+            <label class="mdc-text-field mdc-text-field--filled">
+              <span class="mdc-text-field__ripple"></span>
+              <input placeholder="F.x. 'bob:au'" class="mdc-text-field__input" type="text" aria-labelledby="webstrate-components-permission-adduser-username">
+              <span class="mdc-floating-label" id="id="webstrate-components-permission-adduser-username"">username:provider</span>
+              <span class="mdc-line-ripple"></span>
+            </label>            
+        </td>
+        <td class="mdc-data-table__cell">
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-admin" value="a" name="webstrate-components-permission-adduser-permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="webstrate-components-permission-adduser-admin">Admin, Write and Read</label>
+            </div><br />
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-write" value="w" name="webstrate-components-permission-adduser-permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="webstrate-components-permission-adduser-write">Write and Read</label>
+            </div><br />
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-read" value="r" name="webstrate-components-permission-adduser-permissions">
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="webstrate-components-permission-adduser-read">Read Only</label>
+            </div><br />
+            <div class="mdc-form-field">
+                <div class="mdc-radio">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-none" value="" name="webstrate-components-permission-adduser-permissions" checked>
+                    <div class="mdc-radio__background">
+                        <div class="mdc-radio__outer-circle"></div>
+                        <div class="mdc-radio__inner-circle"></div>
+                    </div>
+                    <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="webstrate-components-permission-adduser-none">None</label>
+            </div>
+        </td>
+    </tr>
+</template>
+
+<template id="webstrate-components-permission-add-permission-dialog-tpl">
+    <div>
+        <table class="mdc-data-table__table" aria-label="User permissions">
+            <thead>
+            <tr class="mdc-data-table__header-row">
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">User</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Permissions</th>
+            </tr>
+            </thead>
+            <tbody class="mdc-data-table__content">
+            </tbody>
+        </table>    
+        <div class="mdc-dialog__actions">
+            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Cancel</span>
+            </button>
+            <button type="button" class="mdc-button mdc-dialog__button mdc-button--raised" data-mdc-dialog-action="add">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Add</span>
+            </button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,13 @@
+{
+    "friendlyName": "MenuSystem",
+    "description": "A system to dynamically register into a menu structure and present it visually",
+    "dependencies": [
+        "WebstrateComponents_Tools"
+    ],
+    "assets": [],
+    "version": "0.1",
+    "license": "Apache 2.0",
+    "changelog": {
+        "0.1": "Initial version"
+    }
+}

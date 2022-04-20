@@ -1,0 +1,12 @@
+{
+    "friendlyName": "Icon registry",
+    "description": "Icon providers can register icons for everyone and everything",
+    "dependencies": [],
+    "assets": [
+    ],
+    "version": "0.1",
+    "license": "Apache 2.0 + CC-BY",    
+    "changelog": {
+        "0.1": "Initial version"
+    }
+}

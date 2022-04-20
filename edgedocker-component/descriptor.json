@@ -1,0 +1,15 @@
+{
+    "friendlyName": "Edge Docking Area",
+    "description": "Creates a dockable area and reflows the rest of the parent around it like regular built-in developer tools",
+    "dependencies": [
+        "/wpm_js_libs/?raw #CaviTouch",
+        "WebstrateComponents_Tools"
+    ],
+    "assets": [],
+    "version": "0.9",
+    "license": "Apache 2.0",
+    "changelog": {
+        "0.8": "Initial checkin based on linear editor docking system",
+        "0.9": "Support for moving around rest of document when docking"
+    }
+}

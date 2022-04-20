@@ -1,0 +1,20 @@
+{
+    "friendlyName": "Tree Browser",
+    "description": "Generic component for rendering tree-like navigation structures",
+    "dependencies": [
+        "/wpm_js_libs/?raw #material-design-components",
+        "/wpm_js_libs/?raw #material-design-icons",
+        "/wpm_js_libs/?raw #CaviDraggableHTML5",
+        "/wpm_js_libs/?raw #CaviTouch",
+        "/wpm_common/?raw #UUIDGenerator",
+        "#WebstrateComponents_Tools",
+        "#wsc-icon-registry",
+        "/codestrates-repos/?raw #EventSystem"
+    ],
+    "assets": [],
+    "version": "1.0",
+    "license": "Apache 2.0",
+    "changelog": {
+        "1.0": "Initial version"
+    }
+}

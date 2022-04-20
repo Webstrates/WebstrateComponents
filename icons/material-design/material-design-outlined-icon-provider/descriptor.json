@@ -1,0 +1,14 @@
+{
+    "friendlyName": "Icons based on the outlined Material Design icon set",
+    "description": "Various icons from Material Design",
+    "dependencies": [
+        "#wsc-icon-registry",
+        "/wpm_js_libs/?raw #material-design-icons"
+    ],
+    "assets": [],
+    "version": "0.1",
+    "changelog": {
+        "0.1": "Initial version"
+    },
+    "license": "Apache 2.0"
+}

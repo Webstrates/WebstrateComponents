@@ -1,0 +1,25 @@
+<template id="TreeBrowser_Main">
+    <ul class="mdc-list tree-browser tree-browser-root" role="list">
+    </ul>
+</template>
+
+<template id="TreeBrowser_Leaf">
+    <li tabindex="-1" class="mdc-list-item tree-browser-leaf tree-browser-node">
+        <div class="rippley"><span class='mdc-list-item__ripple'></span></div>
+        <span class="mdc-list-item__graphic tree-browser-navigator" aria-hidden="true"></span>
+        <span class="mdc-list-item__graphic tree-browser-icons" aria-hidden="true"></span>
+        <span class="mdc-list-item__text tree-browser-content"></span>
+        <span aria-hidden="true" class="mdc-list-item__meta"></span>
+    </li>
+</template>
+
+<template id="TreeBrowser_Children">
+    <li class="tree-browser-children">
+        <ul class="mdc-list tree-browser" role="list">
+        </ul>
+    </li>
+</template>
+
+<template id="TreeBrowser_Modifier">
+    <span class="tree-browser-modifier" aria-hidden="true"></span>
+</template>

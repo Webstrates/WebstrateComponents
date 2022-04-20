@@ -1,0 +1,226 @@
+/**
+ *  EdgeDocker Styles
+ * 
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Center for Advanced Visualization and Interacion, Aarhus University
+ *    
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+**/
+
+html {
+    height: 100vh;
+    
+    &[transient-data-docking-area-component-mode~="minimized"] {
+        .docking-area-resizer {
+            display: none;
+        }
+
+        .docking-area-component {
+            display: none;
+        }        
+    }
+    
+    &[transient-data-docking-area-component-mode~="maximized"] {
+        >*:not(.docking-area-component):not(.docking-area--ignore) {
+            /* Hide other items without breaking Monaco */
+            opacity: 0;
+            overflow: hidden;
+            width: 1em;
+            height: 1em;
+        }
+
+        .docking-area-resizer {
+            display: none;
+        }
+
+        .docking-area-component {
+            position: fixed !important;
+            display: block;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;    
+        }
+    }
+    
+    &[transient-data-docking-area-component-mode~="floating"] {
+        .docking-area-resizer {
+            display: none;
+        }
+        
+        .docking-area-component {
+            position: fixed;
+            display: block;
+            top: 0;
+            left: 0;
+            width: 35em;
+            height: 22em;
+            overflow: auto;
+            resize: both;
+            z-index: 1000;
+            box-sizing: border-box;
+            border: 1px outset #ababab;
+            box-shadow: 0.1em 0.1em 0.5em rgba(0,0,0,0.15);
+        }
+    }
+    
+    &[transient-data-docking-area-component-mode~="edge"] {
+        overflow: hidden;
+        display: flex;
+
+        >*:not(.docking-area--ignore) {
+            flex: 1 1 auto;
+            overflow: auto;
+            contain: paint;
+        }
+        
+        >.docking-area-resizer {
+            flex: 0 0 auto;
+            min-height: 1px;
+            min-width: 1px;
+            cursor: ew-resize;
+            position: relative;
+            margin: -2px;
+            border: 2px solid transparent;
+            contain: none;
+            overflow: visible;
+            z-index: 5;
+            
+            &:before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(128,128,128,0.5);
+                content: "";
+            }
+            
+            &:hover {
+                margin: -0.5em;
+                border: 0.5em solid transparent;
+
+                &:before {
+                    margin: -1px;
+                    border: 1px solid rgba(128,128,128,0.1);
+                }
+            }
+        }
+
+        >.docking-area-component {
+            contain: none;
+            position: relative;
+            flex: 0 0 auto;
+            min-width: 20vw;
+            min-height: 20vh;
+        }
+        
+        
+        &[transient-data-docking-area-component-mode~="left"]{
+            >.docking-area-resizer { 
+                order: -1;        
+            }    
+            >.docking-area-component {
+                order: -2;
+                height: auto;
+            }
+        }
+        &[transient-data-docking-area-component-mode~="right"]{
+            >.docking-area-resizer { 
+                order: 1;        
+            }    
+            >.docking-area-component {
+                order: 2;
+                height: auto;
+            }
+        }
+        &[transient-data-docking-area-component-mode~="bottom"]{
+            flex-direction: column;
+            
+            >.docking-area-resizer { 
+                order: 1;     
+                cursor: ns-resize;
+            }    
+            >.docking-area-component {
+                order: 2;
+            }
+        }
+    }
+    
+    
+    .docking-area-visualizer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 15em;
+        height: 10em;
+        background: rgba(10,10,255,0.25);
+        border: 1px solid rgba(0,0,255,0.3);
+        box-sizing: border-box;
+        transition: all 0.1s;
+        opacity: 0;
+        display: block;
+        pointer-events: none;
+        z-index: 9000;
+    }
+    &[transient-data-docking-area-component-drag~="dragging"] {
+        $edgeWidth: 90%;
+        overflow: hidden;
+        
+        .docking-area-visualizer {
+            opacity: 1;
+        }
+        
+        &[transient-data-docking-area-component-drag~="float"] .docking-area-visualizer {
+            opacity: 0;
+            transition: none;
+        }
+        &[transient-data-docking-area-component-drag~="left"] .docking-area-visualizer {
+            left: 0 !important;
+            top: 0 !important;
+            right: $edgeWidth !important;
+            bottom: 0 !important;
+            width: auto;
+            height: auto;
+        }
+        &[transient-data-docking-area-component-drag~="right"] .docking-area-visualizer {
+            left: $edgeWidth !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            width: auto;
+            height: auto;
+        }
+        &[transient-data-docking-area-component-drag~="bottom"] .docking-area-visualizer {
+            left: 0 !important;
+            right: 0 !important;
+            top: $edgeWidth !important;
+            bottom: 0 !important;
+            width: auto;
+            height: auto;
+        }              
+        &[transient-data-docking-area-component-drag~="maximized"] .docking-area-visualizer {
+            left: 0 !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: auto;
+            height: auto;
+        }             
+    }
+    
+    
+    
+}
