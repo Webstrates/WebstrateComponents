@@ -398,9 +398,24 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 packageItemTemplate.querySelector(".package-required input").checked = true;
             } else {
                 packageItemTemplate.querySelector(".package-required").setAttribute("data-indirect-requirement","true");
-                packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by another package");
+                packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by another package at runtime");
                 
-                // STUB: Add which package pulled this in
+                try {
+                    // Add which package pulled this in
+                    let pulledInBy = [];
+                    WPMv2.getCurrentlyInstalledPackages().forEach(function(pkg){
+                        pkg.dependencies.forEach(function(dep){
+                            if (typeof dep === "string" && dep.indexOf("#"+wpmPackage.name)!=-1){
+                                pulledInBy.push(pkg);
+                            }
+                        });
+                    });
+                    if (pulledInBy.length > 0){
+                        packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by "+pulledInBy);
+                    }
+                } catch (ex){
+                    console.warn(ex);
+                }
             }
 
             // Embedding status
