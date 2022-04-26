@@ -258,10 +258,15 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             // In webstrate mode webstrates defines what is transient
             if (webstrate.config.isTransientElement(packageElement)) return true;
         } else {
-            // Otherwise we assume a transient tag is used to mark it
+            // Otherwise we assume a transient-element tag is used to mark it
             console.log("Trying to match ", packageElement.tagName);
-            if (packageElement.tagName.toLowerCase()==="transient") return true;
+            if (packageElement.closest("[transient-wpmid]")){
+                return true;
+            } else {
+                return false;
+            }
         }
+        
         let parent = packageElement.parentElement;
         if (parent){
             return this.isTransientPackageElement(parent);
