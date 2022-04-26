@@ -3,7 +3,7 @@
     "description": "Various icons from Material Design",
     "dependencies": [
         "#wsc-icon-registry",
-        "/wpm_js_libs/?raw #material-design-icons"
+        "wpm_js_libs #material-design-icons"
     ],
     "assets": [],
     "version": "0.1",

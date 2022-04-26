@@ -5,8 +5,8 @@
         "#WebstrateComponents_Tools"
     ],
     "optionalDependencies": [
-        "/wpm_js_libs/?raw #material-design-components",
-        "/wpm_js_libs/?raw #material-design-icons"        
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons"
     ],
     "assets": [],
     "version": "1.0",

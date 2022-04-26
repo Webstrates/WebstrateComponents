@@ -2,8 +2,8 @@
     "friendlyName": "Revision Browser",
     "description": "Browse, tag and restore revisions of your webstrate with a visual UI",
     "dependencies": [
-        "/wpm_js_libs/?raw #material-design-components",
-        "/wpm_js_libs/?raw #material-design-icons",
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons",
         "WebstrateComponents_Tools"
     ],
     "assets": [],

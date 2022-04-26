@@ -2,8 +2,8 @@
     "friendlyName": "Permission Manager",
     "description": "Manage permissions on a webstrate",
     "dependencies": [
-        "/wpm_js_libs/?raw #material-design-components",
-        "/wpm_js_libs/?raw #material-design-icons",
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons",
         "WebstrateComponents_Tools"
     ],
     "assets": [],

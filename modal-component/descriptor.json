@@ -2,11 +2,11 @@
     "friendlyName": "Modal Dialog",
     "description": "Generic Modal Dialog",
     "dependencies": [
-        "/wpm_js_libs/?raw #material-design-components",
-        "/wpm_js_libs/?raw #material-design-icons",
-        "/wpm_js_libs/?raw #UUIDGenerator",
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons",
+        "wpm_js_libs #UUIDGenerator",
         "#WebstrateComponents_Tools",
-        "/codestrates-repos/?raw #EventSystem"
+        "codestrates-repos #EventSystem"
     ],
     "assets": [ 
     ],

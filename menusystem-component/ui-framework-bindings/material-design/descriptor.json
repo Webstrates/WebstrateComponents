@@ -2,8 +2,8 @@
     "friendlyName": "MaterialMenu",
     "description": "MDC bindings for MenuSystem visualization",
     "dependencies": [
-        "/wpm_js_libs/?raw #material-design-components",
-        "/wpm_js_libs/?raw #material-design-icons",
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons",
         "#wsc-icon-registry",
         "MenuSystem"
     ],

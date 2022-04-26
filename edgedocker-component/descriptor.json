@@ -2,7 +2,7 @@
     "friendlyName": "Edge Docking Area",
     "description": "Creates a dockable area and reflows the rest of the parent around it like regular built-in developer tools",
     "dependencies": [
-        "/wpm_js_libs/?raw #CaviTouch",
+        "wpm_js_libs #CaviTouch",
         "WebstrateComponents_Tools"
     ],
     "assets": [],
