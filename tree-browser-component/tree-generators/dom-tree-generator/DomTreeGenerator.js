@@ -102,7 +102,7 @@ class DomTreeGenerator extends TreeGenerator {
             }
         }
 
-        if(webstrate != null && !this.includeWebstrateTransients) {
+        if((typeof webstrate !== "undefined") && !this.includeWebstrateTransients) {
             if(webstrate.config.isTransientElement(node)) {
                 return false;
             }
