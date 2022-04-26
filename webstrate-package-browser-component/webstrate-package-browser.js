@@ -259,6 +259,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             if (webstrate.config.isTransientElement(packageElement)) return true;
         } else {
             // Otherwise we assume a transient tag is used to mark it
+            console.log("Trying to match ", packageElement.tagName);
             if (packageElement.tagName.toLowerCase()==="transient") return true;
         }
         let parent = packageElement.parentElement;
