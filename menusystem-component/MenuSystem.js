@@ -505,7 +505,11 @@ MenuSystem.Menu = class Menu {
         let self = this;
         this.onOpen.forEach((callback)=>{
             if(typeof callback === "function") {
-                callback(self);
+                try {
+                    callback(self);
+                } catch(e) {
+                    console.error("Error inside onOpen:", e);
+                }
             }
         });
     }
@@ -518,7 +522,11 @@ MenuSystem.Menu = class Menu {
         let self = this;
         this.onClose.forEach((callback)=>{
             if(typeof callback === "function") {
-                callback(self);
+                try {
+                    callback(self);
+                } catch(e) {
+                    console.error("Error inside onClose:", e);
+                }
             }
         });
     }
