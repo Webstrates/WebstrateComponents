@@ -535,18 +535,6 @@ class TreeNode {
         let self = this;
 
         if(window.MenuSystem != null) {
-            //Setup context menus
-            this.contextMenu = MenuSystem.MenuManager.createMenu("TreeBrowser.TreeNode.ContextMenu", {
-                context: self,
-                groupDividers: true
-            });
-
-            this.contextMenu.registerOnCloseCallback(()=>{
-                if(this.contextMenu.html.parentNode != null) {
-                    this.contextMenu.html.parentNode.removeChild(this.contextMenu.html);
-                }
-            });
-
             this.html.addEventListener("contextmenu", (evt)=>{
                 evt.preventDefault();
             });
@@ -564,9 +552,19 @@ class TreeNode {
                     parent = parent.parentNode;
                 }
 
-                parent.appendChild(self.contextMenu.html);
+                //Setup context menus
+                let contextMenu = MenuSystem.MenuManager.createMenu("TreeBrowser.TreeNode.ContextMenu", {
+                    context: self,
+                    groupDividers: true
+                });
 
-                self.contextMenu.open({
+                contextMenu.registerOnCloseCallback(()=>{
+                    if(contextMenu.html.parentNode != null) {
+                        contextMenu.html.parentNode.removeChild(contextMenu.html);
+                    }
+                });
+                parent.appendChild(contextMenu.html);
+                contextMenu.open({
                     x: evt.pageX,
                     y: evt.pageY
                 });
