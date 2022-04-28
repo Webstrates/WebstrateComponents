@@ -25,6 +25,8 @@ window.WSIconProvider = class WSIconProvider {
             "webstrates:wpm-package-open",
             "webstrates:wpm-package-closed",
             "webstrates:cauldron",
+            "webstrates:codestrates",
+            "webstrates:components",
             "webstrates:varv"
         ];
     }

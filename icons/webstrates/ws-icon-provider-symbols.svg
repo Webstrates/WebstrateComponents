@@ -180,5 +180,25 @@
         <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M36.2,19.1C24.5,7.8,12.7,7.8,12.7,7.8"/>
         <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M40.2,13.1C28.8,1,12.7,1,12.7,1"/>
     </symbol>
-    <symbol id="varv-icon" viewBox="0 0 567 567"><path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="50" d="M39 56h503M6 147h503M95 238h472M26 329h416M1 420h503M39 511h485"/></symbol>    
+    <symbol id="varv-icon" viewBox="0 0 567 567">
+        <!-- License:
+            Copyright (c) 2022 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
+            Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
+        -->        
+        <path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="50" d="M39 56h503M6 147h503M95 238h472M26 329h416M1 420h503M39 511h485"/>
+    </symbol>
+    <symbol id="codestrates-icon" viewBox="0 0 567 567">
+        <!-- License:
+            Copyright (c) 2022 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
+            Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
+        -->        
+        <ellipse cx="283.5" cy="250.8" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="20" rx="270.1" ry="86.3"/><ellipse cx="283.5" cy="316.2" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="20" rx="270.1" ry="86.3"/><path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="20" d="M13 251v65M554 251v65"/><path fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="9" d="m262 308-25-25 25-25M305 258l26 25-26 25M291 249l-15 69"/>
+    </symbol>
+    <symbol id="components-icon" viewBox="0 0 567 567">
+        <!-- License:
+            Copyright (c) 2022 Jonas Oxenbøll Petersen, CAVI - Center for Advanced Visualization and Interaction, Aarhus University
+            Distributed under Creative Commons Attribution 4.0 (CC-BY-4.0)
+        -->        
+        <path fill="currentColor" d="M335 410c-1 13-4 23-9 33-5 8-11 16-18 23-6 5-12 10-20 11-13 3-21-2-23-16l-1-8-1-3-3 1-8 10c-6 6-13 13-21 16-6 2-12-3-13-9 0-7 2-13 4-20l11-27 2-9c1-3 0-5-3-7-2-2-4-3-4-6 1-3 3-4 6-5 5-2 11-2 17 2 3 2 4 5 3 8l-5 19-12 34v3l3-1 10-9 14-20 14-25c2-3 3-5 6-5h9c4 1 5 4 3 8l-9 19c-3 8-6 15-7 23l1 8c2 7 7 8 13 5 9-5 14-13 18-22 4-8 5-15 5-23-1-6-1-11-4-16-3-3-2-6 3-8 7-4 15 0 17 8l2 8z"/><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="20" d="M13 364h541v144H13zM80 326h100v38H80zM385 326h100v38H385z"/><path fill="currentColor" d="M335 144c-1 13-4 24-9 33s-11 16-18 23c-6 5-12 10-20 12-13 2-21-3-23-16l-1-9-1-2c-1-1-2 0-3 1l-8 9c-6 7-13 13-21 16-6 3-12-3-13-8 0-8 2-14 4-21l11-27 2-8c1-3 0-6-3-8-2-1-4-3-4-6 1-2 3-4 6-5 5-2 11-2 17 2 3 2 4 5 3 8l-5 20-12 33v3h3l10-10 14-19 14-26c2-2 3-5 6-5h9c4 1 5 4 3 8l-9 20c-3 7-6 15-7 23l1 7c2 7 7 8 13 5 9-5 14-13 18-22 4-7 5-15 5-23-1-6-1-11-4-15s-2-7 3-9c7-4 15 0 17 8l2 8z"/><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="20" d="M13 98h541v144H13zM80 60h100v38H80zM385 60h100v38H385z"/>
+    </symbol>
 </svg>
