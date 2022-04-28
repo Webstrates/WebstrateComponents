@@ -5136,20 +5136,31 @@ window.RevisionBrowser = class RevisionBrowser {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-.mdc-data-table {
-  width: 100%; }
-
-.package-required[data-indirect-requirement] .mdc-checkbox__background:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 100, 255, 0.22); }
-
 #packageBrowserMain {
   border-top: 1px solid lightgray; }
+  #packageBrowserMain .mdc-data-table__table {
+    width: 100%; }
+    #packageBrowserMain .mdc-data-table__table .mdc-data-table__cell {
+      height: 43px; }
+  #packageBrowserMain .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 100, 255, 0.22); }
+  #packageBrowserMain .package-required, #packageBrowserMain .package-embedded {
+    width: 5em; }
+  #packageBrowserMain .package-name {
+    width: 10em; }
+  #packageBrowserMain .package-version {
+    width: 8em; }
+  #packageBrowserMain .package-license {
+    width: 9em; }
+  #packageBrowserMain .package-description {
+    width: 100%;
+    overflow: hidden; }
 </style>
 
                 <script id="webstrate-package-browser-script" type="disabled">
@@ -5207,7 +5218,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 
                     self.setBootConfig(bootConfig);
                 }
-                tabs.activateTab(0); //self.showInstalled();
+                tabs.activateTab(0); //self.showRepositories();
             } catch (ex){
                 tabs.activateTab(1); //self.showSystem();
             }            
@@ -5220,15 +5231,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         let parent = document.createElement("transient");
         parent.appendChild(this.html);
         document.body.appendChild(parent);
-    }
-
-    showInstalled() {
-        let self = this;
-        this.mainView.innerHTML="";
-        
-        
-        let installedView = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageList");
-        this.mainView.appendChild(installedView);
     }
     
     showRepositories() {
@@ -5247,9 +5249,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         }        
         let bootConfig = this.getBootConfig();
         if (bootConfig.knownRepositories && Array.isArray(bootConfig.knownRepositories)){
-            for (let repoURL of bootConfig.knownRepositories){
-                if (!knownRepositories.includes(repoURL)){
-                    knownRepositories.push(repoURL);
+            for (let repoName of bootConfig.knownRepositories){
+                if (!knownRepositories.includes(repoName)){
+                    knownRepositories.push(repoName);
                 }
             }
         }
@@ -5257,15 +5259,22 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         // Sort it and show it
         let sortedRepositories = knownRepositories.sort();        
         let repoListDiv = repositoryView.querySelector(".repository-list");
-        for (let repositoryURL of sortedRepositories){
+        for (let repositoryName of sortedRepositories){
             let repositoryHeaderTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_header");            
             let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
             let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
-            repositoryHeaderTemplate.querySelector(".repository-url").innerText = repositoryURL;
+            repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
+            
+            // Check if this is mapped somewhere with the bootloader
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
+            
+            
+            // Check if this is mapped somewhere with any overrides
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             
             // Delayed-load up-to-date packages list
             setTimeout(async ()=>{
-                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryURL);
+                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
                 
                 let renderBody = ()=>{
                     for (let packageInfo of repositoryPackages){
@@ -5275,7 +5284,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 await renderBody();
                 
                 // Repository-wide override buttons
-                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryURL);
+                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
                 repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
                     // Enabled repository-wide require option, remove any per-package settings from bootConfig
                     for (let packageInfo of repositoryPackages){
@@ -5283,9 +5292,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                     
                     if (evt.target.checked){
-                        await self.addRepositoryRequire(repositoryURL);
+                        await self.addRepositoryRequire(repositoryName);
                     } else {                       
-                        await self.removeRepositoryRequire(repositoryURL);
+                        await self.removeRepositoryRequire(repositoryName);
                     }
                     
                     bootConfig = this.getBootConfig();
@@ -5695,38 +5704,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
     </div>    
 </template>
 
-<template id="packageBrowserPackageList">
-    <div class="mdc-data-table">
-        <div class="mdc-data-table__table-container">
-            <table class="mdc-data-table__table">
-                <thead>
-                    <tr class="mdc-data-table__header-row">
-                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox" role="columnheader" scope="col">
-                            <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
-                                <input type="checkbox" class="mdc-checkbox__native-control" aria-label="Toggle all rows"/>
-                                <div class="mdc-checkbox__background">
-                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
-                                    </svg>
-                                    <div class="mdc-checkbox__mixedmark"></div>
-                                </div>
-                                <div class="mdc-checkbox__ripple"></div>
-                            </div>
-                        </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Type</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="mdc-data-table__content package-browser-package-rows">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</template>
-
-
 <template id="packageBrowserSystem">
     <div>
         <div id="wpm-info">
@@ -5820,7 +5797,16 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 <template id="packageBrowserRepositoryItem_header">
     <thead>
         <tr>
-            <th colspan="7"><h2 class="repository-url">...</h2></th>
+            <th class="package-required"></th>
+            <th class="package-embedded"></th>            
+            <th class="package-name"></th>
+            <th class="package-version"></th>
+            <th class="package-license"></th>
+            <th class="package-description"></th>
+            <th class="package-options"></th>
+        </tr>        
+        <tr>
+            <th colspan="7"><h2 class="repository-name">...</h2><h3 class="repository-url"></h3></th>
         </tr>            
     </thead>
 </template>

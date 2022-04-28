@@ -33,40 +33,6 @@
     </div>    
 </template>
 
-<template id="packageBrowserPackageList">
-    <!-- Package list -->
-    <div class="mdc-data-table">
-        <div class="mdc-data-table__table-container">
-            <table class="mdc-data-table__table">
-                <thead>
-                    <tr class="mdc-data-table__header-row">
-                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox" role="columnheader" scope="col">
-                            <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
-                                <input type="checkbox" class="mdc-checkbox__native-control" aria-label="Toggle all rows"/>
-                                <div class="mdc-checkbox__background">
-                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-                                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
-                                    </svg>
-                                    <div class="mdc-checkbox__mixedmark"></div>
-                                </div>
-                                <div class="mdc-checkbox__ripple"></div>
-                            </div>
-                        </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Type</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="mdc-data-table__content package-browser-package-rows">
-                    <!-- rows -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</template>
-
-
 <template id="packageBrowserSystem">
     <div>
         <div id="wpm-info">
@@ -160,7 +126,16 @@
 <template id="packageBrowserRepositoryItem_header">
     <thead>
         <tr>
-            <th colspan="7"><h2 class="repository-url">...</h2></th>
+            <th class="package-required"></th>
+            <th class="package-embedded"></th>            
+            <th class="package-name"></th>
+            <th class="package-version"></th>
+            <th class="package-license"></th>
+            <th class="package-description"></th>
+            <th class="package-options"></th>
+        </tr>        
+        <tr>
+            <th colspan="7"><h2 class="repository-name">...</h2><h3 class="repository-url"></h3></th>
         </tr>            
     </thead>
 </template>

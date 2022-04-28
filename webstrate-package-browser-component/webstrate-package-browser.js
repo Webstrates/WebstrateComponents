@@ -52,7 +52,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 
                     self.setBootConfig(bootConfig);
                 }
-                tabs.activateTab(0); //self.showInstalled();
+                tabs.activateTab(0); //self.showRepositories();
             } catch (ex){
                 tabs.activateTab(1); //self.showSystem();
             }            
@@ -65,15 +65,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         let parent = document.createElement("transient");
         parent.appendChild(this.html);
         document.body.appendChild(parent);
-    }
-
-    showInstalled() {
-        let self = this;
-        this.mainView.innerHTML="";
-        
-        
-        let installedView = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageList");
-        this.mainView.appendChild(installedView);
     }
     
     showRepositories() {
@@ -92,9 +83,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         }        
         let bootConfig = this.getBootConfig();
         if (bootConfig.knownRepositories && Array.isArray(bootConfig.knownRepositories)){
-            for (let repoURL of bootConfig.knownRepositories){
-                if (!knownRepositories.includes(repoURL)){
-                    knownRepositories.push(repoURL);
+            for (let repoName of bootConfig.knownRepositories){
+                if (!knownRepositories.includes(repoName)){
+                    knownRepositories.push(repoName);
                 }
             }
         }
@@ -102,15 +93,22 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         // Sort it and show it
         let sortedRepositories = knownRepositories.sort();        
         let repoListDiv = repositoryView.querySelector(".repository-list");
-        for (let repositoryURL of sortedRepositories){
+        for (let repositoryName of sortedRepositories){
             let repositoryHeaderTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_header");            
             let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
             let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
-            repositoryHeaderTemplate.querySelector(".repository-url").innerText = repositoryURL;
+            repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
+            
+            // Check if this is mapped somewhere with the bootloader
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
+            
+            
+            // Check if this is mapped somewhere with any overrides
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             
             // Delayed-load up-to-date packages list
             setTimeout(async ()=>{
-                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryURL);
+                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
                 
                 let renderBody = ()=>{
                     for (let packageInfo of repositoryPackages){
@@ -120,7 +118,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 await renderBody();
                 
                 // Repository-wide override buttons
-                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryURL);
+                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
                 repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
                     // Enabled repository-wide require option, remove any per-package settings from bootConfig
                     for (let packageInfo of repositoryPackages){
@@ -128,9 +126,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                     
                     if (evt.target.checked){
-                        await self.addRepositoryRequire(repositoryURL);
+                        await self.addRepositoryRequire(repositoryName);
                     } else {                       
-                        await self.removeRepositoryRequire(repositoryURL);
+                        await self.removeRepositoryRequire(repositoryName);
                     }
                     
                     bootConfig = this.getBootConfig();
