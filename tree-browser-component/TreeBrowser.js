@@ -539,11 +539,12 @@ class TreeNode {
                 evt.preventDefault();
             });
 
+            let contextMenu = null;
+
             this.html.addEventListener("mouseup", (evt)=>{
                 if(evt.button !== 2) {
                     return;
                 }
-
                 self.select();
 
                 //Find top component after html
@@ -553,16 +554,19 @@ class TreeNode {
                 }
 
                 //Setup context menus
-                let contextMenu = MenuSystem.MenuManager.createMenu("TreeBrowser.TreeNode.ContextMenu", {
-                    context: self,
-                    groupDividers: true
-                });
+                if(contextMenu == null) {
+                    contextMenu = MenuSystem.MenuManager.createMenu("TreeBrowser.TreeNode.ContextMenu", {
+                        context: self,
+                        groupDividers: true
+                    });
 
-                contextMenu.registerOnCloseCallback(()=>{
-                    if(contextMenu.html.parentNode != null) {
-                        contextMenu.html.parentNode.removeChild(contextMenu.html);
-                    }
-                });
+                    contextMenu.registerOnCloseCallback(() => {
+                        if (contextMenu.html.parentNode != null) {
+                            contextMenu.html.parentNode.removeChild(contextMenu.html);
+                        }
+                    });
+                }
+
                 parent.appendChild(contextMenu.html);
                 contextMenu.open({
                     x: evt.pageX,
