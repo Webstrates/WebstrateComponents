@@ -5105,7 +5105,8 @@ window.RevisionBrowser = class RevisionBrowser {
     ],
     "optionalDependencies": [
         "wpm_js_libs #material-design-components",
-        "wpm_js_libs #material-design-icons"
+        "wpm_js_libs #material-design-icons",
+        "#ModalDialog"
     ],
     "assets": [],
     "version": "1.0",
@@ -5136,31 +5137,35 @@ window.RevisionBrowser = class RevisionBrowser {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-#packageBrowserMain {
-  border-top: 1px solid lightgray; }
-  #packageBrowserMain .mdc-data-table__table {
-    width: 100%; }
-    #packageBrowserMain .mdc-data-table__table .mdc-data-table__cell {
-      height: 43px; }
-  #packageBrowserMain .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 100, 255, 0.22); }
-  #packageBrowserMain .package-required, #packageBrowserMain .package-embedded {
-    width: 5em; }
-  #packageBrowserMain .package-name {
-    width: 10em; }
-  #packageBrowserMain .package-version {
-    width: 8em; }
-  #packageBrowserMain .package-license {
-    width: 9em; }
-  #packageBrowserMain .package-description {
-    width: 100%;
-    overflow: hidden; }
+.package-browser-base {
+  max-width: 100vw; }
+  .package-browser-base #packageBrowserMain {
+    border-top: 1px solid lightgray; }
+    .package-browser-base #packageBrowserMain .repository-actions {
+      text-align: right; }
+    .package-browser-base #packageBrowserMain .mdc-data-table__table {
+      width: 100%; }
+      .package-browser-base #packageBrowserMain .mdc-data-table__table .mdc-data-table__cell {
+        height: 43px; }
+    .package-browser-base #packageBrowserMain .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 100, 255, 0.22); }
+    .package-browser-base #packageBrowserMain .package-required, .package-browser-base #packageBrowserMain .package-embedded {
+      width: 5em; }
+    .package-browser-base #packageBrowserMain .package-name {
+      width: 10em; }
+    .package-browser-base #packageBrowserMain .package-version {
+      width: 8em; }
+    .package-browser-base #packageBrowserMain .package-license {
+      width: 9em; }
+    .package-browser-base #packageBrowserMain .package-description {
+      width: 100%;
+      overflow: hidden; }
 </style>
 
                 <script id="webstrate-package-browser-script" type="disabled">
@@ -5238,6 +5243,27 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         this.mainView.innerHTML="";
         
         let repositoryView = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryList");
+        
+        // General actions for repositories
+        let addRepositoryDialog = new WebstrateComponents.ModalDialog(
+                WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder"),
+                {
+                    "title":"Add Repository",
+                    "actions": {
+                            "cancel":{},
+                            "add": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        document.documentElement.appendChild(addRepositoryDialog.html);
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+                if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+                           alert("Yeah baby!");
+                }
+        });
+        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.open();
+        });
         
         // Gather a list of used repositories, both site-wide from WPM and previously added from this browser
         let knownRepositories = [];
@@ -5862,13 +5888,16 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 
 <template id="packageBrowserRepositoryList">
     <div>
-        <div class="mdc-touch-target-wrapper add-repository">
-          <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
-            <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__touch"></span>
-            <span class="mdc-button__label">More Respositories...</span>
-          </button>
-        </div>        
+        <div class="repository-actions">
+            <div class="mdc-touch-target-wrapper add-repository">
+              <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
+                    <i class="material-icons mdc-button__icon">add_link</i>
+                    <span class="mdc-button__ripple"></span>
+                    <span class="mdc-button__touch"></span>
+                    <span class="mdc-button__label">Add Respository...</span>
+              </button>
+            </div>        
+        </div>
         
         <div class="mdc-data-table">
             <div class="mdc-data-table__table-container">
@@ -5877,6 +5906,13 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             </div>
         </div>
     </div>
+</template>
+
+<template id="packageBrowserRepositoryAdder">
+        <div>
+            Repository URL<br />
+            <input type="URL" placeholder="https://..." title="Repository to add - typically another webstrate with ?raw or a Github raw URL">
+        </div>
 </template>
 
             </div>            
@@ -6629,7 +6665,8 @@ class ModalDialog {
             closeOnOutsideClick: true,
             closeOnEscape: true,
             autoStackButtons: true,
-            maximize: false
+            maximize: false,
+            actions: {}
         };
 
         this.uuid = UUIDGenerator.generateUUID("dialog-");
@@ -6640,12 +6677,51 @@ class ModalDialog {
 
         this.title = this.html.querySelector(".mdc-dialog__title");
         this.content = this.html.querySelector(".mdc-dialog__content");
+        this.actions = this.html.querySelector(".mdc-dialog__actions");
 
         this.title.id = this.uuid + "-title";
         this.content.id = this.uuid + "-content";
 
         this.html.querySelector(".mdc-dialog__surface").setAttribute("aria-labelledby", this.title.id);
         this.html.querySelector(".mdc-dialog__surface").setAttribute("aria-describedby", this.content.id);
+
+        // Action buttons
+        if (this.options.actions === null || Object.keys(this.options.actions).length===0){
+                this.actions.remove();
+        } else {
+                for (const [action, actionOptions] of Object.entries(this.options.actions)) {
+                        let actionButton = document.createElement("button");
+                        actionButton.classList.add("mdc-button");
+                        actionButton.classList.add("mdc-dialog__button");
+                        if (actionOptions.primary){
+                                actionButton.classList.add("mdc-button--raised");
+                        }
+                        actionButton.setAttribute("data-mdc-dialog-action", action);
+                        
+                        if (actionOptions.mdcIcon){
+                                let icon = document.createElement("i");
+                                icon.classList.add("material-icons");
+                                icon.classList.add("mdc-button__icon");
+                                icon.innerText = actionOptions.mdcIcon;
+                                actionButton.appendChild(icon);
+                        }
+                        
+                        let ripple = document.createElement("div");
+                        ripple.classList.add("mdc-button__ripple");
+                        actionButton.appendChild(ripple);
+                        
+                        let label = document.createElement("span");
+                        label.classList.add("mdc-button__label");
+                        if (actionOptions.label){
+                                label.innerText = actionOptions.label;
+                        } else {
+                                label.innerText = action;
+                        }
+                        actionButton.append(label);
+                        
+                        this.actions.appendChild(actionButton);
+                }
+        }
 
         this.content.appendChild(content);
         if(this.options.title != null && this.options.title.trim() !== "") {
@@ -6734,6 +6810,7 @@ window.WebstrateComponents.ModalDialog = ModalDialog;
                  aria-describedby="my-dialog-content">
                 <h2 class="mdc-dialog__title" id="my-dialog-title"></h2>
                 <div class="mdc-dialog__content" id="my-dialog-content"></div>
+                <div class="mdc-dialog__actions"></div>                
             </div>
         </div>
         <div class="mdc-dialog__scrim"></div>

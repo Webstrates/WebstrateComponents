@@ -17,44 +17,52 @@
  *  limitations under the License.
 **/
 
-#packageBrowserMain {
-    border-top: 1px solid lightgray;
-    
-    .mdc-data-table__table {
-        width: 100%;
+.package-browser-base {
+    max-width: 100vw;
+
+    #packageBrowserMain {        
+        border-top: 1px solid lightgray;
         
-        .mdc-data-table__cell {
-            height: 43px;
+        .repository-actions {
+            text-align: right;
         }
-    }
-    
-    .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
-        content:"";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 100, 255, 0.22)
+
+        .mdc-data-table__table {
+            width: 100%;
+
+            .mdc-data-table__cell {
+                height: 43px;
+            }
+        }
+
+        .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
+            content:"";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 100, 255, 0.22)
+        }    
+
+        .package-required, .package-embedded {
+            width: 5em;
+        }
+
+        .package-name {
+            width: 10em;
+        }
+
+        .package-version {
+            width: 8em;
+        }
+        .package-license {
+            width: 9em;
+        }
+
+        .package-description {
+            width: 100%;
+            overflow: hidden;
+        }        
     }    
-    
-    .package-required, .package-embedded {
-        width: 5em;
-    }
-    
-    .package-name {
-        width: 10em;
-    }
-    
-    .package-version {
-        width: 8em;
-    }
-    .package-license {
-        width: 9em;
-    }
-    
-    .package-description {
-        width: 100%;
-        overflow: hidden;
-    }
 }

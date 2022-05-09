@@ -47,7 +47,8 @@ class ModalDialog {
             closeOnOutsideClick: true,
             closeOnEscape: true,
             autoStackButtons: true,
-            maximize: false
+            maximize: false,
+            actions: {}
         };
 
         this.uuid = UUIDGenerator.generateUUID("dialog-");
@@ -58,12 +59,51 @@ class ModalDialog {
 
         this.title = this.html.querySelector(".mdc-dialog__title");
         this.content = this.html.querySelector(".mdc-dialog__content");
+        this.actions = this.html.querySelector(".mdc-dialog__actions");
 
         this.title.id = this.uuid + "-title";
         this.content.id = this.uuid + "-content";
 
         this.html.querySelector(".mdc-dialog__surface").setAttribute("aria-labelledby", this.title.id);
         this.html.querySelector(".mdc-dialog__surface").setAttribute("aria-describedby", this.content.id);
+
+        // Action buttons
+        if (this.options.actions === null || Object.keys(this.options.actions).length===0){
+                this.actions.remove();
+        } else {
+                for (const [action, actionOptions] of Object.entries(this.options.actions)) {
+                        let actionButton = document.createElement("button");
+                        actionButton.classList.add("mdc-button");
+                        actionButton.classList.add("mdc-dialog__button");
+                        if (actionOptions.primary){
+                                actionButton.classList.add("mdc-button--raised");
+                        }
+                        actionButton.setAttribute("data-mdc-dialog-action", action);
+                        
+                        if (actionOptions.mdcIcon){
+                                let icon = document.createElement("i");
+                                icon.classList.add("material-icons");
+                                icon.classList.add("mdc-button__icon");
+                                icon.innerText = actionOptions.mdcIcon;
+                                actionButton.appendChild(icon);
+                        }
+                        
+                        let ripple = document.createElement("div");
+                        ripple.classList.add("mdc-button__ripple");
+                        actionButton.appendChild(ripple);
+                        
+                        let label = document.createElement("span");
+                        label.classList.add("mdc-button__label");
+                        if (actionOptions.label){
+                                label.innerText = actionOptions.label;
+                        } else {
+                                label.innerText = action;
+                        }
+                        actionButton.append(label);
+                        
+                        this.actions.appendChild(actionButton);
+                }
+        }
 
         this.content.appendChild(content);
         if(this.options.title != null && this.options.title.trim() !== "") {

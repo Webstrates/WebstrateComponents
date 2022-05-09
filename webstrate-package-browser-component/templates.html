@@ -193,13 +193,16 @@
 <!-- Repository List -->
 <template id="packageBrowserRepositoryList">
     <div>
-        <div class="mdc-touch-target-wrapper add-repository">
-          <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
-            <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__touch"></span>
-            <span class="mdc-button__label">More Respositories...</span>
-          </button>
-        </div>        
+        <div class="repository-actions">
+            <div class="mdc-touch-target-wrapper add-repository">
+              <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
+                    <i class="material-icons mdc-button__icon">add_link</i>
+                    <span class="mdc-button__ripple"></span>
+                    <span class="mdc-button__touch"></span>
+                    <span class="mdc-button__label">Add Respository...</span>
+              </button>
+            </div>        
+        </div>
         
         <div class="mdc-data-table">
             <div class="mdc-data-table__table-container">
@@ -209,4 +212,11 @@
             </div>
         </div>
     </div>
+</template>
+
+<template id="packageBrowserRepositoryAdder">
+        <div>
+            Repository URL<br />
+            <input type="URL" placeholder="https://..." title="Repository to add - typically another webstrate with ?raw or a Github raw URL">
+        </div>
 </template>

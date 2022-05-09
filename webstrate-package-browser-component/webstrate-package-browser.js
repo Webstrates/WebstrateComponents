@@ -73,6 +73,27 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         
         let repositoryView = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryList");
         
+        // General actions for repositories
+        let addRepositoryDialog = new WebstrateComponents.ModalDialog(
+                WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder"),
+                {
+                    "title":"Add Repository",
+                    "actions": {
+                            "cancel":{},
+                            "add": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        document.documentElement.appendChild(addRepositoryDialog.html);
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+                if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+                           alert("Yeah baby!");
+                }
+        });
+        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.open();
+        });
+        
         // Gather a list of used repositories, both site-wide from WPM and previously added from this browser
         let knownRepositories = [];
         let installedPackages = WPMv2.getCurrentlyInstalledPackages();
