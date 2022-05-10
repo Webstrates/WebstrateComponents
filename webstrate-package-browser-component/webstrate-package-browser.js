@@ -87,11 +87,23 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         );
         document.documentElement.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
-                if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
-                           alert("Yeah baby!"+repoAddTemplate.querySelector("#repoid").value);
+            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+                let bootConfig = self.getBootConfig();
+                let value = repoAddTemplate.querySelector("#repoid").value;
+                if (value){
+                    if ((!bootConfig.knownRepositories) || !Array.isArray(bootConfig.knownRepositories)){
+                        bootConfig.knownRepositories = []; // Destructive conformity
+                    }
+                    bootConfig.knownRepositories.push(repoAddTemplate.querySelector("#repoid").value);
+                    self.setBootConfig(bootConfig);
+                    self.showRepositories();
+                    
+                    // TODO: .scrollIntoView() ?
                 }
+            }
         });
         repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.html.querySelector("#repoid").value = "";
             addRepositoryDialog.open();
         });
         
@@ -121,12 +133,22 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
             repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
             
-            // Check if this is mapped somewhere with the bootloader
-            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             
+            // Check if this is mapped somewhere with the bootloader
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it   
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
+            if (stepRepositoryRegistrations[repositoryName]){
+                repositoryHeaderTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+            }
             
             // Check if this is mapped somewhere with any overrides
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
+            let overrideRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
+            if (overrideRepositoryRegistrations[repositoryName]){
+                repositoryHeaderTemplate.querySelector(".repository-override-url").innerText = overrideRepositoryRegistrations[repositoryName];
+                repositoryHeaderTemplate.querySelector(".repository-override-url").title = "Site-wide developer override in this browser";
+                repositoryHeaderTemplate.querySelector(".repository-header").classList.add("overridden");
+            }            
             
             // Delayed-load up-to-date packages list
             setTimeout(async ()=>{

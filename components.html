@@ -5147,6 +5147,18 @@ window.RevisionBrowser = class RevisionBrowser {
         padding-left: 0.75em; }
     .package-browser-base #packageBrowserMain .repository-actions {
       text-align: right; }
+    .package-browser-base #packageBrowserMain .repository-header .repository-name {
+      margin-bottom: 0; }
+    .package-browser-base #packageBrowserMain .repository-header .repository-url {
+      font-weight: normal;
+      font-size: 0.8em; }
+    .package-browser-base #packageBrowserMain .repository-header .repository-override-url {
+      font-size: 0.8em;
+      color: red; }
+    .package-browser-base #packageBrowserMain .repository-header .repository-override-actions {
+      display: none; }
+    .package-browser-base #packageBrowserMain .repository-header.overridden .repository-url {
+      text-decoration: line-through; }
     .package-browser-base #packageBrowserMain .mdc-data-table__table-container {
       overflow-x: initial; }
     .package-browser-base #packageBrowserMain .mdc-data-table__table {
@@ -5264,11 +5276,23 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         );
         document.documentElement.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
-                if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
-                           alert("Yeah baby!"+repoAddTemplate.querySelector("#repoid").value);
+            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+                let bootConfig = self.getBootConfig();
+                let value = repoAddTemplate.querySelector("#repoid").value;
+                if (value){
+                    if ((!bootConfig.knownRepositories) || !Array.isArray(bootConfig.knownRepositories)){
+                        bootConfig.knownRepositories = []; // Destructive conformity
+                    }
+                    bootConfig.knownRepositories.push(repoAddTemplate.querySelector("#repoid").value);
+                    self.setBootConfig(bootConfig);
+                    self.showRepositories();
+                    
+                    // TODO: .scrollIntoView() ?
                 }
+            }
         });
         repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.html.querySelector("#repoid").value = "";
             addRepositoryDialog.open();
         });
         
@@ -5298,12 +5322,22 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
             repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
             
-            // Check if this is mapped somewhere with the bootloader
-            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             
+            // Check if this is mapped somewhere with the bootloader
+            // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it   
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
+            if (stepRepositoryRegistrations[repositoryName]){
+                repositoryHeaderTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+            }
             
             // Check if this is mapped somewhere with any overrides
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
+            let overrideRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
+            if (overrideRepositoryRegistrations[repositoryName]){
+                repositoryHeaderTemplate.querySelector(".repository-override-url").innerText = overrideRepositoryRegistrations[repositoryName];
+                repositoryHeaderTemplate.querySelector(".repository-override-url").title = "Site-wide developer override in this browser";
+                repositoryHeaderTemplate.querySelector(".repository-header").classList.add("overridden");
+            }            
             
             // Delayed-load up-to-date packages list
             setTimeout(async ()=>{
@@ -5843,7 +5877,11 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             <th class="package-options"></th>
         </tr>        
         <tr>
-            <th colspan="7"><h2 class="repository-name">...</h2><h3 class="repository-url"></h3></th>
+            <th colspan="7" class="repository-header">
+                <h2 class="repository-name">...</h2>
+                <div class="repository-url"></div>
+                <div class="repository-override-url"></div>
+            </th>
         </tr>            
     </thead>
 </template>

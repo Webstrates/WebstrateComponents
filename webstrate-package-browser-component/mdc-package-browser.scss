@@ -35,6 +35,29 @@
             text-align: right;
         }
         
+        .repository-header {
+            .repository-name {
+                margin-bottom: 0;
+            }
+            .repository-url {
+                font-weight: normal;
+                font-size: 0.8em;         
+            }
+            .repository-override-url {
+                font-size: 0.8em;            
+                color: red;
+            }
+            .repository-override-actions {
+                display: none;
+            }
+            
+            &.overridden {
+                .repository-url {
+                    text-decoration: line-through;
+                }
+            }            
+        }
+
         .mdc-data-table__table-container {
             overflow-x: initial;
         }        
