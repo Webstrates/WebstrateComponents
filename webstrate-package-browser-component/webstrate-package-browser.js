@@ -155,7 +155,8 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 });         
                 moreMenu.addItem({
                     label: "Remove",
-                    order: 999,
+                    order: 10,
+                    icon: IconRegistry.createIcon("mdc:delete_outline"),
                     onAction: ()=>{                        
                         let bootConfig = self.getBootConfig();
                         if ((!bootConfig.knownRepositories) || !Array.isArray(bootConfig.knownRepositories)){
@@ -168,9 +169,18 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                         }
                     }
                 });
+                moreMenu.addItem({
+                    label: "URL Override...",
+                    icon: IconRegistry.createIcon("mdc:assistant_direction"),
+                    order: 999,
+                    onAction: ()=>{                        
+                        alert("Prove that you are a dev first!");
+                        // Use WPMv2.registerRepository("the-name", "new url", true);
+                    }
+                });                
                 
                 moreMenu.registerOnCloseCallback(() => {
-                    if (moreMenu.html.parentNode != null) {
+                    if (moreMenu.html.parentNode !== null) {
                         moreMenu.html.parentNode.removeChild(moreMenu.html);
                     }
                 });                
