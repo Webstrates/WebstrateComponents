@@ -21,12 +21,11 @@
 window.WPMPackageBrowser = class WPMPackageBrowser {
     constructor(autoOpen=true) {
         let self = this;
-
-        this.itemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItem");
-        this.html = WebstrateComponents.Tools.loadTemplate("#packageBrowserBase");
-        this.mainView = self.html.querySelector("#packageBrowserMain");
+        self.itemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItem");
+        self.html = WebstrateComponents.Tools.loadTemplate("#packageBrowserBase");
+        self.mainView = self.html.querySelector("#packageBrowserMain");
         
-        wpm.require(["material-design-components", "material-design-icons"]).then(()=>{
+        wpm.require(["material-design-components", "material-design-icons","ModalDialog","MenuSystem"]).then(()=>{
             mdc.autoInit(self.html);
             let tabs = self.html.querySelector(".mdc-tab-bar").MDCTabBar;
             
@@ -89,8 +88,8 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
             if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
                 let bootConfig = self.getBootConfig();
-                let value = repoAddTemplate.querySelector("#repoid").value;
-                if (value){
+                let value = repoAddTemplate.querySelector("#repoid").value.trim();
+                if (value.length>0){
                     if ((!bootConfig.knownRepositories) || !Array.isArray(bootConfig.knownRepositories)){
                         bootConfig.knownRepositories = []; // Destructive conformity
                     }
@@ -148,7 +147,43 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 repositoryHeaderTemplate.querySelector(".repository-override-url").innerText = overrideRepositoryRegistrations[repositoryName];
                 repositoryHeaderTemplate.querySelector(".repository-override-url").title = "Site-wide developer override in this browser";
                 repositoryHeaderTemplate.querySelector(".repository-header").classList.add("overridden");
-            }            
+            }     
+            
+            repositoryHeaderTemplate.querySelector(".repository-more").addEventListener("click", (evt)=>{
+                let moreMenu = MenuSystem.MenuManager.createMenu("PackageBrowser.RepositoryMore", {
+                    growDirection: MenuSystem.Menu.GrowDirection.DOWN
+                });         
+                moreMenu.addItem({
+                    label: "Remove",
+                    order: 999,
+                    onAction: ()=>{                        
+                        let bootConfig = self.getBootConfig();
+                        if ((!bootConfig.knownRepositories) || !Array.isArray(bootConfig.knownRepositories)){
+                            console.log("Couldn't understand bootConfig.knownRepositories", bootConfig.knownRepositories);
+                            return;
+                        } else {
+                            bootConfig.knownRepositories = bootConfig.knownRepositories.filter(e => e !== repositoryName);
+                            self.setBootConfig(bootConfig);
+                            self.showRepositories();
+                        }
+                    }
+                });
+                
+                moreMenu.registerOnCloseCallback(() => {
+                    if (moreMenu.html.parentNode != null) {
+                        moreMenu.html.parentNode.removeChild(moreMenu.html);
+                    }
+                });                
+                
+                self.html.appendChild(moreMenu.html);
+                moreMenu.open({
+                    x: evt.pageX,
+                    y: evt.pageY
+                });
+                evt.stopPropagation();
+                evt.preventDefault();
+            });
+            
             
             // Delayed-load up-to-date packages list
             setTimeout(async ()=>{

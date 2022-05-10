@@ -7,7 +7,8 @@
     "optionalDependencies": [
         "wpm_js_libs #material-design-components",
         "wpm_js_libs #material-design-icons",
-        "#ModalDialog"
+        "#ModalDialog",
+        "#MenuSystem"
     ],
     "assets": [],
     "version": "1.0",

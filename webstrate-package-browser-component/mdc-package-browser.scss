@@ -34,6 +34,9 @@
         .repository-actions {
             text-align: right;
         }
+        .repository-more {
+            margin-left: -2em;
+        }        
         
         .repository-header {
             .repository-name {
@@ -64,9 +67,12 @@
 
         .mdc-data-table__table {
             width: 100%;
+            border-spacing: 0;
+            border-collapse: initial;
             
             .mdc-data-table__cell {
                 height: 43px;
+                border-top: 1px solid #eee;
             }
         }
 
@@ -85,14 +91,17 @@
         }
 
         .package-name {
-            width: 10em;
+            width: 12em;
         }
 
         .package-version {
-            width: 8em;
+            width: 6em;
         }
         .package-license {
             width: 9em;
+        }
+        .package-options {
+            width: 1em;
         }
 
         .package-description {
