@@ -23,13 +23,25 @@
     #packageBrowserMain {        
         border-top: 1px solid lightgray;
         
+        .install-options-icons {
+            line-height: 1em;
+            
+            th {
+                padding-left: 0.75em;
+            }
+        }
+        
         .repository-actions {
             text-align: right;
         }
+        
+        .mdc-data-table__table-container {
+            overflow-x: initial;
+        }        
 
         .mdc-data-table__table {
             width: 100%;
-
+            
             .mdc-data-table__cell {
                 height: 43px;
             }
@@ -46,7 +58,7 @@
         }    
 
         .package-required, .package-embedded {
-            width: 5em;
+            width: 3.5em;
         }
 
         .package-name {

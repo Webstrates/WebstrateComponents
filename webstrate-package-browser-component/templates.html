@@ -38,11 +38,11 @@
         <div id="wpm-info">
             <h2>Webstrate Package Manager</h2>
             <table>
-                <tr><th>Name</th><th>API</th><th>Specific Revision</th><th></th></tr>
-                <tr>
-                    <td class="name">Unknown Platform</td>
-                    <td class="version">Legacy</td>
-                    <td class="revision">?</td>
+                
+                <tr><th>Name</th><td class="name">Unknown Platform</td></tr>
+                <tr><th>API</th><td class="version">Legacy</td></tr>
+                <tr><th>Specific Revision</th><td class="revision">?</td></tr>
+                <tr><th></th>
                     <td class="options">
                         <button class="update">Check For Updates</button>
                     </td>
@@ -141,7 +141,7 @@
 </template>
 <template id="packageBrowserRepositoryItem_repository">    
     <thead>        
-        <tr class="mdc-data-table__header-row">
+        <tr class="mdc-data-table__header-row install-options-icons">
             <th role="columnheader" scope="col" title="Automatically require at boot">
                 <i class="material-icons">play_arrow</i>
             </th>
@@ -215,8 +215,27 @@
 </template>
 
 <template id="packageBrowserRepositoryAdder">
-        <div>
-            Repository URL<br />
-            <input type="URL" placeholder="https://..." title="Repository to add - typically another webstrate with ?raw or a Github raw URL">
-        </div>
+    <div>
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository ID</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repoid">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Identification token - e.g. 'cauldron-repos'
+          </div>
+        </div>            
+        <p>
+            WPM will search for the repository in:
+        </p>
+        <ul>
+            <li>/[identifier]/?raw - using Webstrates</li>
+            <li>./[identifier]/index.html - on filesystem</li>
+        </ul>
+</div>
 </template>

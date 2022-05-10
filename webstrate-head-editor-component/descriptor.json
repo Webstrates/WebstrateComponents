@@ -1,0 +1,17 @@
+{
+    "friendlyName": "Head Editor Component",
+    "description": "Easily modify the properties in the head of the page",
+    "dependencies": [
+        "#WebstrateComponents_Tools"
+    ],
+    "optionalDependencies": [
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons"
+    ],
+    "assets": [],
+    "version": "1.0",
+    "license": "Apache 2.0",
+    "changelog": {
+        "1.0": "Initial version"
+    }
+}

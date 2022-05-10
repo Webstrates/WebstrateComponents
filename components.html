@@ -5141,8 +5141,14 @@ window.RevisionBrowser = class RevisionBrowser {
   max-width: 100vw; }
   .package-browser-base #packageBrowserMain {
     border-top: 1px solid lightgray; }
+    .package-browser-base #packageBrowserMain .install-options-icons {
+      line-height: 1em; }
+      .package-browser-base #packageBrowserMain .install-options-icons th {
+        padding-left: 0.75em; }
     .package-browser-base #packageBrowserMain .repository-actions {
       text-align: right; }
+    .package-browser-base #packageBrowserMain .mdc-data-table__table-container {
+      overflow-x: initial; }
     .package-browser-base #packageBrowserMain .mdc-data-table__table {
       width: 100%; }
       .package-browser-base #packageBrowserMain .mdc-data-table__table .mdc-data-table__cell {
@@ -5156,7 +5162,7 @@ window.RevisionBrowser = class RevisionBrowser {
       bottom: 0;
       background: rgba(0, 100, 255, 0.22); }
     .package-browser-base #packageBrowserMain .package-required, .package-browser-base #packageBrowserMain .package-embedded {
-      width: 5em; }
+      width: 3.5em; }
     .package-browser-base #packageBrowserMain .package-name {
       width: 10em; }
     .package-browser-base #packageBrowserMain .package-version {
@@ -5245,8 +5251,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         let repositoryView = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryList");
         
         // General actions for repositories
+        let repoAddTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder");
         let addRepositoryDialog = new WebstrateComponents.ModalDialog(
-                WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder"),
+                repoAddTemplate,
                 {
                     "title":"Add Repository",
                     "actions": {
@@ -5258,7 +5265,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         document.documentElement.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
                 if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
-                           alert("Yeah baby!");
+                           alert("Yeah baby!"+repoAddTemplate.querySelector("#repoid").value);
                 }
         });
         repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
@@ -5588,9 +5595,13 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             return WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItemError");            
         }
         packageItemTemplate.querySelector(".package-name").innerText = wpmPackage.name;
+        packageItemTemplate.querySelector(".package-name").title = wpmPackage.name;
         
         ["version", "description", "license"].forEach((packageProperty)=>{
-            if (wpmPackage[packageProperty]) packageItemTemplate.querySelector(".package-"+packageProperty).innerText = wpmPackage[packageProperty];
+            if (wpmPackage[packageProperty]){
+                packageItemTemplate.querySelector(".package-"+packageProperty).innerText = wpmPackage[packageProperty];
+                packageItemTemplate.querySelector(".package-"+packageProperty).title = wpmPackage[packageProperty];
+            }
         });
         
         let localPackageElement = this.getLocalPackageElement(wpmPackage.name);
@@ -5735,11 +5746,11 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         <div id="wpm-info">
             <h2>Webstrate Package Manager</h2>
             <table>
-                <tr><th>Name</th><th>API</th><th>Specific Revision</th><th></th></tr>
-                <tr>
-                    <td class="name">Unknown Platform</td>
-                    <td class="version">Legacy</td>
-                    <td class="revision">?</td>
+                
+                <tr><th>Name</th><td class="name">Unknown Platform</td></tr>
+                <tr><th>API</th><td class="version">Legacy</td></tr>
+                <tr><th>Specific Revision</th><td class="revision">?</td></tr>
+                <tr><th></th>
                     <td class="options">
                         <button class="update">Check For Updates</button>
                     </td>
@@ -5838,7 +5849,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 </template>
 <template id="packageBrowserRepositoryItem_repository">    
     <thead>        
-        <tr class="mdc-data-table__header-row">
+        <tr class="mdc-data-table__header-row install-options-icons">
             <th role="columnheader" scope="col" title="Automatically require at boot">
                 <i class="material-icons">play_arrow</i>
             </th>
@@ -5909,10 +5920,29 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 </template>
 
 <template id="packageBrowserRepositoryAdder">
-        <div>
-            Repository URL<br />
-            <input type="URL" placeholder="https://..." title="Repository to add - typically another webstrate with ?raw or a Github raw URL">
-        </div>
+    <div>
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository ID</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repoid">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Identification token - e.g. 'cauldron-repos'
+          </div>
+        </div>            
+        <p>
+            WPM will search for the repository in:
+        </p>
+        <ul>
+            <li>/[identifier]/?raw - using Webstrates</li>
+            <li>./[identifier]/index.html - on filesystem</li>
+        </ul>
+</div>
 </template>
 
             </div>            
@@ -6561,6 +6591,29 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
 </template>
 
             </div>
+            <div class="package" id="HeadEditorComponent">
+                <script id="descriptor-script" type="descriptor">
+{
+    "friendlyName": "Head Editor Component",
+    "description": "Easily modify the properties in the head of the page",
+    "dependencies": [
+        "#WebstrateComponents_Tools"
+    ],
+    "optionalDependencies": [
+        "wpm_js_libs #material-design-components",
+        "wpm_js_libs #material-design-icons"
+    ],
+    "assets": [],
+    "version": "1.0",
+    "license": "Apache 2.0",
+    "changelog": {
+        "1.0": "Initial version"
+    }
+}
+
+</script>
+
+            </div>            
 
             <div class="package" id="ModalDialog">
                 <script id="descriptor-script" type="descriptor">
@@ -6785,6 +6838,8 @@ class ModalDialog {
                 action: evt.detail.action
             });
         });
+        
+        mdc.autoInit(this.html);
     }
 
     open() {

@@ -167,6 +167,8 @@ class ModalDialog {
                 action: evt.detail.action
             });
         });
+        
+        mdc.autoInit(this.html);
     }
 
     open() {

@@ -74,8 +74,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         let repositoryView = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryList");
         
         // General actions for repositories
+        let repoAddTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder");
         let addRepositoryDialog = new WebstrateComponents.ModalDialog(
-                WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryAdder"),
+                repoAddTemplate,
                 {
                     "title":"Add Repository",
                     "actions": {
@@ -87,7 +88,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         document.documentElement.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
                 if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
-                           alert("Yeah baby!");
+                           alert("Yeah baby!"+repoAddTemplate.querySelector("#repoid").value);
                 }
         });
         repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
@@ -417,9 +418,13 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             return WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItemError");            
         }
         packageItemTemplate.querySelector(".package-name").innerText = wpmPackage.name;
+        packageItemTemplate.querySelector(".package-name").title = wpmPackage.name;
         
         ["version", "description", "license"].forEach((packageProperty)=>{
-            if (wpmPackage[packageProperty]) packageItemTemplate.querySelector(".package-"+packageProperty).innerText = wpmPackage[packageProperty];
+            if (wpmPackage[packageProperty]){
+                packageItemTemplate.querySelector(".package-"+packageProperty).innerText = wpmPackage[packageProperty];
+                packageItemTemplate.querySelector(".package-"+packageProperty).title = wpmPackage[packageProperty];
+            }
         });
         
         let localPackageElement = this.getLocalPackageElement(wpmPackage.name);
