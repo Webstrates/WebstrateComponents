@@ -1,5 +1,74 @@
 <template id="headEditorBase">
     <div class="head-editor-base">
-        Nope.
-    </div>    
+
+        <div class="inline-text-field-container">
+            <div class="mdc-text-field mdc-text-field--filled mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
+                <i aria-hidden="true" class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">title</i>  
+                <input class="mdc-text-field__input" id="title-input" type="text" aria-labelledby="title-label">
+                <div class="mdc-line-ripple"></div>
+                <label class="mdc-floating-label" id="title-label">Title</label>
+            </div>
+            <div class="mdc-text-field-helper-line">
+                <div class="mdc-text-field-helper-text">Shown in browser tabs and history</div>
+            </div>
+        </div>
+
+        <div class="inline-text-field-container">
+            <div class="mdc-text-field mdc-text-field--filled mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
+                <i aria-hidden="true" class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">person</i>  
+                <input class="mdc-text-field__input" type="text" aria-labelledby="author-label" id="author-input">
+                <span class="mdc-line-ripple"></span>
+                <label class="mdc-floating-label" id="author-label">Author</label>
+            </div>
+            <div class="mdc-text-field-helper-line">
+                <div class="mdc-text-field-helper-text">The name of your or your team</div>
+            </div>
+        </div>
+
+        <div class="inline-text-field-container">
+            <div class="mdc-text-field mdc-text-field--filled mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
+                <i aria-hidden="true" class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">tag</i>  
+                <input class="mdc-text-field__input" type="text" aria-labelledby="keywords-label" id="keywords-input">
+                <span class="mdc-line-ripple"></span>
+                <label class="mdc-floating-label" id="keywords-label">Keywords</label>
+            </div>
+            <div class="mdc-text-field-helper-line">
+                <div class="mdc-text-field-helper-text">Comma separated list of keywords</div>
+            </div>
+        </div>
+        
+        
+        <div class="inline-text-field-container">
+            <div class="mdc-text-field mdc-text-field--filled mdc-text-field--with-leading-icon" data-mdc-auto-init="MDCTextField">
+                <i aria-hidden="true" class="material-icons mdc-text-field__icon mdc-text-field__icon--leading">edit_note</i>  
+                <input class="mdc-text-field__input" type="text" aria-labelledby="description-label" id="description-input">
+                <span class="mdc-line-ripple"></span>
+                <label class="mdc-floating-label" id="description-label">Description</label>
+            </div>
+            <div class="mdc-text-field-helper-line">
+                <div class="mdc-text-field-helper-text">Short textual description</div>                
+            </div>
+        </div>
+
+        <h2>Addtional Elements</h2>
+        <div class="header-editor-additionals">
+        </div>
+        <div class="mdc-touch-target-wrapper ">
+          <button class="mdc-button mdc-button--outlined mdc-button--touch add-element">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__touch"></span>
+            <span class="mdc-button__label">Add New</span>
+            <i aria-hidden="true" class="material-icons mdc-button__icon">arrow_drop_down</i>  
+          </button>
+        </div>        
+    </div>
 </template>
+
+<template id="head-template-viewport-mobile">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</template>
+
+<template id="head-template-charset-utf8">
+    <meta charset="UTF-8">    
+</template>
+

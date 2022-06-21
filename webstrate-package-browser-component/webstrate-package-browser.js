@@ -21,6 +21,8 @@
 window.WPMPackageBrowser = class WPMPackageBrowser {
     constructor(autoOpen=true) {
         let self = this;
+        self.topLevelComponent = document.documentElement;
+        
         self.itemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItem");
         self.html = WebstrateComponents.Tools.loadTemplate("#packageBrowserBase");
         self.mainView = self.html.querySelector("#packageBrowserMain");
@@ -66,6 +68,10 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         document.body.appendChild(parent);
     }
     
+    setTopLevelComponent(component){
+        this.topLevelComponent = component;
+    }    
+    
     showRepositories() {
         let self = this;
         this.mainView.innerHTML="";
@@ -84,7 +90,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 }
         );
-        document.documentElement.appendChild(addRepositoryDialog.html);
+        self.topLevelComponent.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
             if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
                 let bootConfig = self.getBootConfig();

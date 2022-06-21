@@ -35,7 +35,7 @@
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12em,auto));
-    background: white;
+    background: var(--mdc-theme-background, white);
     
     .tag-button {
         margin-left: auto;
@@ -59,7 +59,8 @@
         max-height: 100%;
         
         display: flex;
-        justify-content: stretch;        
+        justify-content: stretch;      
+        background: white;
     }
     
     .revision-framescaler {
