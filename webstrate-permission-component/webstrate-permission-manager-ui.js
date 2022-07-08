@@ -64,15 +64,8 @@ class PermissionManagerUI {
 
         new mdc.textField.MDCTextField(permissionTpl.querySelector('.mdc-text-field'));
 
-        dialogTpl.querySelectorAll('.mdc-radio').forEach((radio)=>{
-            new mdc.radio.MDCRadio(radio);
-        });
-        dialogTpl.querySelectorAll('.mdc-form-field').forEach((formField)=>{
-            new mdc.formField.MDCFormField(formField);
-        });
-        
         dialog.open();
-
+        
         EventSystem.registerEventCallback('ModalDialog.Closed', function(evt) {
             //Remove template after use
             transient.remove();
