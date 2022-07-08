@@ -54,6 +54,7 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
         let tpl = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_MenuItem");
         
         tpl.querySelector(".mdc-list-item__text").textContent = menuItem.label;
+        tpl.menuItem = menuItem;
 
         if(menuItem.icon != null) {
             let iconTpl = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_MenuItem_Icon");
@@ -77,10 +78,21 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
         
         if (menuItem.tooltip != null){
             tpl.setAttribute("title", menuItem.tooltip);
-        }
+        }        
         
         mdc.ripple.MDCRipple.attachTo(tpl);
 
+        if (menuItem.checked != null){
+            // This is a toggle-able item, upgrade it with additional UI elements and update the state
+            let checkmarkTemplate = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_Checkmark");
+            tpl.insertBefore(checkmarkTemplate, tpl.lastChild.nextSibling);
+            tpl.classList.add("mdc-menu__selection-group");
+            
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("mdc-menu__selection-group");
+            wrapper.appendChild(tpl);
+            tpl = wrapper;
+        }
         return tpl;
     }
 
@@ -108,6 +120,19 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
 
             group.forEach((item)=>{
                 menuItemInsertLocation.appendChild(item.html);
+                
+                // Update checked status
+                if (item.checked!==null){
+                    try {
+                        if (item.checked()){
+                            item.html.querySelector(".mdc-list-item").classList.add("mdc-menu-item--selected");
+                        } else {
+                            item.html.querySelector(".mdc-list-item").classList.remove("mdc-menu-item--selected");
+                        }
+                    } catch (ex){
+                        console.warn("MenuItem caused exception in .checked ",item,ex);
+                    }
+                }
             });
         });
     }

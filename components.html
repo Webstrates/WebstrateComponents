@@ -2049,6 +2049,7 @@ MenuSystem.MenuItem = class MenuItem {
         this.group = WebstrateComponents.Tools.fromConfig(config, "group", null);
         this.groupOrder = WebstrateComponents.Tools.fromConfig(config, "groupOrder", 99999);
         this.class = WebstrateComponents.Tools.fromConfig(config, "class", null);
+        this.checked = WebstrateComponents.Tools.fromConfig(config, "checked", null);
 
         this.submenu = WebstrateComponents.Tools.fromConfig(config, "submenu", null);
 
@@ -2058,7 +2059,6 @@ MenuSystem.MenuItem = class MenuItem {
 
         /** @member {Element} - The DOM Element of this MenuItem */
         this.html = builder.buildMenuItemHtml(this);
-        this.html.menuItem = this;
 
         if(this.class != null) {
             this.html.classList.add(this.class.split(" "));
@@ -2503,6 +2503,7 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
         let tpl = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_MenuItem");
         
         tpl.querySelector(".mdc-list-item__text").textContent = menuItem.label;
+        tpl.menuItem = menuItem;
 
         if(menuItem.icon != null) {
             let iconTpl = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_MenuItem_Icon");
@@ -2526,10 +2527,21 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
         
         if (menuItem.tooltip != null){
             tpl.setAttribute("title", menuItem.tooltip);
-        }
+        }        
         
         mdc.ripple.MDCRipple.attachTo(tpl);
 
+        if (menuItem.checked != null){
+            // This is a toggle-able item, upgrade it with additional UI elements and update the state
+            let checkmarkTemplate = WebstrateComponents.Tools.loadTemplate("MenuSystem_MaterialMenu_Checkmark");
+            tpl.insertBefore(checkmarkTemplate, tpl.lastChild.nextSibling);
+            tpl.classList.add("mdc-menu__selection-group");
+            
+            let wrapper = document.createElement("div");
+            wrapper.classList.add("mdc-menu__selection-group");
+            wrapper.appendChild(tpl);
+            tpl = wrapper;
+        }
         return tpl;
     }
 
@@ -2557,6 +2569,19 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
 
             group.forEach((item)=>{
                 menuItemInsertLocation.appendChild(item.html);
+                
+                // Update checked status
+                if (item.checked!==null){
+                    try {
+                        if (item.checked()){
+                            item.html.querySelector(".mdc-list-item").classList.add("mdc-menu-item--selected");
+                        } else {
+                            item.html.querySelector(".mdc-list-item").classList.remove("mdc-menu-item--selected");
+                        }
+                    } catch (ex){
+                        console.warn("MenuItem caused exception in .checked ",item,ex);
+                    }
+                }
             });
         });
     }
@@ -2646,7 +2671,7 @@ MenuSystem.MenuManager.setDefaultBuilder(MenuSystem.MaterialMenuBuilder);
 </template>
 
 <template id="MenuSystem_MaterialMenu_MenuItem">
-    <li class="mdc-list-item" role="menuitem">
+    <li class="mdc-list-item" role="menuitem">        
         <span class="mdc-list-item__ripple"></span>
         <span class="mdc-list-item__text"></span>
     </li>
@@ -2662,6 +2687,10 @@ MenuSystem.MenuManager.setDefaultBuilder(MenuSystem.MaterialMenuBuilder);
 
 <template id="MenuSystem_MaterialMenu_GroupDivider">
     <li class="mdc-list-divider" role="separator"></li>
+</template>
+
+<template id="MenuSystem_MaterialMenu_Checkmark">
+    <span class="mdc-list-item__graphic mdc-menu__selection-group-icon material-icons">check</span>    
 </template>
 
                 <style id="main-style">

@@ -615,6 +615,7 @@ MenuSystem.MenuItem = class MenuItem {
         this.group = WebstrateComponents.Tools.fromConfig(config, "group", null);
         this.groupOrder = WebstrateComponents.Tools.fromConfig(config, "groupOrder", 99999);
         this.class = WebstrateComponents.Tools.fromConfig(config, "class", null);
+        this.checked = WebstrateComponents.Tools.fromConfig(config, "checked", null);
 
         this.submenu = WebstrateComponents.Tools.fromConfig(config, "submenu", null);
 
@@ -624,7 +625,6 @@ MenuSystem.MenuItem = class MenuItem {
 
         /** @member {Element} - The DOM Element of this MenuItem */
         this.html = builder.buildMenuItemHtml(this);
-        this.html.menuItem = this;
 
         if(this.class != null) {
             this.html.classList.add(this.class.split(" "));
