@@ -6770,30 +6770,9 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
             <div class="mdc-text-field-helper-line">
                 <div class="mdc-text-field-helper-text">Short textual description</div>                
             </div>
-        </div>
-
-        <h2>Addtional Elements</h2>
-        <div class="header-editor-additionals">
-        </div>
-        <div class="mdc-touch-target-wrapper ">
-          <button class="mdc-button mdc-button--outlined mdc-button--touch add-element">
-            <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__touch"></span>
-            <span class="mdc-button__label">Add New</span>
-            <i aria-hidden="true" class="material-icons mdc-button__icon">arrow_drop_down</i>  
-          </button>
-        </div>        
+        </div>  
     </div>
 </template>
-
-<template id="head-template-viewport-mobile">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</template>
-
-<template id="head-template-charset-utf8">
-    <meta charset="UTF-8">    
-</template>
-
 
                 <script id="head-editor-component-script" type="disabled">
 /**
@@ -6836,16 +6815,26 @@ window.HeadEditorComponent = class HeadEditorComponent {
         self.html.querySelector("#title-input").value = document.title;
         self.html.querySelector("#title-input").addEventListener("input", () => {
             let newTitle = self.html.querySelector("#title-input").value.trim();
-            document.title = newTitle; // TODO: Approve this for Webstrates
+            document.title = newTitle;
+            let titleElement = document.head.querySelector("title");
             if (newTitle.length === 0) {
-                let titleElement = document.head.querySelector("title");
                 if (titleElement){
                     titleElement.remove();
+                }
+            } else {
+                if (titleElement){
+                    WPMv2.stripProtection(titleElement);
                 }
             }
         });
         
         ["author","keywords","description"].forEach((metaField)=>{
+            try {
+                self.html.querySelector("#"+metaField+"-input").value = document.querySelector("head meta[name='"+metaField+"']").getAttribute("content");
+            } catch (ex){
+                // Ignore missing fields
+            }
+            
             self.html.querySelector("#"+metaField+"-input").addEventListener("input", () => {
                 let newValue = self.html.querySelector("#"+metaField+"-input").value.trim();
                 
@@ -6858,7 +6847,8 @@ window.HeadEditorComponent = class HeadEditorComponent {
                     if (!metaElement){
                         metaElement = document.createElement("meta");
                         metaElement.setAttribute("name", metaField);
-                        document.head.appendChild(metaElement); // TODO: Approve for webstrates?
+                        WPMv2.stripProtection(metaElement);
+                        document.head.appendChild(metaElement);
                     }
                     metaElement.setAttribute("content", newValue);
                 }

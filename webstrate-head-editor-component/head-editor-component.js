@@ -38,16 +38,26 @@ window.HeadEditorComponent = class HeadEditorComponent {
         self.html.querySelector("#title-input").value = document.title;
         self.html.querySelector("#title-input").addEventListener("input", () => {
             let newTitle = self.html.querySelector("#title-input").value.trim();
-            document.title = newTitle; // TODO: Approve this for Webstrates
+            document.title = newTitle;
+            let titleElement = document.head.querySelector("title");
             if (newTitle.length === 0) {
-                let titleElement = document.head.querySelector("title");
                 if (titleElement){
                     titleElement.remove();
+                }
+            } else {
+                if (titleElement){
+                    WPMv2.stripProtection(titleElement);
                 }
             }
         });
         
         ["author","keywords","description"].forEach((metaField)=>{
+            try {
+                self.html.querySelector("#"+metaField+"-input").value = document.querySelector("head meta[name='"+metaField+"']").getAttribute("content");
+            } catch (ex){
+                // Ignore missing fields
+            }
+            
             self.html.querySelector("#"+metaField+"-input").addEventListener("input", () => {
                 let newValue = self.html.querySelector("#"+metaField+"-input").value.trim();
                 
@@ -60,7 +70,8 @@ window.HeadEditorComponent = class HeadEditorComponent {
                     if (!metaElement){
                         metaElement = document.createElement("meta");
                         metaElement.setAttribute("name", metaField);
-                        document.head.appendChild(metaElement); // TODO: Approve for webstrates?
+                        WPMv2.stripProtection(metaElement);
+                        document.head.appendChild(metaElement);
                     }
                     metaElement.setAttribute("content", newValue);
                 }
