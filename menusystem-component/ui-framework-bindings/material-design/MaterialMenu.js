@@ -32,13 +32,11 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
         }
 
         //Hook mdc-menu-surface close
-        let origClose = tpl.mdcMenu["menuSurface_"]["foundation"]["close"];
-
+        let origClose = tpl.mdcMenu.menuSurface.foundation.close;
         tpl.mdcMenu.realClose = function () {
-            origClose.call(tpl.mdcMenu["menuSurface_"]["foundation"]);
+            origClose.call(tpl.mdcMenu.menuSurface.foundation);
         };
-
-        tpl.mdcMenu["menuSurface_"]["foundation"]["close"] = function() {
+        tpl.mdcMenu.menuSurface.foundation.close = function() {
             //Empty on purpose
         };
 
