@@ -5268,16 +5268,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             });
             
             try {
-                if (!self.getBootConfig()){
-                    // We assume that we may create a new empty boot config if it doesn't exist
-                    let bootConfig = {
-                        creator: "WPMPackageManager",
-                        created: Date.now(),
-                        require: []
-                    };
-
-                    self.setBootConfig(bootConfig);
-                }
                 tabs.activateTab(0); //self.showRepositories();
             } catch (ex){
                 tabs.activateTab(1); //self.showSystem();
@@ -5510,11 +5500,24 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 
     
     getBootConfig(){
-        let element = document.querySelector("script[type='text/json+bootconfig']");
-        if (!element) return false;
+        try {
+            let element = document.querySelector("script[type='text/json+bootconfig']");
+            if (!element) throw Error("No bootconfig defined");
+
+            let j = JSON.parse(element.textContent);
+            return j;
+        } catch (ex){
+            console.log("PackageBrowser error", ex);
+        }
         
-        let j = JSON.parse(element.textContent);
-        return j;
+        // We assume that we may create a new empty boot config if it doesn't exist
+        let bootConfig = {
+            creator: "WPMPackageManager",
+            created: Date.now(),
+            require: []
+        };
+
+        return bootConfig;
     }    
     
     setBootConfig(config){
