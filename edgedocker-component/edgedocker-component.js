@@ -330,7 +330,7 @@ class EdgeDocker {
         this.parent.setAttribute("transient-data-docking-area-component-mode", mode);
         this.currentMode = mode;
 
-        if(this.currentMode === EdgeDocker.MODE.MAXIMIZED) {
+        if(this.currentMode === EdgeDocker.MODE.MAXIMIZED || this.currentMode === EdgeDocker.MODE.EMBEDDED) {
             this.componentArea.style.width = "";
             this.componentArea.style.height = "";
         } else if(this.currentMode === EdgeDocker.MODE.LEFT || this.currentMode === EdgeDocker.MODE.RIGHT) {
@@ -343,6 +343,7 @@ class EdgeDocker {
             this.componentArea.style.width = "";
             this.componentArea.style.height = "";
         }
+        
         if (this.currentMode !== EdgeDocker.MODE.FLOAT){
             this.componentArea.style.top = null;
             this.componentArea.style.left = null;
@@ -353,6 +354,16 @@ class EdgeDocker {
         }
 
         window.dispatchEvent(new Event('resize'));
+    }
+    
+    dockInto(parentElement){
+        if (parentElement){
+            // Move into the element if one is given
+            parentElement.appendChild(this.componentArea);
+        } else {
+            // Default to being shown before the visualizer
+            this.visualizerHandle.parentElement.insertBefore(this.componentArea, this.visualizerHandle);
+        }
     }
 
     loadBounds(mode) {
@@ -424,7 +435,8 @@ EdgeDocker.MODE = {
     LEFT: "left edge",
     RIGHT: "right edge",
     BOTTOM: "bottom edge",
-    FLOAT: "floating"
+    FLOAT: "floating",
+    EMBEDDED: "embedded"
 };
 
 window.EdgeDocker = EdgeDocker;

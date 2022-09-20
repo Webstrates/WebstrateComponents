@@ -29,6 +29,18 @@ html {
             display: none;
         }        
     }
+
+    
+    &[transient-data-docking-area-component-mode~="embedded"] {
+        .docking-area-resizer {
+            display: none;
+        }     
+        
+        .docking-area-component {
+            width: 100%;
+            height: 100%;
+        }        
+    }    
     
     &[transient-data-docking-area-component-mode~="maximized"] {
         >*:not(.docking-area-component):not(.docking-area--ignore) {
