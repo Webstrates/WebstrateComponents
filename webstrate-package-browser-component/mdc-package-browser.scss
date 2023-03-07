@@ -18,51 +18,73 @@
 **/
 
 .package-browser-base {
-    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 
     #packageBrowserMain {        
         border-top: 1px solid lightgray;
+        display: flex;
+        height: 100%;
+        width: 100%;
+        min-height: 0;
         
-        .install-options-icons {
-            line-height: 1em;
+        .tabcontent {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 0;
             
-            th {
-                padding-left: 1.75em;
+            &.padded {
+                padding: 1em;
             }
         }
         
-        .repository-actions {
-            text-align: right;
-        }
-        .repository-more {
-            margin-left: -2em;
-        }        
-        
-        .repository-header {
-            .repository-name {
-                margin-bottom: 0;
-            }
-            .repository-url {
-                font-weight: normal;
-                font-size: 0.8em;         
-            }
-            .repository-override-url {
-                font-size: 0.8em;            
-                color: red;
-            }
-            .repository-override-actions {
-                display: none;
-            }
+        .split {
+            display: flex;
+            flex: 1 1 auto;
+            min-height:0;
             
-            &.overridden {
-                .repository-url {
-                    text-decoration: line-through;
+            > .mdc-list {
+                flex: 0 0 auto;
+                width: 20em;
+                max-width: 25vw;
+                min-height: 0;
+                overflow-y: auto;
+                background: rgba(100,100,100,0.2);
+                padding: 0;
+                
+                .mdc-list-item {
+                    padding-right: 0;
                 }
-            }            
+                
+                .repository-name {
+                    text-transform: capitalize;
+                }
+            }
+            
+            > .scroller {
+                flex: 1 1 auto;
+                min-height: 0;
+                overflow-y: auto;
+            }
+        }                
+        
+        .install-options-icon {
+            position: absolute;
+            line-height: 1.5em;
+            margin-left: 0.3em;
+            color: var(--mdc-theme-text-icon-on-light);        
+            user-select: none;
+        }
+        
+        .mdc-data-table {
+            border: none;
+            display: block;
         }
 
         .mdc-data-table__table-container {
-            overflow-x: initial;
+            overflow-x: hidden;
         }        
 
         .mdc-data-table__table {
@@ -70,9 +92,15 @@
             border-spacing: 0;
             border-collapse: initial;
             
+            .mdc-data-table__header-cell {
+                background: rgba(0,0,255,0.1);                
+            }            
             .mdc-data-table__cell {
                 height: 43px;
-                border-top: 1px solid #eee;
+                border-top: 1px dotted var(--mdc-theme-text-secondary-on-background);
+            }
+            tbody tr:first-child .mdc-data-table__cell {
+                border-top: 1px solid var(--mdc-theme-text-secondary-on-background);
             }
         }
 
@@ -87,21 +115,21 @@
         }    
 
         .package-required, .package-embedded {
-            width: 3.5em;
+            width: 3.5rem;
         }
 
         .package-name {
-            width: 12em;
+            width: 12rem;
         }
 
         .package-version {
-            width: 6em;
+            width: 6rem;
         }
         .package-license {
-            width: 9em;
+            width: 9rem;
         }
         .package-options {
-            width: 1em;
+            width: 1rem;
         }
 
         .package-description {

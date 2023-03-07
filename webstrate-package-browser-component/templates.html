@@ -34,7 +34,7 @@
 </template>
 
 <template id="packageBrowserSystem">
-    <div>
+    <div class="tabcontent padded">
         <div id="wpm-info">
             <h2>Webstrate Package Manager</h2>
             <table>
@@ -42,11 +42,6 @@
                 <tr><th>Name</th><td class="name">Unknown Platform</td></tr>
                 <tr><th>API</th><td class="version">Legacy</td></tr>
                 <tr><th>Specific Revision</th><td class="revision">?</td></tr>
-                <tr><th></th>
-                    <td class="options">
-                        <button class="update">Check For Updates</button>
-                    </td>
-                </tr>
             </table>
             <div class="wpm-version-warning">
                 <h2>Warning!</h2>
@@ -123,48 +118,12 @@
     </tr>    
 </template>
 
-<template id="packageBrowserRepositoryItem_header">
-    <thead>
-        <tr>
-            <th class="package-required"></th>
-            <th class="package-embedded"></th>            
-            <th class="package-name"></th>
-            <th class="package-version"></th>
-            <th class="package-license"></th>
-            <th class="package-description"></th>
-            <th class="package-options"></th>
-        </tr>        
-        <tr>
-            <th colspan="6" class="repository-header">
-                <h2 class="repository-name">...</h2>
-                <div class="repository-url"></div>
-                <div class="repository-override-url"></div>
-            </th>
-            <td>
-                <div class="mdc-touch-target-wrapper repository-more">
-                  <button class="mdc-icon-button mdc-icon-button--touch material-icons">
-                    <div class="mdc-icon-button__ripple"></div>
-                    more_vert
-                    <div class="mdc-icon-button__touch"></div>
-                  </button>
-                </div>                
-            </td>
-        </tr>            
-    </thead>
-</template>
 <template id="packageBrowserRepositoryItem_repository">    
     <thead>        
-        <tr class="mdc-data-table__header-row install-options-icons">
-            <th role="columnheader" scope="col" title="Automatically require at boot">
-                <i class="material-icons">play_arrow</i>
-            </th>
-            <th role="columnheader" scope="col"  title="Embed locally into webstrate">
-                <i class="material-icons">archive</i>
-            </th>                        
-        </tr>
         <tr>
-            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
-                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+            <th class="package-required mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Automatically require at boot">
+                    <i class="material-icons install-options-icon">play_arrow</i>
                     <input type="checkbox" class="mdc-checkbox__native-control"/>
                     <div class="mdc-checkbox__background">
                         <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -175,8 +134,9 @@
                     <div class="mdc-checkbox__ripple"></div>
                 </div>                                      
             </th>
-            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
-                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+            <th class="package-embedded mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Embed locally into webstrate">
+                    <i class="material-icons install-options-icon">archive</i>
                     <input type="checkbox" class="mdc-checkbox__native-control" disabled/>
                     <div class="mdc-checkbox__background">
                         <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -187,11 +147,11 @@
                     <div class="mdc-checkbox__ripple"></div>
                 </div>                            
             </th>            
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">License</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Description</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
+            <th class="package-name mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
+            <th class="mdc-data-table__header-cell package-version" role="columnheader" scope="col">Version</th>
+            <th class="mdc-data-table__header-cell package-license" role="columnheader" scope="col">License</th>
+            <th class="mdc-data-table__header-cell package-description" role="columnheader" scope="col">Description</th>
+            <th class="mdc-data-table__header-cell package-options" role="columnheader" scope="col">
             </th>
         </tr>
     </thead>
@@ -205,23 +165,19 @@
 
 <!-- Repository List -->
 <template id="packageBrowserRepositoryList">
-    <div>
-        <div class="repository-actions">
-            <div class="mdc-touch-target-wrapper add-repository">
-              <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
-                    <i class="material-icons mdc-button__icon">add_link</i>
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__touch"></span>
-                    <span class="mdc-button__label">Add Respository...</span>
-              </button>
-            </div>        
-        </div>
-        
-        <div class="mdc-data-table">
-            <div class="mdc-data-table__table-container">
-                <table class="mdc-data-table__table repository-list">
-                    <!-- repositories -->
-                </table>
+    <div class="tabcontent">        
+        <div class="split">
+            <ul class="mdc-list mdc-list--two-line repository-overview" data-mdc-auto-init="MDCList">
+                <!-- entries -->
+            </ul>
+            <div class="scroller">
+                <div class="mdc-data-table">
+                    <div class="mdc-data-table__table-container">
+                        <table class="mdc-data-table__table repository-list">
+                            <!-- repositories -->
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -231,7 +187,7 @@
     <div>
         <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
           <span class="mdc-text-field__ripple"></span>
-          <span class="mdc-floating-label" id="repo-label-id">Repository ID</span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Identifier</span>
           <input class="mdc-text-field__input" type="text"
                  aria-labelledby="repo-label-id"
                  aria-controls="repo-helper-text"
@@ -243,12 +199,84 @@
             Identification token - e.g. 'cauldron-repos'
           </div>
         </div>            
-        <p>
-            WPM will search for the repository in:
-        </p>
-        <ul>
+        WPM will search for the repository in:
+        <ul style="margin:0">
             <li>/[identifier]/?raw - using Webstrates</li>
             <li>./[identifier]/index.html - on filesystem</li>
         </ul>
-</div>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryURL">
+    <div>
+        Specify the URL to use load this repository
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Source</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repourl">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Repository URL - e.g. 'https://mydomain.com/awesome-repos'
+          </div>
+        </div>            
+        <ul style="margin:0">
+            <li>Absolute https://mydomain.com/awesome-repos</li>
+            <li>Relative ./something/index.html</li>
+            <li>Server-relative: /something/?raw</li>
+        </ul>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryDevURL">
+    <div>
+        Specify the Dev Override URL to use locally for this repository
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Override</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repodevurl">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Repository Override - e.g. '/something/?raw'
+          </div>
+        </div>            
+        <ul style="margin:0">
+            <li>Absolute https://mydomain.com/awesome-repos</li>
+            <li>Relative ./something/index.html</li>
+            <li>Server-relative: /something/?raw</li>
+        </ul>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryListItem">
+    <li class="mdc-list-item" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text repository-name">Two-line item
+            </span>
+            <span class="mdc-list-item__secondary-text repository-url">Repository URL</span>
+        </span>
+        <button data-mdc-ripple-is-unbounded="" class="mdc-list-item__meta mdc-icon-button material-icons repository-more">
+        more_vert
+    </button>
+    </li>
+</template>
+
+<template id="packageBrowserAddListItem">
+    <li class="mdc-list-item add-repository" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <i class="material-icons" aria-hidden="true">add</i>
+        <span>
+            Add Repository
+        </span>
+    </li>
 </template>

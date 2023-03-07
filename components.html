@@ -5151,8 +5151,10 @@ window.RevisionBrowser = class RevisionBrowser {
     "optionalDependencies": [
         "wpm_js_libs #material-design-components",
         "wpm_js_libs #material-design-icons",
+        "#MaterialDesignOutlinedIcons",
         "#ModalDialog",
-        "#MenuSystem"
+        "#MenuSystem",
+        "#MaterialMenu"
     ],
     "assets": [],
     "version": "1.0",
@@ -5184,38 +5186,64 @@ window.RevisionBrowser = class RevisionBrowser {
  *  limitations under the License.
 **/
 .package-browser-base {
-  max-width: 100vw; }
+  display: flex;
+  flex-direction: column;
+  position: relative; }
   .package-browser-base #packageBrowserMain {
-    border-top: 1px solid lightgray; }
-    .package-browser-base #packageBrowserMain .install-options-icons {
-      line-height: 1em; }
-      .package-browser-base #packageBrowserMain .install-options-icons th {
-        padding-left: 1.75em; }
-    .package-browser-base #packageBrowserMain .repository-actions {
-      text-align: right; }
-    .package-browser-base #packageBrowserMain .repository-more {
-      margin-left: -2em; }
-    .package-browser-base #packageBrowserMain .repository-header .repository-name {
-      margin-bottom: 0; }
-    .package-browser-base #packageBrowserMain .repository-header .repository-url {
-      font-weight: normal;
-      font-size: 0.8em; }
-    .package-browser-base #packageBrowserMain .repository-header .repository-override-url {
-      font-size: 0.8em;
-      color: red; }
-    .package-browser-base #packageBrowserMain .repository-header .repository-override-actions {
-      display: none; }
-    .package-browser-base #packageBrowserMain .repository-header.overridden .repository-url {
-      text-decoration: line-through; }
+    border-top: 1px solid lightgray;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    min-height: 0; }
+    .package-browser-base #packageBrowserMain .tabcontent {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 0; }
+      .package-browser-base #packageBrowserMain .tabcontent.padded {
+        padding: 1em; }
+    .package-browser-base #packageBrowserMain .split {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0; }
+      .package-browser-base #packageBrowserMain .split > .mdc-list {
+        flex: 0 0 auto;
+        width: 20em;
+        max-width: 25vw;
+        min-height: 0;
+        overflow-y: auto;
+        background: rgba(100, 100, 100, 0.2);
+        padding: 0; }
+        .package-browser-base #packageBrowserMain .split > .mdc-list .mdc-list-item {
+          padding-right: 0; }
+        .package-browser-base #packageBrowserMain .split > .mdc-list .repository-name {
+          text-transform: capitalize; }
+      .package-browser-base #packageBrowserMain .split > .scroller {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto; }
+    .package-browser-base #packageBrowserMain .install-options-icon {
+      position: absolute;
+      line-height: 1.5em;
+      margin-left: 0.3em;
+      color: var(--mdc-theme-text-icon-on-light);
+      user-select: none; }
+    .package-browser-base #packageBrowserMain .mdc-data-table {
+      border: none;
+      display: block; }
     .package-browser-base #packageBrowserMain .mdc-data-table__table-container {
-      overflow-x: initial; }
+      overflow-x: hidden; }
     .package-browser-base #packageBrowserMain .mdc-data-table__table {
       width: 100%;
       border-spacing: 0;
       border-collapse: initial; }
+      .package-browser-base #packageBrowserMain .mdc-data-table__table .mdc-data-table__header-cell {
+        background: rgba(0, 0, 255, 0.1); }
       .package-browser-base #packageBrowserMain .mdc-data-table__table .mdc-data-table__cell {
         height: 43px;
-        border-top: 1px solid #eee; }
+        border-top: 1px dotted var(--mdc-theme-text-secondary-on-background); }
+      .package-browser-base #packageBrowserMain .mdc-data-table__table tbody tr:first-child .mdc-data-table__cell {
+        border-top: 1px solid var(--mdc-theme-text-secondary-on-background); }
     .package-browser-base #packageBrowserMain .package-required[data-indirect-requirement] .mdc-checkbox__background:after {
       content: "";
       position: absolute;
@@ -5225,15 +5253,15 @@ window.RevisionBrowser = class RevisionBrowser {
       bottom: 0;
       background: rgba(0, 100, 255, 0.22); }
     .package-browser-base #packageBrowserMain .package-required, .package-browser-base #packageBrowserMain .package-embedded {
-      width: 3.5em; }
+      width: 3.5rem; }
     .package-browser-base #packageBrowserMain .package-name {
-      width: 12em; }
+      width: 12rem; }
     .package-browser-base #packageBrowserMain .package-version {
-      width: 6em; }
+      width: 6rem; }
     .package-browser-base #packageBrowserMain .package-license {
-      width: 9em; }
+      width: 9rem; }
     .package-browser-base #packageBrowserMain .package-options {
-      width: 1em; }
+      width: 1rem; }
     .package-browser-base #packageBrowserMain .package-description {
       width: 100%;
       overflow: hidden; }
@@ -5269,7 +5297,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         self.html = WebstrateComponents.Tools.loadTemplate("#packageBrowserBase");
         self.mainView = self.html.querySelector("#packageBrowserMain");
         
-        wpm.require(["material-design-components", "material-design-icons","ModalDialog","MenuSystem"]).then(()=>{
+        wpm.require(["material-design-components", "material-design-icons","ModalDialog","MenuSystem","MaterialMenu","MaterialDesignOutlinedIcons"]).then(()=>{
             mdc.autoInit(self.html);
             let tabs = self.html.querySelector(".mdc-tab-bar").MDCTabBar;
             
@@ -5288,7 +5316,10 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 tabs.activateTab(0); //self.showRepositories();
             } catch (ex){
                 tabs.activateTab(1); //self.showSystem();
-            }            
+            }
+            
+            self.repositoryURLDialog = this.getURLDialog();
+            self.repositoryDevURLDialog = this.getDevURLDialog();
         });
         
         if (autoOpen) this.openInBody();
@@ -5302,6 +5333,103 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
     
     setTopLevelComponent(component){
         this.topLevelComponent = component;
+    }    
+    
+    getURLDialog(){
+        let self = this;
+        let repoAddTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryURL");
+        let repositoryURLDialog = new WebstrateComponents.ModalDialog(
+                repoAddTemplate,
+                {
+                    "title":"Repository URL",
+                    "actions": {
+                            "cancel":{},
+                            "set": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        this.topLevelComponent.appendChild(repositoryURLDialog.html);
+        
+        repositoryURLDialog.setTarget = (target)=>{
+            repositoryURLDialog.target = target;
+            
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
+            if (stepRepositoryRegistrations[target]){
+                repoAddTemplate.querySelector("#repourl").value = stepRepositoryRegistrations[target];
+            }                        
+        };
+        
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+            if(evt.detail.dialog===repositoryURLDialog && evt.detail.action === "set") {
+                let bootConfig = self.getBootConfig();
+                
+                if (bootConfig.require && Array.isArray(bootConfig.require)){
+                    let repo = {};
+                    repo[repositoryURLDialog.target] = repoAddTemplate.querySelector("#repourl").value;
+                    if (bootConfig.require.length===0){
+                        bootConfig.require = {
+                            repositories: repo,
+                            dependencies: []
+                        };
+                    } else {
+                        let oldRepos = bootConfig.require[0].repositories;
+                        if (!oldRepos){
+                            bootConfig.require[0].repositories = repo;
+                        } else {
+                            bootConfig.require[0].repositories = {...bootConfig.require[0].repositories, ...repo};
+                        }
+                    }
+                    
+                    // Effectuate immediately too
+                    WPMv2.registerRepository(repositoryURLDialog.target, repo[repositoryURLDialog.target]);
+                }
+                
+                self.setBootConfig(bootConfig);
+                self.showRepositories();
+            }
+        });        
+        
+        return repositoryURLDialog;
+    }
+    
+    getDevURLDialog(){
+        let self = this;
+        let repoDevTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryDevURL");
+        let repositoryDevURLDialog = new WebstrateComponents.ModalDialog(
+                repoDevTemplate,
+                {
+                    "title":"Repository Dev Override",
+                    "actions": {
+                            "cancel":{},
+                            "remove":{},
+                            "set": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        this.topLevelComponent.appendChild(repositoryDevURLDialog.html);
+        
+        repositoryDevURLDialog.setTarget = (target)=>{
+            repositoryDevURLDialog.target = target;
+            
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
+            if (stepRepositoryRegistrations[target]){
+                repoDevTemplate.querySelector("#repodevurl").value = stepRepositoryRegistrations[target];
+            }                        
+        };
+        
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+            if(evt.detail.dialog===repositoryDevURLDialog){
+                let value = repoDevTemplate.querySelector("#repodevurl").value;
+                if (evt.detail.action === "remove" || (evt.detail.action === "set" && value.trim().length===0)){
+                    WPMv2.unregisterRepository(repositoryDevURLDialog.target, true);
+                } else if (evt.detail.action === "set"){
+                    WPMv2.registerRepository(repositoryDevURLDialog.target, value, true);
+                }
+            }
+            self.showRepositories();
+        });        
+        
+        return repositoryDevURLDialog;
     }    
     
     showRepositories() {
@@ -5318,13 +5446,13 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     "title":"Add Repository",
                     "actions": {
                             "cancel":{},
-                            "add": {primary: true, mdcIcon: "add_link"}
+                            "next": {primary: true, mdcIcon: "add_link"}
                     }
                 }
         );
         self.topLevelComponent.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
-            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "next") {
                 let bootConfig = self.getBootConfig();
                 let value = repoAddTemplate.querySelector("#repoid").value.trim();
                 if (value.length>0){
@@ -5338,10 +5466,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     // TODO: .scrollIntoView() ?
                 }
             }
-        });
-        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
-            addRepositoryDialog.html.querySelector("#repoid").value = "";
-            addRepositoryDialog.open();
         });
         
         // Gather a list of used repositories, both site-wide from WPM and previously added from this browser
@@ -5363,31 +5487,30 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         
         // Sort it and show it
         let sortedRepositories = knownRepositories.sort();        
-        let repoListDiv = repositoryView.querySelector(".repository-list");
-        for (let repositoryName of sortedRepositories){
-            let repositoryHeaderTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_header");            
-            let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
-            let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
-            repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
-            
+        let overviewAddItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserAddListItem");                        
+        for (let repositoryName of sortedRepositories){            
+            let overviewListItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryListItem");            
+            overviewListItemTemplate.querySelector(".repository-name").title = repositoryName;            
+            overviewListItemTemplate.querySelector(".repository-name").innerText = repositoryName.replace("-repos","").replaceAll("_"," ").replaceAll("-", " ");
             
             // Check if this is mapped somewhere with the bootloader
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it   
             let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
             if (stepRepositoryRegistrations[repositoryName]){
-                repositoryHeaderTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").title = stepRepositoryRegistrations[repositoryName];
             }
             
             // Check if this is mapped somewhere with any overrides
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             let overrideRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
             if (overrideRepositoryRegistrations[repositoryName]){
-                repositoryHeaderTemplate.querySelector(".repository-override-url").innerText = overrideRepositoryRegistrations[repositoryName];
-                repositoryHeaderTemplate.querySelector(".repository-override-url").title = "Site-wide developer override in this browser";
-                repositoryHeaderTemplate.querySelector(".repository-header").classList.add("overridden");
+                overviewListItemTemplate.querySelector(".repository-url").title = overviewListItemTemplate.querySelector(".repository-url").innerText+ " overridden by site-wide developer setting in this browser";
+                overviewListItemTemplate.querySelector(".repository-url").innerText = overrideRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").style.color="red";
             }     
             
-            repositoryHeaderTemplate.querySelector(".repository-more").addEventListener("click", (evt)=>{
+            overviewListItemTemplate.querySelector(".repository-more").addEventListener("click", (evt)=>{
                 let moreMenu = MenuSystem.MenuManager.createMenu("PackageBrowser.RepositoryMore", {
                     growDirection: MenuSystem.Menu.GrowDirection.DOWN
                 });         
@@ -5408,12 +5531,21 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 });
                 moreMenu.addItem({
-                    label: "URL Override...",
+                    label: "Source URL...",
+                    icon: IconRegistry.createIcon("mdc:link"),
+                    order: 900,
+                    onAction: ()=>{     
+                        self.repositoryURLDialog.setTarget(repositoryName);
+                        self.repositoryURLDialog.open();
+                    }
+                });                 
+                moreMenu.addItem({
+                    label: "Dev Override...",
                     icon: IconRegistry.createIcon("mdc:assistant_direction"),
                     order: 999,
                     onAction: ()=>{                        
-                        alert("Prove that you are a dev first!");
-                        // Use WPMv2.registerRepository("the-name", "new url", true);
+                        self.repositoryDevURLDialog.setTarget(repositoryName);
+                        self.repositoryDevURLDialog.open();
                     }
                 });                
                 
@@ -5423,54 +5555,75 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 });                
                 
+                console.log("Menu",evt);
                 self.html.appendChild(moreMenu.html);
+                
                 moreMenu.open({
-                    x: evt.pageX,
-                    y: evt.pageY
+                    x: evt.clientX,
+                    y: evt.clientY
                 });
                 evt.stopPropagation();
                 evt.preventDefault();
             });
             
-            
-            // Delayed-load up-to-date packages list
-            setTimeout(async ()=>{
-                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
-                
-                let renderBody = ()=>{
-                    for (let packageInfo of repositoryPackages){
-                        repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig));
-                    }                
-                };
-                await renderBody();
-                
-                // Repository-wide override buttons
-                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
-                repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
-                    // Enabled repository-wide require option, remove any per-package settings from bootConfig
-                    for (let packageInfo of repositoryPackages){
-                        await self.removePackageRequire(packageInfo);
-                    }
-                    
-                    if (evt.target.checked){
-                        await self.addRepositoryRequire(repositoryName);
-                    } else {                       
-                        await self.removeRepositoryRequire(repositoryName);
-                    }
-                    
-                    bootConfig = this.getBootConfig();
-                    repositoryBodyTemplate.innerHTML = "";
-                    await renderBody();
-                });
-                
-            },0);
-                       
-            repoListDiv.appendChild(repositoryHeaderTemplate);
+            // Insert into overview of repositories
+            repositoryView.querySelector(".repository-overview").appendChild(overviewListItemTemplate);
+        }
+        repositoryView.querySelector(".repository-overview").appendChild(overviewAddItemTemplate);        
+        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.html.querySelector("#repoid").value = "";
+            addRepositoryDialog.open();
+        });                
+        
+        let renderRepository = async function renderRepository(repositoryName){
+            let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
+
+            let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
+            let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
+            let repoListDiv = repositoryView.querySelector(".repository-list");
+            repoListDiv.innerHTML = "";
             repoListDiv.appendChild(repositoryRepositoryTemplate);
             repoListDiv.appendChild(repositoryBodyTemplate);
             
-            
-        }
+            let renderBody = ()=>{
+                for (let packageInfo of repositoryPackages){
+                    repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig));
+                }                
+
+                // TODO: Render missing packages here
+            };
+            await renderBody();
+
+            // Repository-wide override buttons
+            repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
+            repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
+                // Enabled repository-wide require option, remove any per-package settings from bootConfig
+                for (let packageInfo of repositoryPackages){
+                    await self.removePackageRequire(packageInfo);
+                }
+
+                if (evt.target.checked){
+                    await self.addRepositoryRequire(repositoryName);
+                } else {                       
+                    await self.removeRepositoryRequire(repositoryName);
+                }
+
+                bootConfig = self.getBootConfig();
+                repositoryBodyTemplate.innerHTML = "";
+                await renderBody();
+            });
+        };
+        
+        mdc.autoInit(repositoryView);        
+        let list = repositoryView.querySelector(".repository-overview").MDCList;
+        list.singleSelection = true;
+        list.listen("MDCList:action", async (evt)=>{            
+            if (evt.detail.index > sortedRepositories.length) return;
+            let repositoryName = sortedRepositories[evt.detail.index];
+            renderRepository(repositoryName);
+        });   
+        list.selectedIndex = 0;
+        if (sortedRepositories.length>0) renderRepository(sortedRepositories[0]);
         
         this.mainView.appendChild(repositoryView);        
     }
@@ -5495,20 +5648,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             if (WPMv2.revision){
                 wpmInfo.querySelector(".revision").innerText = WPMv2.revision;
             }
-            
-            wpmInfo.querySelector(".update").addEventListener("click", async ()=>{
-                // STUB: Maybe make this fancier with custom URLs and showing new version before updating etc
-                let oldVersion = WPMv2.version;
-                await WPMv2.updateWPM("/wpm/?raw");
-                let newVersion = WPMv2.version;
-
-                if(oldVersion !== newVersion) {
-                    console.log("WPM was updated, reloading...")
-                    setTimeout(()=>{
-                        location.reload();
-                    }, 1000);
-                }
-            });
         }
         
         // Config
@@ -5883,7 +6022,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 </template>
 
 <template id="packageBrowserSystem">
-    <div>
+    <div class="tabcontent padded">
         <div id="wpm-info">
             <h2>Webstrate Package Manager</h2>
             <table>
@@ -5891,11 +6030,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 <tr><th>Name</th><td class="name">Unknown Platform</td></tr>
                 <tr><th>API</th><td class="version">Legacy</td></tr>
                 <tr><th>Specific Revision</th><td class="revision">?</td></tr>
-                <tr><th></th>
-                    <td class="options">
-                        <button class="update">Check For Updates</button>
-                    </td>
-                </tr>
             </table>
             <div class="wpm-version-warning">
                 <h2>Warning!</h2>
@@ -5972,48 +6106,12 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
     </tr>    
 </template>
 
-<template id="packageBrowserRepositoryItem_header">
-    <thead>
-        <tr>
-            <th class="package-required"></th>
-            <th class="package-embedded"></th>            
-            <th class="package-name"></th>
-            <th class="package-version"></th>
-            <th class="package-license"></th>
-            <th class="package-description"></th>
-            <th class="package-options"></th>
-        </tr>        
-        <tr>
-            <th colspan="6" class="repository-header">
-                <h2 class="repository-name">...</h2>
-                <div class="repository-url"></div>
-                <div class="repository-override-url"></div>
-            </th>
-            <td>
-                <div class="mdc-touch-target-wrapper repository-more">
-                  <button class="mdc-icon-button mdc-icon-button--touch material-icons">
-                    <div class="mdc-icon-button__ripple"></div>
-                    more_vert
-                    <div class="mdc-icon-button__touch"></div>
-                  </button>
-                </div>                
-            </td>
-        </tr>            
-    </thead>
-</template>
 <template id="packageBrowserRepositoryItem_repository">    
     <thead>        
-        <tr class="mdc-data-table__header-row install-options-icons">
-            <th role="columnheader" scope="col" title="Automatically require at boot">
-                <i class="material-icons">play_arrow</i>
-            </th>
-            <th role="columnheader" scope="col"  title="Embed locally into webstrate">
-                <i class="material-icons">archive</i>
-            </th>                        
-        </tr>
         <tr>
-            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
-                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+            <th class="package-required mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Automatically require at boot">
+                    <i class="material-icons install-options-icon">play_arrow</i>
                     <input type="checkbox" class="mdc-checkbox__native-control"/>
                     <div class="mdc-checkbox__background">
                         <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -6024,8 +6122,9 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     <div class="mdc-checkbox__ripple"></div>
                 </div>                                      
             </th>
-            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
-                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+            <th class="package-embedded mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
+                <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Embed locally into webstrate">
+                    <i class="material-icons install-options-icon">archive</i>
                     <input type="checkbox" class="mdc-checkbox__native-control" disabled/>
                     <div class="mdc-checkbox__background">
                         <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -6036,11 +6135,11 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     <div class="mdc-checkbox__ripple"></div>
                 </div>                            
             </th>            
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Version</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">License</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Description</th>
-            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
+            <th class="package-name mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
+            <th class="mdc-data-table__header-cell package-version" role="columnheader" scope="col">Version</th>
+            <th class="mdc-data-table__header-cell package-license" role="columnheader" scope="col">License</th>
+            <th class="mdc-data-table__header-cell package-description" role="columnheader" scope="col">Description</th>
+            <th class="mdc-data-table__header-cell package-options" role="columnheader" scope="col">
             </th>
         </tr>
     </thead>
@@ -6052,22 +6151,17 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 </template>
 
 <template id="packageBrowserRepositoryList">
-    <div>
-        <div class="repository-actions">
-            <div class="mdc-touch-target-wrapper add-repository">
-              <button class="mdc-button mdc-button--touch" data-mdc-auto-init="MDCButton">
-                    <i class="material-icons mdc-button__icon">add_link</i>
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__touch"></span>
-                    <span class="mdc-button__label">Add Respository...</span>
-              </button>
-            </div>        
-        </div>
-        
-        <div class="mdc-data-table">
-            <div class="mdc-data-table__table-container">
-                <table class="mdc-data-table__table repository-list">
-                </table>
+    <div class="tabcontent">        
+        <div class="split">
+            <ul class="mdc-list mdc-list--two-line repository-overview" data-mdc-auto-init="MDCList">
+            </ul>
+            <div class="scroller">
+                <div class="mdc-data-table">
+                    <div class="mdc-data-table__table-container">
+                        <table class="mdc-data-table__table repository-list">
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -6077,7 +6171,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
     <div>
         <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
           <span class="mdc-text-field__ripple"></span>
-          <span class="mdc-floating-label" id="repo-label-id">Repository ID</span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Identifier</span>
           <input class="mdc-text-field__input" type="text"
                  aria-labelledby="repo-label-id"
                  aria-controls="repo-helper-text"
@@ -6089,14 +6183,86 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             Identification token - e.g. 'cauldron-repos'
           </div>
         </div>            
-        <p>
-            WPM will search for the repository in:
-        </p>
-        <ul>
+        WPM will search for the repository in:
+        <ul style="margin:0">
             <li>/[identifier]/?raw - using Webstrates</li>
             <li>./[identifier]/index.html - on filesystem</li>
         </ul>
-</div>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryURL">
+    <div>
+        Specify the URL to use load this repository
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Source</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repourl">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Repository URL - e.g. 'https://mydomain.com/awesome-repos'
+          </div>
+        </div>            
+        <ul style="margin:0">
+            <li>Absolute https://mydomain.com/awesome-repos</li>
+            <li>Relative ./something/index.html</li>
+            <li>Server-relative: /something/?raw</li>
+        </ul>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryDevURL">
+    <div>
+        Specify the Dev Override URL to use locally for this repository
+        <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+          <span class="mdc-text-field__ripple"></span>
+          <span class="mdc-floating-label" id="repo-label-id">Repository Override</span>
+          <input class="mdc-text-field__input" type="text"
+                 aria-labelledby="repo-label-id"
+                 aria-controls="repo-helper-text"
+                 aria-describedby="repo-helper-text" id="repodevurl">
+          <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+          <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+            Repository Override - e.g. '/something/?raw'
+          </div>
+        </div>            
+        <ul style="margin:0">
+            <li>Absolute https://mydomain.com/awesome-repos</li>
+            <li>Relative ./something/index.html</li>
+            <li>Server-relative: /something/?raw</li>
+        </ul>
+    </div>
+</template>
+
+<template id="packageBrowserRepositoryListItem">
+    <li class="mdc-list-item" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <span class="mdc-list-item__text">
+            <span class="mdc-list-item__primary-text repository-name">Two-line item
+            </span>
+            <span class="mdc-list-item__secondary-text repository-url">Repository URL</span>
+        </span>
+        <button data-mdc-ripple-is-unbounded="" class="mdc-list-item__meta mdc-icon-button material-icons repository-more">
+        more_vert
+    </button>
+    </li>
+</template>
+
+<template id="packageBrowserAddListItem">
+    <li class="mdc-list-item add-repository" data-mdc-auto-init="MDCRipple" tabindex="0">
+        <span class="mdc-list-item__ripple"></span>
+        <i class="material-icons" aria-hidden="true">add</i>
+        <span>
+            Add Repository
+        </span>
+    </li>
 </template>
 
             </div>            

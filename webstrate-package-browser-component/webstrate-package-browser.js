@@ -27,7 +27,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         self.html = WebstrateComponents.Tools.loadTemplate("#packageBrowserBase");
         self.mainView = self.html.querySelector("#packageBrowserMain");
         
-        wpm.require(["material-design-components", "material-design-icons","ModalDialog","MenuSystem"]).then(()=>{
+        wpm.require(["material-design-components", "material-design-icons","ModalDialog","MenuSystem","MaterialMenu","MaterialDesignOutlinedIcons"]).then(()=>{
             mdc.autoInit(self.html);
             let tabs = self.html.querySelector(".mdc-tab-bar").MDCTabBar;
             
@@ -46,7 +46,10 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                 tabs.activateTab(0); //self.showRepositories();
             } catch (ex){
                 tabs.activateTab(1); //self.showSystem();
-            }            
+            }
+            
+            self.repositoryURLDialog = this.getURLDialog();
+            self.repositoryDevURLDialog = this.getDevURLDialog();
         });
         
         if (autoOpen) this.openInBody();
@@ -60,6 +63,103 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
     
     setTopLevelComponent(component){
         this.topLevelComponent = component;
+    }    
+    
+    getURLDialog(){
+        let self = this;
+        let repoAddTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryURL");
+        let repositoryURLDialog = new WebstrateComponents.ModalDialog(
+                repoAddTemplate,
+                {
+                    "title":"Repository URL",
+                    "actions": {
+                            "cancel":{},
+                            "set": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        this.topLevelComponent.appendChild(repositoryURLDialog.html);
+        
+        repositoryURLDialog.setTarget = (target)=>{
+            repositoryURLDialog.target = target;
+            
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
+            if (stepRepositoryRegistrations[target]){
+                repoAddTemplate.querySelector("#repourl").value = stepRepositoryRegistrations[target];
+            }                        
+        };
+        
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+            if(evt.detail.dialog===repositoryURLDialog && evt.detail.action === "set") {
+                let bootConfig = self.getBootConfig();
+                
+                if (bootConfig.require && Array.isArray(bootConfig.require)){
+                    let repo = {};
+                    repo[repositoryURLDialog.target] = repoAddTemplate.querySelector("#repourl").value;
+                    if (bootConfig.require.length===0){
+                        bootConfig.require = {
+                            repositories: repo,
+                            dependencies: []
+                        };
+                    } else {
+                        let oldRepos = bootConfig.require[0].repositories;
+                        if (!oldRepos){
+                            bootConfig.require[0].repositories = repo;
+                        } else {
+                            bootConfig.require[0].repositories = {...bootConfig.require[0].repositories, ...repo};
+                        }
+                    }
+                    
+                    // Effectuate immediately too
+                    WPMv2.registerRepository(repositoryURLDialog.target, repo[repositoryURLDialog.target]);
+                }
+                
+                self.setBootConfig(bootConfig);
+                self.showRepositories();
+            }
+        });        
+        
+        return repositoryURLDialog;
+    }
+    
+    getDevURLDialog(){
+        let self = this;
+        let repoDevTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryDevURL");
+        let repositoryDevURLDialog = new WebstrateComponents.ModalDialog(
+                repoDevTemplate,
+                {
+                    "title":"Repository Dev Override",
+                    "actions": {
+                            "cancel":{},
+                            "remove":{},
+                            "set": {primary: true, mdcIcon: "add_link"}
+                    }
+                }
+        );
+        this.topLevelComponent.appendChild(repositoryDevURLDialog.html);
+        
+        repositoryDevURLDialog.setTarget = (target)=>{
+            repositoryDevURLDialog.target = target;
+            
+            let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
+            if (stepRepositoryRegistrations[target]){
+                repoDevTemplate.querySelector("#repodevurl").value = stepRepositoryRegistrations[target];
+            }                        
+        };
+        
+        EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
+            if(evt.detail.dialog===repositoryDevURLDialog){
+                let value = repoDevTemplate.querySelector("#repodevurl").value;
+                if (evt.detail.action === "remove" || (evt.detail.action === "set" && value.trim().length===0)){
+                    WPMv2.unregisterRepository(repositoryDevURLDialog.target, true);
+                } else if (evt.detail.action === "set"){
+                    WPMv2.registerRepository(repositoryDevURLDialog.target, value, true);
+                }
+            }
+            self.showRepositories();
+        });        
+        
+        return repositoryDevURLDialog;
     }    
     
     showRepositories() {
@@ -76,13 +176,13 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     "title":"Add Repository",
                     "actions": {
                             "cancel":{},
-                            "add": {primary: true, mdcIcon: "add_link"}
+                            "next": {primary: true, mdcIcon: "add_link"}
                     }
                 }
         );
         self.topLevelComponent.appendChild(addRepositoryDialog.html);
         EventSystem.registerEventCallback('ModalDialog.Closing', function(evt) {
-            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "add") {
+            if(evt.detail.dialog===addRepositoryDialog && evt.detail.action === "next") {
                 let bootConfig = self.getBootConfig();
                 let value = repoAddTemplate.querySelector("#repoid").value.trim();
                 if (value.length>0){
@@ -96,10 +196,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     // TODO: .scrollIntoView() ?
                 }
             }
-        });
-        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
-            addRepositoryDialog.html.querySelector("#repoid").value = "";
-            addRepositoryDialog.open();
         });
         
         // Gather a list of used repositories, both site-wide from WPM and previously added from this browser
@@ -121,31 +217,30 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         
         // Sort it and show it
         let sortedRepositories = knownRepositories.sort();        
-        let repoListDiv = repositoryView.querySelector(".repository-list");
-        for (let repositoryName of sortedRepositories){
-            let repositoryHeaderTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_header");            
-            let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
-            let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
-            repositoryHeaderTemplate.querySelector(".repository-name").innerText = repositoryName;
-            
+        let overviewAddItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserAddListItem");                        
+        for (let repositoryName of sortedRepositories){            
+            let overviewListItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryListItem");            
+            overviewListItemTemplate.querySelector(".repository-name").title = repositoryName;            
+            overviewListItemTemplate.querySelector(".repository-name").innerText = repositoryName.replace("-repos","").replaceAll("_"," ").replaceAll("-", " ");
             
             // Check if this is mapped somewhere with the bootloader
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it   
             let stepRepositoryRegistrations = WPMv2.getRegisteredRepositories(false);
             if (stepRepositoryRegistrations[repositoryName]){
-                repositoryHeaderTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").innerText = stepRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").title = stepRepositoryRegistrations[repositoryName];
             }
             
             // Check if this is mapped somewhere with any overrides
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it
             let overrideRepositoryRegistrations = WPMv2.getRegisteredRepositories(true);
             if (overrideRepositoryRegistrations[repositoryName]){
-                repositoryHeaderTemplate.querySelector(".repository-override-url").innerText = overrideRepositoryRegistrations[repositoryName];
-                repositoryHeaderTemplate.querySelector(".repository-override-url").title = "Site-wide developer override in this browser";
-                repositoryHeaderTemplate.querySelector(".repository-header").classList.add("overridden");
+                overviewListItemTemplate.querySelector(".repository-url").title = overviewListItemTemplate.querySelector(".repository-url").innerText+ " overridden by site-wide developer setting in this browser";
+                overviewListItemTemplate.querySelector(".repository-url").innerText = overrideRepositoryRegistrations[repositoryName];
+                overviewListItemTemplate.querySelector(".repository-url").style.color="red";
             }     
             
-            repositoryHeaderTemplate.querySelector(".repository-more").addEventListener("click", (evt)=>{
+            overviewListItemTemplate.querySelector(".repository-more").addEventListener("click", (evt)=>{
                 let moreMenu = MenuSystem.MenuManager.createMenu("PackageBrowser.RepositoryMore", {
                     growDirection: MenuSystem.Menu.GrowDirection.DOWN
                 });         
@@ -166,12 +261,21 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 });
                 moreMenu.addItem({
-                    label: "URL Override...",
+                    label: "Source URL...",
+                    icon: IconRegistry.createIcon("mdc:link"),
+                    order: 900,
+                    onAction: ()=>{     
+                        self.repositoryURLDialog.setTarget(repositoryName);
+                        self.repositoryURLDialog.open();
+                    }
+                });                 
+                moreMenu.addItem({
+                    label: "Dev Override...",
                     icon: IconRegistry.createIcon("mdc:assistant_direction"),
                     order: 999,
                     onAction: ()=>{                        
-                        alert("Prove that you are a dev first!");
-                        // Use WPMv2.registerRepository("the-name", "new url", true);
+                        self.repositoryDevURLDialog.setTarget(repositoryName);
+                        self.repositoryDevURLDialog.open();
                     }
                 });                
                 
@@ -181,54 +285,75 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 });                
                 
+                console.log("Menu",evt);
                 self.html.appendChild(moreMenu.html);
+                
                 moreMenu.open({
-                    x: evt.pageX,
-                    y: evt.pageY
+                    x: evt.clientX,
+                    y: evt.clientY
                 });
                 evt.stopPropagation();
                 evt.preventDefault();
             });
             
-            
-            // Delayed-load up-to-date packages list
-            setTimeout(async ()=>{
-                let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
-                
-                let renderBody = ()=>{
-                    for (let packageInfo of repositoryPackages){
-                        repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig));
-                    }                
-                };
-                await renderBody();
-                
-                // Repository-wide override buttons
-                repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
-                repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
-                    // Enabled repository-wide require option, remove any per-package settings from bootConfig
-                    for (let packageInfo of repositoryPackages){
-                        await self.removePackageRequire(packageInfo);
-                    }
-                    
-                    if (evt.target.checked){
-                        await self.addRepositoryRequire(repositoryName);
-                    } else {                       
-                        await self.removeRepositoryRequire(repositoryName);
-                    }
-                    
-                    bootConfig = this.getBootConfig();
-                    repositoryBodyTemplate.innerHTML = "";
-                    await renderBody();
-                });
-                
-            },0);
-                       
-            repoListDiv.appendChild(repositoryHeaderTemplate);
+            // Insert into overview of repositories
+            repositoryView.querySelector(".repository-overview").appendChild(overviewListItemTemplate);
+        }
+        repositoryView.querySelector(".repository-overview").appendChild(overviewAddItemTemplate);        
+        repositoryView.querySelector(".add-repository").addEventListener("click", ()=>{
+            addRepositoryDialog.html.querySelector("#repoid").value = "";
+            addRepositoryDialog.open();
+        });                
+        
+        let renderRepository = async function renderRepository(repositoryName){
+            let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
+
+            let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
+            let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
+            let repoListDiv = repositoryView.querySelector(".repository-list");
+            repoListDiv.innerHTML = "";
             repoListDiv.appendChild(repositoryRepositoryTemplate);
             repoListDiv.appendChild(repositoryBodyTemplate);
             
-            
-        }
+            let renderBody = ()=>{
+                for (let packageInfo of repositoryPackages){
+                    repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig));
+                }                
+
+                // TODO: Render missing packages here
+            };
+            await renderBody();
+
+            // Repository-wide override buttons
+            repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
+            repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
+                // Enabled repository-wide require option, remove any per-package settings from bootConfig
+                for (let packageInfo of repositoryPackages){
+                    await self.removePackageRequire(packageInfo);
+                }
+
+                if (evt.target.checked){
+                    await self.addRepositoryRequire(repositoryName);
+                } else {                       
+                    await self.removeRepositoryRequire(repositoryName);
+                }
+
+                bootConfig = self.getBootConfig();
+                repositoryBodyTemplate.innerHTML = "";
+                await renderBody();
+            });
+        };
+        
+        mdc.autoInit(repositoryView);        
+        let list = repositoryView.querySelector(".repository-overview").MDCList;
+        list.singleSelection = true;
+        list.listen("MDCList:action", async (evt)=>{            
+            if (evt.detail.index > sortedRepositories.length) return;
+            let repositoryName = sortedRepositories[evt.detail.index];
+            renderRepository(repositoryName);
+        });   
+        list.selectedIndex = 0;
+        if (sortedRepositories.length>0) renderRepository(sortedRepositories[0]);
         
         this.mainView.appendChild(repositoryView);        
     }
@@ -253,20 +378,6 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             if (WPMv2.revision){
                 wpmInfo.querySelector(".revision").innerText = WPMv2.revision;
             }
-            
-            wpmInfo.querySelector(".update").addEventListener("click", async ()=>{
-                // STUB: Maybe make this fancier with custom URLs and showing new version before updating etc
-                let oldVersion = WPMv2.version;
-                await WPMv2.updateWPM("/wpm/?raw");
-                let newVersion = WPMv2.version;
-
-                if(oldVersion !== newVersion) {
-                    console.log("WPM was updated, reloading...")
-                    setTimeout(()=>{
-                        location.reload();
-                    }, 1000);
-                }
-            });
         }
         
         // Config
