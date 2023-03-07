@@ -6962,6 +6962,9 @@ window.HeadEditorComponent = class HeadEditorComponent {
   z-index: 9000; }
   .wc-modal-dialog .mdc-dialog__surface {
     max-width: 95%; }
+  .wc-modal-dialog .mdc-dialog__content.flexcontent {
+    display: flex;
+    padding: 0; }
   .wc-modal-dialog.wc-modal-maximized .mdc-dialog__container {
     min-width: 85%; }
     .wc-modal-dialog.wc-modal-maximized .mdc-dialog__container .mdc-dialog__surface {
@@ -7020,6 +7023,7 @@ class ModalDialog {
             closeOnEscape: true,
             autoStackButtons: true,
             maximize: false,
+            flexContent: false,
             actions: {}
         };
 
@@ -7077,6 +7081,9 @@ class ModalDialog {
                 }
         }
 
+        if (this.options.flexContent){
+            this.content.classList.add("flexcontent");
+        }
         this.content.appendChild(content);
         if(this.options.title != null && this.options.title.trim() !== "") {
             this.title.textContent = this.options.title.trim();

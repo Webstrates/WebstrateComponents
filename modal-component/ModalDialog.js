@@ -48,6 +48,7 @@ class ModalDialog {
             closeOnEscape: true,
             autoStackButtons: true,
             maximize: false,
+            flexContent: false,
             actions: {}
         };
 
@@ -105,6 +106,9 @@ class ModalDialog {
                 }
         }
 
+        if (this.options.flexContent){
+            this.content.classList.add("flexcontent");
+        }
         this.content.appendChild(content);
         if(this.options.title != null && this.options.title.trim() !== "") {
             this.title.textContent = this.options.title.trim();

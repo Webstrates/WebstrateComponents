@@ -23,6 +23,10 @@
     .mdc-dialog__surface {
         max-width: 95%;
     }
+    .mdc-dialog__content.flexcontent {
+        display:flex;
+        padding: 0;
+    }
     
     &.wc-modal-maximized .mdc-dialog__container {
         min-width: 85%;
