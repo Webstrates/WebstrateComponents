@@ -5157,10 +5157,11 @@ window.RevisionBrowser = class RevisionBrowser {
         "#MaterialMenu"
     ],
     "assets": [],
-    "version": "1.0",
+    "version": "2.0",
     "license": "Apache 2.0",
     "changelog": {
-        "1.0": "Initial version"
+        "1.0": "Initial version",
+        "2.0": "No longer initial version"
     }
 }
 
@@ -5228,6 +5229,8 @@ window.RevisionBrowser = class RevisionBrowser {
       margin-left: 0.3em;
       color: var(--mdc-theme-text-icon-on-light);
       user-select: none; }
+    .package-browser-base #packageBrowserMain .mdc-data-table__row.missing {
+      background: rgba(255, 0, 0, 0.6); }
     .package-browser-base #packageBrowserMain .mdc-data-table {
       border: none;
       display: block; }
@@ -5432,6 +5435,145 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         return repositoryDevURLDialog;
     }    
     
+    
+    async renderRepository(repositoryName, repositoryView){
+        let self = this;
+        let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
+        let bootConfig = this.getBootConfig();
+
+        let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
+        let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
+        let repoListDiv = repositoryView.querySelector(".repository-list");
+        repoListDiv.innerHTML = "";
+        repoListDiv.appendChild(repositoryRepositoryTemplate);
+        repoListDiv.appendChild(repositoryBodyTemplate);
+
+        let renderBody = ()=>{            
+            let installedFromRepository = WPMv2.getCurrentlyInstalledPackages().filter(pkg=>pkg.repository&&pkg.repository==repositoryName);
+            // TODO: Handle packages that are in the bootConfig requirestep for this repo but aren't in the repo
+            let repositoryIsThisPage = WPMv2.getLocalRepositoryURL && (repositoryName == WPMv2.getLocalRepositoryURL());
+                        
+            for (let packageInfo of repositoryPackages){
+                if (packageInfo.repository && packageInfo.repository!=repositoryName) continue; // This package is not actually from here but somewhere else
+                repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig, {repositoryIsThisPage:repositoryIsThisPage}));
+                installedFromRepository = installedFromRepository.filter(pkg=>pkg.name!=packageInfo.name);
+            }                
+
+            // Render packages that claim to be in this repository, but aren't
+            installedFromRepository.forEach((packageInfo)=>{
+                repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig, {missingInRepository:true}));
+            });
+        };
+        await renderBody();
+
+        // Repository-wide override buttons
+        repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
+        repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
+            // Enabled repository-wide require option, remove any per-package settings from bootConfig
+            for (let packageInfo of repositoryPackages){
+                await self.removePackageRequire(packageInfo);
+            }
+
+            if (evt.target.checked){
+                await self.addRepositoryRequire(repositoryName);
+            } else {                       
+                await self.removeRepositoryRequire(repositoryName);
+            }
+
+            bootConfig = self.getBootConfig();
+            repositoryBodyTemplate.innerHTML = "";
+            await renderBody();
+        });
+
+        repositoryRepositoryTemplate.querySelector(".repository-embed").addEventListener("click", async (evt)=>{
+            let embedMenu = MenuSystem.MenuManager.createMenu("PackageBrowser.RepositoryEmbed", {
+                growDirection: MenuSystem.Menu.GrowDirection.DOWN
+            });         
+            embedMenu.addItem({
+                label: "Embed In-Use",
+                order: 100,
+                group: "Fetching",
+                groupOrder: 200,
+                icon: IconRegistry.createIcon("mdc:downloading"),
+                onAction: async ()=>{               
+                    let packagesToEmbed = [];
+                    for (let packageInfo of repositoryPackages){
+                        let inUse = self.getLocalPackageElement(packageInfo.name);
+                        if (inUse && (self.isTransientPackageElement(inUse))){
+                            packagesToEmbed.push(packageInfo);
+                        }
+                    }
+                    console.log(packagesToEmbed);
+                    await self.embedPackages(packagesToEmbed);
+                    self.renderRepository(repositoryName, repositoryView);
+                }
+            });
+            embedMenu.addItem({
+                label: "Embed All",
+                icon: IconRegistry.createIcon("mdc:download_for_offline"),
+                group: "Fetching",
+                groupOrder: 200,
+                order: 200,
+                onAction: async ()=>{
+                    if (confirm("This will bloat the page, the repository may not be designed to have ALL packages embedded and newly added packages will not be included")){
+                        let packagesToEmbed = []
+                        for (let packageInfo of repositoryPackages){
+                            let localPackageElement = self.getLocalPackageElement(packageInfo.name);
+                            
+                            if ((!localPackageElement)||self.isTransientPackageElement(localPackageElement)){
+                                packagesToEmbed.push(packageInfo);
+                            }
+                        }
+                        await self.embedPackages(packagesToEmbed);
+                        self.renderRepository(repositoryName, repositoryView);                        
+                    }
+                }
+            });                 
+            embedMenu.addItem({
+                label: "Remove All Embedded",
+                icon: IconRegistry.createIcon("mdc:delete"),
+                group: "Destruction",
+                groupOrder: 999,
+                order: 999,
+                onAction: async ()=>{          
+                    let packagesOnlyOnThisPage = 0;
+                    let packagesToUnembed = [];
+                    for (let packageInfo of repositoryPackages){
+                        let localPackageElement = self.getLocalPackageElement(packageInfo.name);
+                        if (localPackageElement && !self.isTransientPackageElement(localPackageElement)){
+                            if (packageInfo.repository && WPMv2.getLocalRepositoryURL && packageInfo.repository==WPMv2.getLocalRepositoryURL()){
+                                packagesOnlyOnThisPage++;
+                            }
+                            packagesToUnembed.push(packageInfo);
+                        }                            
+                    }       
+                    
+                    if ((!packagesOnlyOnThisPage) || confirm("This will permanently delete "+packagesOnlyOnThisPage+" packages that ONLY exist in this page"))
+                    for (let pkg of packagesToUnembed){
+                        await self.unembedPackage(pkg);
+                    }
+                            
+                    self.renderRepository(repositoryName, repositoryView);
+                }
+            });                
+
+            embedMenu.registerOnCloseCallback(() => {
+                if (embedMenu.html.parentNode !== null) {
+                    embedMenu.html.parentNode.removeChild(embedMenu.html);
+                }
+            });                
+
+            self.html.appendChild(embedMenu.html);
+
+            embedMenu.open({
+                x: evt.clientX,
+                y: evt.clientY
+            });
+            evt.stopPropagation();
+            evt.preventDefault();
+        });
+    };    
+    
     showRepositories() {
         let self = this;
         this.mainView.innerHTML="";
@@ -5489,9 +5631,14 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         let sortedRepositories = knownRepositories.sort();        
         let overviewAddItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserAddListItem");                        
         for (let repositoryName of sortedRepositories){            
-            let overviewListItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryListItem");            
-            overviewListItemTemplate.querySelector(".repository-name").title = repositoryName;            
-            overviewListItemTemplate.querySelector(".repository-name").innerText = repositoryName.replace("-repos","").replaceAll("_"," ").replaceAll("-", " ");
+            let overviewListItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryListItem");
+            if (WPMv2.getLocalRepositoryURL && repositoryName == WPMv2.getLocalRepositoryURL()){
+                overviewListItemTemplate.querySelector(".repository-name").innerHTML = "⌂ This Page";
+                overviewListItemTemplate.querySelector(".repository-url").innerText = repositoryName;
+            } else {
+                overviewListItemTemplate.querySelector(".repository-name").title = repositoryName;            
+                overviewListItemTemplate.querySelector(".repository-name").innerText = repositoryName.replace("-repos","").replaceAll("_"," ").replaceAll("-", " ");
+            }
             
             // Check if this is mapped somewhere with the bootloader
             // STUB: Currently this uses WPMv2 instead of the bootstep to resolve it   
@@ -5555,9 +5702,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
                     }
                 });                
                 
-                console.log("Menu",evt);
                 self.html.appendChild(moreMenu.html);
-                
                 moreMenu.open({
                     x: evt.clientX,
                     y: evt.clientY
@@ -5575,55 +5720,16 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             addRepositoryDialog.open();
         });                
         
-        let renderRepository = async function renderRepository(repositoryName){
-            let repositoryPackages = await WPMv2.getPackagesFromRepository(repositoryName);
-
-            let repositoryRepositoryTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_repository");            
-            let repositoryBodyTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserRepositoryItem_body");            
-            let repoListDiv = repositoryView.querySelector(".repository-list");
-            repoListDiv.innerHTML = "";
-            repoListDiv.appendChild(repositoryRepositoryTemplate);
-            repoListDiv.appendChild(repositoryBodyTemplate);
-            
-            let renderBody = ()=>{
-                for (let packageInfo of repositoryPackages){
-                    repositoryBodyTemplate.appendChild(self.renderPackageItem(packageInfo, bootConfig));
-                }                
-
-                // TODO: Render missing packages here
-            };
-            await renderBody();
-
-            // Repository-wide override buttons
-            repositoryRepositoryTemplate.querySelector(".repository-require input").checked = self.isConfigDirectlyRequiringRepository(bootConfig, repositoryName);
-            repositoryRepositoryTemplate.querySelector(".repository-require input").addEventListener("click", async (evt)=>{
-                // Enabled repository-wide require option, remove any per-package settings from bootConfig
-                for (let packageInfo of repositoryPackages){
-                    await self.removePackageRequire(packageInfo);
-                }
-
-                if (evt.target.checked){
-                    await self.addRepositoryRequire(repositoryName);
-                } else {                       
-                    await self.removeRepositoryRequire(repositoryName);
-                }
-
-                bootConfig = self.getBootConfig();
-                repositoryBodyTemplate.innerHTML = "";
-                await renderBody();
-            });
-        };
-        
         mdc.autoInit(repositoryView);        
         let list = repositoryView.querySelector(".repository-overview").MDCList;
         list.singleSelection = true;
         list.listen("MDCList:action", async (evt)=>{            
             if (evt.detail.index > sortedRepositories.length) return;
             let repositoryName = sortedRepositories[evt.detail.index];
-            renderRepository(repositoryName);
+            self.renderRepository(repositoryName, repositoryView);
         });   
         list.selectedIndex = 0;
-        if (sortedRepositories.length>0) renderRepository(sortedRepositories[0]);
+        if (sortedRepositories.length>0) self.renderRepository(sortedRepositories[0], repositoryView);
         
         this.mainView.appendChild(repositoryView);        
     }
@@ -5689,6 +5795,10 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         config["updated"] = Date.now();
         element.textContent = JSON.stringify(config, null, 4);
     }    
+    
+    isLive(packageElement){
+        return packageElement.getAttribute("transient-wpm-live")!==null;
+    }
     
     isConfigDirectlyRequiringPackage(config, name){
         if (!config) throw new Error("Boot config is undefined");
@@ -5866,10 +5976,41 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         this.setBootConfig(config);
     }    
     
-    renderPackageItem(wpmPackage, bootConfig){
+    async embedPackages(wpmPackages){
+        // Prepare for this package to be embedded
+        let requiredPackages = [];
+        wpmPackages.forEach((wpmPackage)=>{
+            let localPackageElement = this.getLocalPackageElement(wpmPackage.name);
+            if (localPackageElement && this.isTransientPackageElement(localPackageElement)){
+                // Already installed transiently, remove first
+                localPackageElement.remove();
+                //Also remove wpm transient element if found
+                document.querySelector("[transient-wpmid='"+wpmPackage.name+"']")?.remove();
+            };
+            requiredPackages.push({package:wpmPackage.name, repository:wpmPackage.repository, appendTarget:"head"});
+        });
+
+        await wpm.require(requiredPackages, {"bootstrap":"false"}); // install it right away
+    }
+    
+    async unembedPackage(wpmPackage){
+        let localPackageElement = this.getLocalPackageElement(wpmPackage.name); // update the package element          
+        localPackageElement.remove();
+
+        if (this.isConfigDirectlyRequiringPackage(this.getBootConfig(), wpmPackage.name)){
+            // Re-install transiently if required
+            await wpm.require(wpmPackage);
+        };                    
+    }
+    
+    renderPackageItem(wpmPackage, bootConfig, displayOptions={}){
         let self = this;
        
         let packageItemTemplate = WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItem");
+        if (displayOptions.missingInRepository){
+            packageItemTemplate.classList.add("missing");
+            packageItemTemplate.title="This package could not be found in the repository";
+        };
       
         if (!wpmPackage.name){            
             return WebstrateComponents.Tools.loadTemplate("#packageBrowserPackageItemError");            
@@ -5890,24 +6031,26 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             if (this.isConfigDirectlyRequiringPackage(bootConfig, wpmPackage.name)){
                 packageItemTemplate.querySelector(".package-required input").checked = true;
             } else {
-                packageItemTemplate.querySelector(".package-required").setAttribute("data-indirect-requirement","true");
-                packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by another package at runtime");
-                
-                try {
-                    // Add which package pulled this in
-                    let pulledInBy = [];
-                    WPMv2.getCurrentlyInstalledPackages().forEach(function(pkg){
-                        pkg.dependencies.forEach(function(dep){
-                            if (typeof dep === "string" && dep.indexOf("#"+wpmPackage.name)!=-1){
-                                pulledInBy.push(pkg);
-                            }
+                if (this.isLive(localPackageElement)){
+                    packageItemTemplate.querySelector(".package-required").setAttribute("data-indirect-requirement","true");
+                    packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by another package at runtime");
+
+                    try {
+                        // Add which package pulled this in
+                        let pulledInBy = [];
+                        WPMv2.getCurrentlyInstalledPackages().forEach(function(pkg){
+                            pkg.dependencies.forEach(function(dep){
+                                if (typeof dep === "string" && dep.indexOf("#"+wpmPackage.name)!=-1){
+                                    pulledInBy.push(pkg);
+                                }
+                            });
                         });
-                    });
-                    if (pulledInBy.length > 0){
-                        packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by "+pulledInBy);
+                        if (pulledInBy.length > 0){
+                            packageItemTemplate.querySelector(".package-required .mdc-checkbox").setAttribute("title", "Indirectly required by "+pulledInBy);
+                        }
+                    } catch (ex){
+                        console.warn(ex);
                     }
-                } catch (ex){
-                    console.warn(ex);
                 }
             }
 
@@ -5918,58 +6061,48 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             }
         }
         
-        let embed = async function embed(){
-            // Embed this package                
-            if (localPackageElement && self.isTransientPackageElement(localPackageElement)){
-                // Already installed transiently, remove first
-                localPackageElement.remove();
-                //Also remove wpm transient element if found
-                document.querySelector("[transient-wpmid='"+wpmPackage.name+"']")?.remove();
-            };
-
-            let packageRequire = {package:wpmPackage.name, repository:wpmPackage.repository, appendTarget:"head"};
-            await wpm.require(packageRequire); // install it right away
-            localPackageElement = self.getLocalPackageElement(wpmPackage.name); // update the package element  
-            packageItemTemplate.querySelector(".package-embedded input").checked = true;
-        }
-        
-        let unEmbed = async function unEmbed(){
-            localPackageElement.remove();
-
-            if (self.isConfigDirectlyRequiringPackage(bootConfig, wpmPackage.name)){
-                // Re-install transiently if required
-                await wpm.require(wpmPackage);
-                localPackageElement = self.getLocalPackageElement(wpmPackage.name); // update the package element
-            };            
-            packageItemTemplate.querySelector(".package-embedded input").checked = false;
-        }
         
         // Click handlers
         packageItemTemplate.querySelector(".package-required input").addEventListener("click", async (box)=>{
             if (box.target.checked){ 
                 // Require a package
                 if (self.isForcedEmbeddedPackage(wpmPackage) && !packageItemTemplate.querySelector(".package-embedded input").checked){
-                    await embed();
-                }
+                    await self.embedPackages([wpmPackage]);
+                    packageItemTemplate.querySelector(".package-embedded input").checked = true;
 
+                }
                 await self.addPackageRequire(wpmPackage);
             } else {
                 if (self.isForcedEmbeddedPackage(wpmPackage) && packageItemTemplate.querySelector(".package-embedded input").checked){
-                    await unEmbed();
+                    await self.unembedPackage(wpmPackage);
+                    packageItemTemplate.querySelector(".package-embedded input").checked = false;
                 }
 
                 // Remove require for a package
                 await self.removePackageRequire(wpmPackage);
-                packageItemTemplate.querySelector(".package-embedded input").checked = false;
             }
+            localPackageElement = self.getLocalPackageElement(wpmPackage.name); // update the package element
         });
         
         packageItemTemplate.querySelector(".package-embedded input").addEventListener("click",async (box)=>{
             if (box.target.checked){
-                await embed();
-            } else {
-                await unEmbed();
+                await self.embedPackages([wpmPackage]);
+                packageItemTemplate.querySelector(".package-embedded input").checked = true;
+            } else {                
+                if (((!displayOptions.missingInRepository) || confirm("This package is missing in the repository, removing it will permanently delete it"))
+                        &&
+                       ((!displayOptions.repositoryIsThisPage) || confirm("The package only exists in this page, removing it will permanently delete it"))) {
+                    await self.unembedPackage(wpmPackage);
+                    packageItemTemplate.querySelector(".package-embedded input").checked = false;
+                    if (self.isForcedEmbeddedPackage(wpmPackage) && packageItemTemplate.querySelector(".package-required input").checked){
+                        await self.removePackageRequire(wpmPackage);
+                        packageItemTemplate.querySelector(".package-required input").checked = false;
+                    }
+                } else {
+                    packageItemTemplate.querySelector(".package-embedded input").checked = true;
+                }
             }   
+            localPackageElement = self.getLocalPackageElement(wpmPackage.name); // update the package element
         });
         
         
@@ -6247,7 +6380,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         <span class="mdc-list-item__text">
             <span class="mdc-list-item__primary-text repository-name">Two-line item
             </span>
-            <span class="mdc-list-item__secondary-text repository-url">Repository URL</span>
+            <span class="mdc-list-item__secondary-text repository-url">Automatic Repository URL</span>
         </span>
         <button data-mdc-ripple-is-unbounded="" class="mdc-list-item__meta mdc-icon-button material-icons repository-more">
         more_vert
