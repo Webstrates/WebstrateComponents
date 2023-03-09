@@ -618,7 +618,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         
         // Add it and load it
         let packageRequire = {package:packageInfo.name, repository:packageInfo.repository};
-        await wpm.require(packageRequire); // also install it right away
+        await WPMv2.require(packageRequire); // also install it right away
         config.require[step].dependencies.push(packageRequire);        
         this.setBootConfig(config);
     }
@@ -643,9 +643,11 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         }
         
         if (removedIt){
-            // TODO: Figure out if something else also depends on it
-            // If not, figure out if the package repository is this page
-            // If not, remove it from runtime too
+            let localPackageElement = this.getLocalPackageElement(packageInfo.name);
+            if (this.isTransientPackageElement(localPackageElement)){
+                localPackageElement.remove();
+                document.querySelector("[transient-wpmid='"+packageInfo.name+"']")?.remove();
+            }
         }
         
         this.setBootConfig(config);        
@@ -698,7 +700,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
         
         // Add it and load it
         let repositoryRequire = {repository:repositoryURL};
-        await wpm.require(repositoryRequire); // also install it right away
+        await WPMv2.require(repositoryRequire); // also install it right away
         config.require[step].dependencies.push(repositoryRequire);        
         this.setBootConfig(config);
     }    
@@ -717,7 +719,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
             requiredPackages.push({package:wpmPackage.name, repository:wpmPackage.repository, appendTarget:"head"});
         });
 
-        await wpm.require(requiredPackages, {"bootstrap":"false"}); // install it right away
+        await WPMv2.require(requiredPackages, {"bootstrap":"false"}); // install it right away
     }
     
     async unembedPackage(wpmPackage){
@@ -726,7 +728,7 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
 
         if (this.isConfigDirectlyRequiringPackage(this.getBootConfig(), wpmPackage.name)){
             // Re-install transiently if required
-            await wpm.require(wpmPackage);
+            await WPMv2.require(wpmPackage);
         };                    
     }
     
