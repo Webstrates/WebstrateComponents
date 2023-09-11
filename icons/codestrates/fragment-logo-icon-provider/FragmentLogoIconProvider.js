@@ -48,6 +48,7 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
             "text/p5js",
             "text/ruby",
             "application/x-lua",
+            "model/vnd.usda",
             "text/x-scss",
             "text/python"
         ];               
