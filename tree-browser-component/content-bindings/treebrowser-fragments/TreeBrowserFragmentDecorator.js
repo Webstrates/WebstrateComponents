@@ -29,6 +29,28 @@ class TreeBrowserFragmentDecorator {
      */
     static decorate(node) {
         if(node.type === "DomTreeNode") {
+            if(node.context.matches("code-folder")){
+                // Set open/closed icons in the default case
+                let iconNode = document.createElement("span");
+                let closedNode = IconRegistry.createIcon("mdc:folder");
+                closedNode.classList.add("tree-browser-icon-closed");
+                iconNode.appendChild(closedNode);
+                let unfoldedNode = IconRegistry.createIcon("mdc:folder_open");
+                unfoldedNode.classList.add("tree-browser-icon-unfolded");
+                iconNode.appendChild(unfoldedNode);                
+                node.setProperty("icon", iconNode);
+                let content = "Unnamed Folder";
+                let name = node.context.getAttribute("name");
+                if (name != null && name != ""){
+                    content = name+" ";
+                }
+                if(node.context.id != null && node.context.id!="") {
+                    content += "#"+node.context.id;
+                }           
+                node.setProperty("content", content);
+                node.setProperty("tooltip", "Folder");
+                return true;
+            }
             if(node.context.matches("code-fragment")) {
                 let content = "";
                 let name = node.context.getAttribute("name");

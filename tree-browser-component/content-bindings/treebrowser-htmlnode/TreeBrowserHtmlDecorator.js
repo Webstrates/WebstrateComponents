@@ -34,27 +34,28 @@ class TreeBrowserHtmlDecorator {
             let name = (node.context.getAttribute("name")!=null && node.context.getAttribute("name").trim().length > 0)?" "+node.context.getAttribute("name"):"";
 
             node.setProperty("content", node.context.tagName.toLowerCase()+id+name);
-            
+            node.setProperty("tooltip", "HTML DOM Element");
             let icon = null;      
             switch (node.context.tagName.toLowerCase()){
-                case "script":
-                    icon = "mdc:code";
+                case "body":
+                    icon = IconRegistry.createIcon("mdc:accessibility_new");
                     break;
+                case "script":
+                    icon = IconRegistry.createIcon("mdc:code");
+                    break;
+                case "style":
+                    icon = IconRegistry.createIcon("mdc:brush");
+                    break;
+                case "ol":
+                case "ul":
+                    icon = IconRegistry.createIcon("mdc:list");
+                    break;
+                default:
+                    icon = IconRegistry.createIcon("mdc:html");
+                    break;
+                    
             }
-            if (icon){
-                node.setProperty("icon", IconRegistry.createIcon(icon));
-            } else {
-                // Set open/closed icons in the default case
-                let iconNode = document.createElement("span");
-                let closedNode = IconRegistry.createIcon("mdc:folder");
-                closedNode.classList.add("tree-browser-icon-closed");
-                iconNode.appendChild(closedNode);
-                let unfoldedNode = IconRegistry.createIcon("mdc:folder_open");
-                unfoldedNode.classList.add("tree-browser-icon-unfolded");
-                iconNode.appendChild(unfoldedNode);                
-                node.setProperty("icon", iconNode);
-            }
-            
+            node.setProperty("icon", icon);
             return true;
         }
 
