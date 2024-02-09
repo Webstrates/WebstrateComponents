@@ -39,6 +39,7 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
         let supportedTypes = [
             "text/html",
             "text/javascript",
+            "text/javascript+babel",
             "text/css",
             "text/x-typescript",
             "text/markdown",
@@ -52,6 +53,7 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
             "text/x-scss",
             "text/python"
         ];               
+        if (mimeType==="text/javascript+babel") mimeType = "text/javascript";
         if (supportedTypes.includes(mimeType)){
             let icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             let link = document.createElementNS('http://www.w3.org/2000/svg', 'use');
