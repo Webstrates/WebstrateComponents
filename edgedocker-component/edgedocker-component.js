@@ -47,6 +47,14 @@ class EdgeDocker {
         this.visualizerHandle = document.createElement("transient");
         this.visualizerHandle.classList.add("docking-area-visualizer");
         this.parent.appendChild(this.visualizerHandle);
+        
+        // Do not let events bubble through the component area to the document below
+        let stopEvent = (evt)=>{
+            evt.stopPropagation();
+        };
+        ["click"].forEach((event)=>{
+            this.componentArea.addEventListener(event, stopEvent);
+        });
 
         this.dragging = false;
 
