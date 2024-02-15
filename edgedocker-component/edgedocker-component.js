@@ -41,19 +41,53 @@ class EdgeDocker {
         this.resizeHandle = document.createElement("transient");
         this.resizeHandle.classList.add("docking-area-resizer");
         this.parent.appendChild(this.resizeHandle);
-        this.componentArea = document.createElement("transient");
-        this.componentArea.classList.add("docking-area-component");
-        this.parent.appendChild(this.componentArea);
+        this.outerComponentArea = document.createElement("component-area");
+        this.outerComponentArea.classList.add("docking-area-component");
+        this.outerComponentArea.setAttribute("transient-element",true);
+        this.parent.appendChild(this.outerComponentArea);
         this.visualizerHandle = document.createElement("transient");
         this.visualizerHandle.classList.add("docking-area-visualizer");
         this.parent.appendChild(this.visualizerHandle);
+        
+        // Create shadowDOM for content in component area and simulate a fake toplevel HTML element on it
+        if (options.shadowRoot){
+            this.componentShadow = this.outerComponentArea.attachShadow({mode:"open"});//this.outerComponentArea;
+            this.innerComponentArea = document.createElement("component-area-content");
+            this.componentShadow.appendChild(this.innerComponentArea);
+            this.componentShadow.matches = (query)=>{
+                if (query==="html") return true;
+            }
+            
+            // For components that do not supply their own stylesheets we can pass thru the main page's
+            if (options.shadowCompatibility){
+                this.shadowCompatibilityNode = document.createElement("compatibility-pasthru");
+                this.shadowCompatibilityNode.style.display="none";
+                this.componentShadow.appendChild(this.shadowCompatibilityNode);
+                
+                let updateCompatibilityPasthru = function updateCompatibilityPasthru(){
+                    self.shadowCompatibilityNode.innerHTML="";
+                    document.querySelectorAll("head link, head style, head wpm-package svg").forEach((style)=>{
+                        self.shadowCompatibilityNode.appendChild(style.cloneNode(true));
+                    });                
+                }
+                let observer = new MutationObserver(updateCompatibilityPasthru);
+                observer.observe(document.head, {
+                    childList: true, 
+                    subtree: true
+                });                
+                updateCompatibilityPasthru();
+                
+            }
+        } else {
+            this.innerComponentArea = this.outerComponentArea;
+        }
         
         // Do not let events bubble through the component area to the document below
         let stopEvent = (evt)=>{
             evt.stopPropagation();
         };
         ["click"].forEach((event)=>{
-            this.componentArea.addEventListener(event, stopEvent);
+            this.outerComponentArea.addEventListener(event, stopEvent);
         });
 
         this.dragging = false;
@@ -79,24 +113,24 @@ class EdgeDocker {
             }
 
             self.boundsAnimationFrame = requestAnimationFrame(()=>{
-                if(self.componentArea.style.width != oldStyleWidth) {
+                if(this.outerComponentArea.style.width != oldStyleWidth) {
                     doEvent = true;
-                    oldStyleWidth = parseInt(self.componentArea.style.width);
+                    oldStyleWidth = parseInt(this.outerComponentArea.style.width);
                 }
 
-                if(self.componentArea.style.height != oldStyleHeight) {
+                if(this.outerComponentArea.style.height != oldStyleHeight) {
                     doEvent = true;
-                    oldStyleHeight = parseInt(self.componentArea.style.height);
+                    oldStyleHeight = parseInt(this.outerComponentArea.style.height);
                 }
 
                 if(doEvent) {
-                    self.setBounds(parseInt(this.componentArea.style.left), parseInt(this.componentArea.style.top), oldStyleWidth, oldStyleHeight);
+                    self.setBounds(parseInt(this.outerComponentArea.style.left), parseInt(this.outerComponentArea.style.top), oldStyleWidth, oldStyleHeight);
                     window.dispatchEvent(new Event('resize'));
                 }
             });
         });
 
-        observer.observe(this.componentArea, {
+        observer.observe(this.outerComponentArea, {
             attributes: true,
             attributeFilter: ["style"]
         });
@@ -143,16 +177,16 @@ class EdgeDocker {
             }
             self.resizeAnimFrame = requestAnimationFrame(()=>{
                 self.resizeAnimFrame = null;
-                let width = self.componentArea.offsetWidth + self.deltaWidth;
-                let height = self.componentArea.offsetHeight + self.deltaHeight;
+                let width = this.outerComponentArea.offsetWidth + self.deltaWidth;
+                let height = this.outerComponentArea.offsetHeight + self.deltaHeight;
                 
                 self.deltaWidth = 0;
                 self.deltaHeight = 0;
 
-                this.setBounds(parseInt(this.componentArea.style.left), parseInt(this.componentArea.style.top), width, height);
+                this.setBounds(parseInt(this.outerComponentArea.style.left), parseInt(this.outerComponentArea.style.top), width, height);
                 /*
-                self.componentArea.style.width = width+"px";
-                self.componentArea.style.height = height+"px";
+                this.outerComponentArea.style.width = width+"px";
+                this.outerComponentArea.style.height = height+"px";
                 */
             });
         });
@@ -194,7 +228,7 @@ class EdgeDocker {
 
             self.parent.setAttribute("transient-data-docking-area-component-drag", "dragging");
 
-            let bounds = self.componentArea.getBoundingClientRect();
+            let bounds = this.outerComponentArea.getBoundingClientRect();
             currentX = bounds.x;
             currentY = bounds.y;
         });
@@ -267,15 +301,15 @@ class EdgeDocker {
             }
 
             if(immediately) {
-                self.componentArea.style.left = x + "px";
-                self.componentArea.style.top = y + "px";
+                this.outerComponentArea.style.left = x + "px";
+                this.outerComponentArea.style.top = y + "px";
                 self.visualizerHandle.style.left = x + "px";
                 self.visualizerHandle.style.top = y + "px";
             } else {
                 this.positionAnimationFrame = requestAnimationFrame(()=>{
                     if(self.currentMode === EdgeDocker.MODE.FLOAT) {
-                        self.componentArea.style.left = x + "px";
-                        self.componentArea.style.top = y + "px";
+                        this.outerComponentArea.style.left = x + "px";
+                        this.outerComponentArea.style.top = y + "px";
                         self.visualizerHandle.style.left = x + "px";
                         self.visualizerHandle.style.top = y + "px";
                     }
@@ -305,18 +339,18 @@ class EdgeDocker {
             case EdgeDocker.MODE.LEFT:
             case EdgeDocker.MODE.RIGHT:
                 //Only Set Width
-                this.componentArea.style.width = width + "px";
+                this.outerComponentArea.style.width = width + "px";
                 break;
 
             case EdgeDocker.MODE.BOTTOM:
                 //Only Set height
-                this.componentArea.style.height = height + "px";
+                this.outerComponentArea.style.height = height + "px";
                 break;
 
             case EdgeDocker.MODE.FLOAT:
                 //Set Width and Height
-                this.componentArea.style.width = width + "px";
-                this.componentArea.style.height = height + "px";
+                this.outerComponentArea.style.width = width + "px";
+                this.outerComponentArea.style.height = height + "px";
                 break;
         }
 
@@ -331,30 +365,30 @@ class EdgeDocker {
      * @param {boolean} [doLoad=true] - Determines if this setMode should load bounds from storage or not.
      */
     setMode(mode, doLoad = true){
-        let oldWidth = parseInt(this.componentArea.style.height);
-        let oldHeight = parseInt(this.componentArea.style.width);
+        let oldWidth = parseInt(this.outerComponentArea.style.height);
+        let oldHeight = parseInt(this.outerComponentArea.style.width);
         let oldMode = this.currentMode;
 
         this.parent.setAttribute("transient-data-docking-area-component-mode", mode);
         this.currentMode = mode;
 
         if(this.currentMode === EdgeDocker.MODE.MAXIMIZED || this.currentMode === EdgeDocker.MODE.EMBEDDED) {
-            this.componentArea.style.width = "";
-            this.componentArea.style.height = "";
+            this.outerComponentArea.style.width = "";
+            this.outerComponentArea.style.height = "";
         } else if(this.currentMode === EdgeDocker.MODE.LEFT || this.currentMode === EdgeDocker.MODE.RIGHT) {
-            this.componentArea.style.height = "";
-            this.componentArea.style.width = (this.parent.offsetWidth*0.5)+"px"; //Overidden if any saved mode exists
+            this.outerComponentArea.style.height = "";
+            this.outerComponentArea.style.width = (this.parent.offsetWidth*0.5)+"px"; //Overidden if any saved mode exists
         } else if(this.currentMode === EdgeDocker.MODE.BOTTOM) {
-            this.componentArea.style.width = "";
-            this.componentArea.style.height = (this.parent.offsetHeight*0.33)+"px"; //Overidden if any saved mode exists
+            this.outerComponentArea.style.width = "";
+            this.outerComponentArea.style.height = (this.parent.offsetHeight*0.33)+"px"; //Overidden if any saved mode exists
         } else if(this.currentMode === EdgeDocker.MODE.FLOAT && oldMode !== EdgeDocker.MODE.FLOAT) {
-            this.componentArea.style.width = "";
-            this.componentArea.style.height = "";
+            this.outerComponentArea.style.width = "";
+            this.outerComponentArea.style.height = "";
         }
         
         if (this.currentMode !== EdgeDocker.MODE.FLOAT){
-            this.componentArea.style.top = null;
-            this.componentArea.style.left = null;
+            this.outerComponentArea.style.top = null;
+            this.outerComponentArea.style.left = null;
         }
 
         if(doLoad) {
@@ -367,10 +401,10 @@ class EdgeDocker {
     dockInto(parentElement){
         if (parentElement){
             // Move into the element if one is given
-            parentElement.appendChild(this.componentArea);
+            parentElement.appendChild(this.outerComponentArea);
         } else {
             // Default to being shown before the visualizer
-            this.visualizerHandle.parentElement.insertBefore(this.componentArea, this.visualizerHandle);
+            this.visualizerHandle.parentElement.insertBefore(this.outerComponentArea, this.visualizerHandle);
         }
     }
 
@@ -396,7 +430,7 @@ class EdgeDocker {
 
         let key = location.pathname + "_" + mode;
 
-        let bounds = this.componentArea.getBoundingClientRect();
+        let bounds = this.outerComponentArea.getBoundingClientRect();
 
         localStorage.setItem(key, JSON.stringify(bounds));
     }
@@ -428,7 +462,7 @@ class EdgeDocker {
      * @returns {HTMLElement}
      */
     getComponentArea(){
-        return this.componentArea;
+        return this.innerComponentArea;
     }
 }
 

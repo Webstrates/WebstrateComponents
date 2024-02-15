@@ -79,7 +79,6 @@ html {
             height: 22em;
             overflow: auto;
             resize: both;
-            z-index: 999999;
             box-sizing: border-box;
             border: 1px outset #ababab;
             box-shadow: 0.1em 0.1em 0.5em rgba(0,0,0,0.15);
@@ -169,6 +168,9 @@ html {
         }
     }
     
+    .docking-area-component {
+        z-index: 1000000;
+    }
     
     .docking-area-visualizer {
         position: fixed;
