@@ -18,6 +18,9 @@
  *  limitations under the License.
 **/
     
+/**
+ * Provides MDC buttons
+ */
 ButtonSystem.MaterialBuilder = class MaterialBuilder {
     static buildButton(button) {
         let buttonHtml = WebstrateComponents.Tools.loadTemplate("ButtonSystem_MaterialDesign_Button");

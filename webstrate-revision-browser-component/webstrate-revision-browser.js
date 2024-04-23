@@ -17,7 +17,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+   
+/**
+ * Manage revisions of a Webstrate in a visual editor
+ */
 window.RevisionBrowser = class RevisionBrowser {
     constructor() {
         let self = this;

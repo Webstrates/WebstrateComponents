@@ -1,8 +1,7 @@
 /**
- *  Package Browser
- *  Visual browser for installing WPM packages into a Webstrate
+ *  Head Editor
  * 
- *  Copyright 2022 Rolf Bagge & Janus B. Kristensen, CAVI,
+ *  Copyright 2022, 2024 Rolf Bagge & Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,9 @@
  *  limitations under the License.
  **/
 
+/**
+ * Editor for adding/removing and changing common document attributes
+ */
 window.HeadEditorComponent = class HeadEditorComponent {
     constructor(autoOpen = true) {
         let self = this;

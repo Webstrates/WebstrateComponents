@@ -44,6 +44,9 @@
  *  limitations under the License.
 **/
 
+/**
+ * Registers icons and uses them on the page
+ */
 window.IconRegistry = class IconRegistry {   
     static registerProvider(iconProvider){
         IconRegistry.iconProviders.push(iconProvider);
@@ -144,6 +147,9 @@ head {
  *  limitations under the License.
 **/
     
+/**
+ * A provider for Codestrate fragment type icons
+ */
 window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
     provides(iconIdentifier){
         return iconIdentifier.startsWith("code-fragment:");
@@ -397,7 +403,10 @@ IconRegistry.registerProvider(new FragmentLogoIconProvider());
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+
+/**
+ * A provider for webstrates icons
+ */
 window.WSIconProvider = class WSIconProvider {
     constructor(){
         this.supportedTypes = [
@@ -658,7 +667,7 @@ IconRegistry.registerProvider(new WSIconProvider());
  *  MaterialDesignOutlinedIconProvider
  *  A provider for registering material icons
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021, 2024 Rolf Bagge, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -673,7 +682,10 @@ IconRegistry.registerProvider(new WSIconProvider());
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+
+/**
+ * A provider for registering material icons in the outlined variation
+ */
 window.MaterialDesignOutlinedIconProvider = class MaterialDesignOutlinedIconProvider {
     provides(iconIdentifier){
         return iconIdentifier.startsWith("mdc:");
@@ -2447,6 +2459,9 @@ ButtonSystem.Button = class Button {
  *  limitations under the License.
 **/
     
+/**
+ * Provides MDC buttons
+ */
 ButtonSystem.MaterialBuilder = class MaterialBuilder {
     static buildButton(button) {
         let buttonHtml = WebstrateComponents.Tools.loadTemplate("ButtonSystem_MaterialDesign_Button");
@@ -4951,7 +4966,10 @@ TreeGenerator.registerDecorator(TreeBrowserWPMDecorator, 10);
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+   
+/**
+ * Manage revisions of a Webstrate in a visual editor
+ */
 window.RevisionBrowser = class RevisionBrowser {
     constructor() {
         let self = this;
@@ -5369,7 +5387,10 @@ window.RevisionBrowser = class RevisionBrowser {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+
+/**
+ * Visual browser for installing WPM packages into a Webstrate
+ */
 window.WPMPackageBrowser = class WPMPackageBrowser {
     constructor(autoOpen=true) {
         let self = this;
@@ -6781,7 +6802,7 @@ WebstrateComponents.PermissionManager.singleton = new PermissionManager();
                 <script id="webstrate-permission-manager-ui-script" type="disabled">
 /**
  *  Permission Manager UI
- *  UI code for controller permissions on a Webstrate
+ *  UI code for controlling permissions on a Webstrate
  * 
  *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
@@ -6799,6 +6820,9 @@ WebstrateComponents.PermissionManager.singleton = new PermissionManager();
  *  limitations under the License.
 **/
     
+/**
+ * UI code for controlling permissions on a Webstrate
+ */
 class PermissionManagerUI {
     constructor() {
         let self = this;
@@ -7196,10 +7220,9 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
 
                 <script id="head-editor-component-script" type="disabled">
 /**
- *  Package Browser
- *  Visual browser for installing WPM packages into a Webstrate
+ *  Head Editor
  * 
- *  Copyright 2022 Rolf Bagge & Janus B. Kristensen, CAVI,
+ *  Copyright 2022, 2024 Rolf Bagge & Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -7215,6 +7238,9 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
  *  limitations under the License.
  **/
 
+/**
+ * Editor for adding/removing and changing common document attributes
+ */
 window.HeadEditorComponent = class HeadEditorComponent {
     constructor(autoOpen = true) {
         let self = this;

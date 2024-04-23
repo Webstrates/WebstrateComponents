@@ -2,7 +2,7 @@
  *  MaterialDesignOutlinedIconProvider
  *  A provider for registering material icons
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021, 2024 Rolf Bagge, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+
+/**
+ * A provider for registering material icons in the outlined variation
+ */
 window.MaterialDesignOutlinedIconProvider = class MaterialDesignOutlinedIconProvider {
     provides(iconIdentifier){
         return iconIdentifier.startsWith("mdc:");

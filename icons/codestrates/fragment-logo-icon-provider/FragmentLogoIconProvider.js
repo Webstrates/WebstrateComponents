@@ -18,6 +18,9 @@
  *  limitations under the License.
 **/
     
+/**
+ * A provider for Codestrate fragment type icons
+ */
 window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
     provides(iconIdentifier){
         return iconIdentifier.startsWith("code-fragment:");

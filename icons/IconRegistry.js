@@ -18,6 +18,9 @@
  *  limitations under the License.
 **/
 
+/**
+ * Registers icons and uses them on the page
+ */
 window.IconRegistry = class IconRegistry {   
     static registerProvider(iconProvider){
         IconRegistry.iconProviders.push(iconProvider);

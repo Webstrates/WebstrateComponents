@@ -17,7 +17,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
 **/
-    
+
+/**
+ * Visual browser for installing WPM packages into a Webstrate
+ */
 window.WPMPackageBrowser = class WPMPackageBrowser {
     constructor(autoOpen=true) {
         let self = this;

@@ -1,6 +1,6 @@
 /**
  *  Permission Manager UI
- *  UI code for controller permissions on a Webstrate
+ *  UI code for controlling permissions on a Webstrate
  * 
  *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
@@ -18,6 +18,9 @@
  *  limitations under the License.
 **/
     
+/**
+ * UI code for controlling permissions on a Webstrate
+ */
 class PermissionManagerUI {
     constructor() {
         let self = this;
