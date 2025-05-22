@@ -6558,8 +6558,10 @@ window.WPMPackageBrowser = class WPMPackageBrowser {
  *  Permission Manager
  *  Low-level interface to control permissions on a Webstrate
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen
+ *  Copyright 2025, Janus B. Kristensen, CAVI
  *  Center for Advanced Visualization and Interacion, Aarhus University
+ *  
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -6635,17 +6637,9 @@ class PermissionManager {
     }
 
     checkAnonymousUser() {
-        //Remove anonymous if last user
-        if(this.permissions.length === 1 && this.permissions[0].username === "anonymous" && this.permissions[0].provider === "") {
-            this.permissions.pop();
-        }
-
-        //Only add anonymous if another user is present
-        if(this.permissions.length > 0 && this.permissions.find((perm)=>{
-            return perm.username === "anonymous" && perm.provider === "";
-        }) == null) {
-            //no anonymous permission, adding with no rights
-            this.permissions.push(new Permission("anonymous", "", ""));
+        if(this.permissions.length === 0){
+            // STUB: We currently have no way of knowing the default permissions on this server so we assume "arw" for anonymous
+            this.permissions.push(new Permission("anonymous", "", "arw"));
         }
     }
 
@@ -6718,7 +6712,7 @@ class PermissionManager {
             }));
 
             if(!canAdmin) {
-                if(confirm("After saving permissions, you will no longer be able to change permissions.\nContinue?")) {
+                if(confirm("You are removing your own admin permission.\nContinue?")) {
                     document.querySelector("html").setAttribute("data-auth", permissionsJson, {approved: true});
                     return true;
                 } else {
@@ -6729,6 +6723,10 @@ class PermissionManager {
                 return true;
             }
         }
+    }
+    
+    static isAdmin(){
+        return webstrate.user.permissions.includes("a");
     }
 }
 
@@ -6804,7 +6802,8 @@ WebstrateComponents.PermissionManager.singleton = new PermissionManager();
  *  Permission Manager UI
  *  UI code for controlling permissions on a Webstrate
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen
+ *  Copyright 2025, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -6844,6 +6843,11 @@ class PermissionManagerUI {
         this.html.querySelector("button.addPermission").addEventListener("click", ()=>{
             self.showAddDialog();
         });
+                
+        this.html.querySelector("button.addMe").addEventListener("click", ()=>{
+            let permission = new WebstrateComponents.Permission(webstrate.user.username, webstrate.user.provider, "arw");
+            WebstrateComponents.PermissionManager.singleton.setPermission(permission);
+        });
 
         this.html.querySelector("button.savePermissions").addEventListener("click", ()=>{
             if(WebstrateComponents.PermissionManager.singleton.save()) {
@@ -6854,6 +6858,12 @@ class PermissionManagerUI {
     
     setTopLevelComponent(component){
         this.topLevelComponent = component;
+    }
+    
+    open() {
+        let parent = document.createElement("transient");
+        parent.appendChild(this.html);
+        this.topLevelComponent.appendChild(parent);
     }
 
     async showAddDialog() {
@@ -6896,10 +6906,12 @@ class PermissionManagerUI {
         //Empty tbody
         while(tbody.firstChild) tbody.firstChild.remove();
 
+        let selfInList = false;
         permissions.forEach((perm)=>{
             let permissionTpl = WebstrateComponents.Tools.loadTemplate("#webstrate-components-permission-user-tpl");
 
-            let prefix = perm.username+"_"+perm.provider+"_";
+            let prefix = perm.username.replaceAll(" ","-")+"_"+perm.provider+"_";
+            if (perm.username === webstrate.user.username && perm.provider === webstrate.user.provider) selfInList = true;
 
             //Rename all input id and name attributes
             permissionTpl.querySelectorAll("input").forEach((input)=>{
@@ -6909,7 +6921,7 @@ class PermissionManagerUI {
                 input.addEventListener("input", ()=>{
                     perm.setPermission(input.value);
                 });
-            })
+            });
 
             //Rename all label for attributes
             permissionTpl.querySelectorAll("label").forEach((label)=>{
@@ -6950,6 +6962,11 @@ class PermissionManagerUI {
 
             tbody.appendChild(permissionTpl);
         });
+
+        // Show an addMe button if logged in and not already in list
+        if (webstrate.user.provider){
+            this.html.querySelector(".addMe").style.display = selfInList?"none":"initial";
+        }
     }
 }
 
@@ -6979,10 +6996,17 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
             <tfoot>
                 <tr class="mdc-data-table__row mdc-data-table__footer-row">
                     <td colspan='6'>
+                        <button class="mdc-button mdc-button--touch addMe">
+                            <div class="mdc-button__ripple"></div>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">person_add</i>
+                            <span class="mdc-button__label">Add My User</span>
+                            <div class="mdc-button__touch"></div>
+                        </button>                        
+                        
                         <button class="mdc-button mdc-button--touch addPermission">
                             <div class="mdc-button__ripple"></div>
                             <i class="material-icons mdc-button__icon" aria-hidden="true">person_add</i>
-                            <span class="mdc-button__label">Add User</span>
+                            <span class="mdc-button__label">Add Another User</span>
                             <div class="mdc-button__touch"></div>
                         </button>                        
                     </td>
@@ -7070,7 +7094,7 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
         <td class="mdc-data-table__cell">
             <div class="mdc-form-field">
                 <div class="mdc-radio">
-                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-admin" value="a" name="webstrate-components-permission-adduser-permissions">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-admin" value="a" name="webstrate-components-permission-adduser-permissions" checked>
                     <div class="mdc-radio__background">
                         <div class="mdc-radio__outer-circle"></div>
                         <div class="mdc-radio__inner-circle"></div>
@@ -7103,7 +7127,7 @@ window.WebstrateComponents.PermissionManagerUI = PermissionManagerUI;
             </div><br />
             <div class="mdc-form-field">
                 <div class="mdc-radio">
-                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-none" value="" name="webstrate-components-permission-adduser-permissions" checked>
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-none" value="" name="webstrate-components-permission-adduser-permissions">
                     <div class="mdc-radio__background">
                         <div class="mdc-radio__outer-circle"></div>
                         <div class="mdc-radio__inner-circle"></div>

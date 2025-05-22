@@ -2,8 +2,10 @@
  *  Permission Manager
  *  Low-level interface to control permissions on a Webstrate
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen
+ *  Copyright 2025, Janus B. Kristensen, CAVI
  *  Center for Advanced Visualization and Interacion, Aarhus University
+ *  
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -79,17 +81,9 @@ class PermissionManager {
     }
 
     checkAnonymousUser() {
-        //Remove anonymous if last user
-        if(this.permissions.length === 1 && this.permissions[0].username === "anonymous" && this.permissions[0].provider === "") {
-            this.permissions.pop();
-        }
-
-        //Only add anonymous if another user is present
-        if(this.permissions.length > 0 && this.permissions.find((perm)=>{
-            return perm.username === "anonymous" && perm.provider === "";
-        }) == null) {
-            //no anonymous permission, adding with no rights
-            this.permissions.push(new Permission("anonymous", "", ""));
+        if(this.permissions.length === 0){
+            // STUB: We currently have no way of knowing the default permissions on this server so we assume "arw" for anonymous
+            this.permissions.push(new Permission("anonymous", "", "arw"));
         }
     }
 
@@ -162,7 +156,7 @@ class PermissionManager {
             }));
 
             if(!canAdmin) {
-                if(confirm("After saving permissions, you will no longer be able to change permissions.\nContinue?")) {
+                if(confirm("You are removing your own admin permission.\nContinue?")) {
                     document.querySelector("html").setAttribute("data-auth", permissionsJson, {approved: true});
                     return true;
                 } else {
@@ -173,6 +167,10 @@ class PermissionManager {
                 return true;
             }
         }
+    }
+    
+    static isAdmin(){
+        return webstrate.user.permissions.includes("a");
     }
 }
 

@@ -2,7 +2,8 @@
  *  Permission Manager UI
  *  UI code for controlling permissions on a Webstrate
  * 
- *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen, CAVI,
+ *  Copyright 2020, 2021 Rolf Bagge, Janus B. Kristensen
+ *  Copyright 2025, Janus B. Kristensen, CAVI,
  *  Center for Advanced Visualization and Interacion, Aarhus University
  *    
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +43,11 @@ class PermissionManagerUI {
         this.html.querySelector("button.addPermission").addEventListener("click", ()=>{
             self.showAddDialog();
         });
+                
+        this.html.querySelector("button.addMe").addEventListener("click", ()=>{
+            let permission = new WebstrateComponents.Permission(webstrate.user.username, webstrate.user.provider, "arw");
+            WebstrateComponents.PermissionManager.singleton.setPermission(permission);
+        });
 
         this.html.querySelector("button.savePermissions").addEventListener("click", ()=>{
             if(WebstrateComponents.PermissionManager.singleton.save()) {
@@ -52,6 +58,12 @@ class PermissionManagerUI {
     
     setTopLevelComponent(component){
         this.topLevelComponent = component;
+    }
+    
+    open() {
+        let parent = document.createElement("transient");
+        parent.appendChild(this.html);
+        this.topLevelComponent.appendChild(parent);
     }
 
     async showAddDialog() {
@@ -94,10 +106,12 @@ class PermissionManagerUI {
         //Empty tbody
         while(tbody.firstChild) tbody.firstChild.remove();
 
+        let selfInList = false;
         permissions.forEach((perm)=>{
             let permissionTpl = WebstrateComponents.Tools.loadTemplate("#webstrate-components-permission-user-tpl");
 
-            let prefix = perm.username+"_"+perm.provider+"_";
+            let prefix = perm.username.replaceAll(" ","-")+"_"+perm.provider+"_";
+            if (perm.username === webstrate.user.username && perm.provider === webstrate.user.provider) selfInList = true;
 
             //Rename all input id and name attributes
             permissionTpl.querySelectorAll("input").forEach((input)=>{
@@ -107,7 +121,7 @@ class PermissionManagerUI {
                 input.addEventListener("input", ()=>{
                     perm.setPermission(input.value);
                 });
-            })
+            });
 
             //Rename all label for attributes
             permissionTpl.querySelectorAll("label").forEach((label)=>{
@@ -148,6 +162,11 @@ class PermissionManagerUI {
 
             tbody.appendChild(permissionTpl);
         });
+
+        // Show an addMe button if logged in and not already in list
+        if (webstrate.user.provider){
+            this.html.querySelector(".addMe").style.display = selfInList?"none":"initial";
+        }
     }
 }
 

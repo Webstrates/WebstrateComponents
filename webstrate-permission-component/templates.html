@@ -20,10 +20,17 @@
             <tfoot>
                 <tr class="mdc-data-table__row mdc-data-table__footer-row">
                     <td colspan='6'>
+                        <button class="mdc-button mdc-button--touch addMe">
+                            <div class="mdc-button__ripple"></div>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">person_add</i>
+                            <span class="mdc-button__label">Add My User</span>
+                            <div class="mdc-button__touch"></div>
+                        </button>                        
+                        
                         <button class="mdc-button mdc-button--touch addPermission">
                             <div class="mdc-button__ripple"></div>
                             <i class="material-icons mdc-button__icon" aria-hidden="true">person_add</i>
-                            <span class="mdc-button__label">Add User</span>
+                            <span class="mdc-button__label">Add Another User</span>
                             <div class="mdc-button__touch"></div>
                         </button>                        
                     </td>
@@ -111,7 +118,7 @@
         <td class="mdc-data-table__cell">
             <div class="mdc-form-field">
                 <div class="mdc-radio">
-                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-admin" value="a" name="webstrate-components-permission-adduser-permissions">
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-admin" value="a" name="webstrate-components-permission-adduser-permissions" checked>
                     <div class="mdc-radio__background">
                         <div class="mdc-radio__outer-circle"></div>
                         <div class="mdc-radio__inner-circle"></div>
@@ -144,7 +151,7 @@
             </div><br />
             <div class="mdc-form-field">
                 <div class="mdc-radio">
-                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-none" value="" name="webstrate-components-permission-adduser-permissions" checked>
+                    <input class="mdc-radio__native-control" type="radio" id="webstrate-components-permission-adduser-none" value="" name="webstrate-components-permission-adduser-permissions">
                     <div class="mdc-radio__background">
                         <div class="mdc-radio__outer-circle"></div>
                         <div class="mdc-radio__inner-circle"></div>
