@@ -13,7 +13,7 @@
                                 <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                             </span>
                             <span class="mdc-tab__ripple"></span>
-                        </button>        
+                        </button>
                         <button class="mdc-tab" role="tab">
                             <span class="mdc-tab__content">
                                 <span class="mdc-tab__icon material-icons" aria-hidden="true">settings</span>
@@ -23,14 +23,14 @@
                                 <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                             </span>
                             <span class="mdc-tab__ripple"></span>
-                        </button>                           
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div id="packageBrowserMain"></div>
-    </div>    
+    </div>
 </template>
 
 <template id="packageBrowserSystem">
@@ -38,7 +38,7 @@
         <div id="wpm-info">
             <h2>Webstrate Package Manager</h2>
             <table>
-                
+
                 <tr><th>Name</th><td class="name">Unknown Platform</td></tr>
                 <tr><th>API</th><td class="version">Legacy</td></tr>
                 <tr><th>Specific Revision</th><td class="revision">?</td></tr>
@@ -59,9 +59,12 @@
                 <b>Be careful, you were warned!</b>
             </p>
 
-            <div class="editor">            
+            <textarea class="editor" rows="10" cols="50"></textarea>
+            <div class="buttons">
+                <button class="mdc-button mdc-button--raised bootloader-save">Save Boot Config</button>
+                <button class="mdc-button mdc-button--raised bootloader-reset">Reset Boot Config</button>
             </div>
-        </div>            
+        </div>
     </div>
 </template>
 
@@ -73,13 +76,13 @@
             The boot configuration contains a syntax error and is guaranteed to crash the page!<br />
             Please correct the errors before saving.
         </p>
-    </div>       
+    </div>
 </template>
 
 <template id="packageBrowserPackageItemError">
     <tr class="mdc-data-table__row">
         <td>
-           ? 
+           ?
         </td>
     </tr>
 </template>
@@ -97,7 +100,7 @@
                 </div>
                 <div class="mdc-checkbox__ripple"></div>
             </div>
-        </td>        
+        </td>
         <td class="mdc-data-table__cell mdc-data-table__cell--checkbox package-embedded">
             <div class="mdc-checkbox mdc-data-table__row-checkbox" data-mdc-auto-init="MDCCheckbox">
                 <input type="checkbox" class="mdc-checkbox__native-control" />
@@ -109,17 +112,17 @@
                 </div>
                 <div class="mdc-checkbox__ripple"></div>
             </div>
-        </td>   
+        </td>
         <th class="mdc-data-table__cell package-name" scope="row">[unnamed]</th>
         <td class="mdc-data-table__cell package-version">[version-less]</td>
         <td class="mdc-data-table__cell package-license"></td>
         <td class="mdc-data-table__cell package-description"></td>
         <td class="mdc-data-table__cell package-options"></td>
-    </tr>    
+    </tr>
 </template>
 
-<template id="packageBrowserRepositoryItem_repository">    
-    <thead>        
+<template id="packageBrowserRepositoryItem_repository">
+    <thead>
         <tr>
             <th class="package-required mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-require" role="columnheader" scope="col" title="Require entire repository at boot">
                 <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Automatically require at boot">
@@ -132,7 +135,7 @@
                         <div class="mdc-checkbox__mixedmark"></div>
                     </div>
                     <div class="mdc-checkbox__ripple"></div>
-                </div>                                      
+                </div>
             </th>
             <th class="package-embedded mdc-data-table__header-cell mdc-data-table__header-cell--checkbox repository-embed" role="columnheader" scope="col">
                 <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected" title="Embed locally into webstrate">
@@ -145,8 +148,8 @@
                         <div class="mdc-checkbox__mixedmark"></div>
                     </div>
                     <div class="mdc-checkbox__ripple"></div>
-                </div>                            
-            </th>            
+                </div>
+            </th>
             <th class="package-name mdc-data-table__header-cell" role="columnheader" scope="col">Package</th>
             <th class="mdc-data-table__header-cell package-version" role="columnheader" scope="col">Version</th>
             <th class="mdc-data-table__header-cell package-license" role="columnheader" scope="col">License</th>
@@ -165,7 +168,7 @@
 
 <!-- Repository List -->
 <template id="packageBrowserRepositoryList">
-    <div class="tabcontent">        
+    <div class="tabcontent">
         <div class="split">
             <ul class="mdc-list mdc-list--two-line repository-overview" data-mdc-auto-init="MDCList">
                 <!-- entries -->
@@ -198,7 +201,7 @@
           <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
             Identification token - e.g. 'cauldron-repos'
           </div>
-        </div>            
+        </div>
         WPM will search for the repository in:
         <ul style="margin:0">
             <li>/[identifier]/?raw - using Webstrates</li>
@@ -223,7 +226,7 @@
           <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
             Repository URL - e.g. 'https://mydomain.com/awesome-repos'
           </div>
-        </div>            
+        </div>
         <ul style="margin:0">
             <li>Absolute https://mydomain.com/awesome-repos</li>
             <li>Relative ./something/index.html</li>
@@ -248,7 +251,7 @@
           <div id="repo-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
             Repository Override - e.g. '/something/?raw'
           </div>
-        </div>            
+        </div>
         <ul style="margin:0">
             <li>Absolute https://mydomain.com/awesome-repos</li>
             <li>Relative ./something/index.html</li>
