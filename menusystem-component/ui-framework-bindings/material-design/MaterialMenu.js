@@ -158,7 +158,7 @@ window.MenuSystem.MaterialMenuBuilder = class MaterialMenuBuilder extends MenuSy
                         });
                 }
             }
-            menu.html.style.zIndex = 9000;           
+            menu.html.style.zIndex = 9000000;           
         }
 
         if (menu.layoutDirection==MenuSystem.Menu.LayoutDirection.HORIZONTAL){
