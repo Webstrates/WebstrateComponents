@@ -130,7 +130,6 @@ html {
 
         >.docking-area-component {
             contain: none;
-            position: relative;
             flex: 0 0 auto;
             min-width: 20vw;
             min-height: 20vh;
@@ -169,6 +168,7 @@ html {
     }
     
     .docking-area-component {
+        position: relative;        
         z-index: 1000000;
     }
     

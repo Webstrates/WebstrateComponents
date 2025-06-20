@@ -932,7 +932,6 @@ html {
           border: 1px solid rgba(128, 128, 128, 0.1); }
     html[transient-data-docking-area-component-mode~="edge"] > .docking-area-component {
       contain: none;
-      position: relative;
       flex: 0 0 auto;
       min-width: 20vw;
       min-height: 20vh; }
@@ -954,6 +953,7 @@ html {
       html[transient-data-docking-area-component-mode~="edge"][transient-data-docking-area-component-mode~="bottom"] > .docking-area-component {
         order: 2; }
   html .docking-area-component {
+    position: relative;
     z-index: 1000000; }
   html .docking-area-visualizer {
     position: fixed;
