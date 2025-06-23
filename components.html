@@ -879,7 +879,6 @@ html {
     display: none; }
   html[transient-data-docking-area-component-mode~="maximized"] .docking-area-component {
     position: fixed !important;
-    display: block;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -954,7 +953,8 @@ html {
         order: 2; }
   html .docking-area-component {
     position: relative;
-    z-index: 1000000; }
+    z-index: 1000000;
+    display: block; }
   html .docking-area-visualizer {
     position: fixed;
     top: 0;

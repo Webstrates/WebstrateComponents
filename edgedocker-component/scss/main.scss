@@ -57,7 +57,6 @@ html {
 
         .docking-area-component {
             position: fixed !important;
-            display: block;
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
@@ -170,6 +169,7 @@ html {
     .docking-area-component {
         position: relative;        
         z-index: 1000000;
+        display: block;
     }
     
     .docking-area-visualizer {
