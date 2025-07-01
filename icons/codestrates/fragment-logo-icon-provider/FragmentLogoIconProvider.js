@@ -42,6 +42,7 @@ window.FragmentLogoIconProvider = class FragmentLogoIconProvider {
         let supportedTypes = [
             "text/html",
             "text/javascript",
+            "text/slopscript+babel",
             "text/javascript+babel",
             "text/css",
             "text/x-typescript",
