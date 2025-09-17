@@ -57,20 +57,24 @@ class PermissionManager {
 
     loadPermissions() {
         let self = this;
-
-        let permissionJson = JSON.parse(document.querySelector("html").getAttribute("data-auth"));
-
         self.permissions = [];
 
-        if(permissionJson != null) {
-            permissionJson.forEach((perm)=>{
-                if(perm.webstrateId != null) {
-                    //Inherit permissions
-                    console.warn("This webstrate is inheriting permissions (Unsupported) from: ", perm.webstrateId);
-                } else {
-                    self.permissions.push(new Permission(perm.username, perm.provider, perm.permissions));
-                }
-            });
+        try {
+            const permissionJson = JSON.parse(document.querySelector("html").getAttribute("data-auth"));
+
+            if (permissionJson != null) {
+                permissionJson.forEach((perm) => {
+                    if (perm.webstrateId != null) {
+                        //Inherit permissions
+                        console.warn("This webstrate is inheriting permissions (Unsupported) from: ", perm.webstrateId);
+                    } else {
+                        self.permissions.push(new Permission(perm.username, perm.provider, perm.permissions));
+                    }
+                });
+            }
+        } catch (e) {
+            console.warn("Failed to parse permissions: ", e);
+            alert("Warning: Failed to parse permissions. Saving will overwrite existing malformed permissions. See console for details.");
         }
 
         this.checkAnonymousUser();
