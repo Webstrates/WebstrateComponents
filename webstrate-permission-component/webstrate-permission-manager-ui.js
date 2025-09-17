@@ -40,17 +40,22 @@ class PermissionManagerUI {
 
         this.reload(WebstrateComponents.PermissionManager.singleton.permissions);
 
-        this.html.querySelector("button.addPermission").addEventListener("click", ()=>{
+        this.html.querySelector("button.addAnonymous").addEventListener("click", () => {
+            const permission = new WebstrateComponents.Permission("anonymous", "", "arw");
+            WebstrateComponents.PermissionManager.singleton.setPermission(permission);
+        });
+
+        this.html.querySelector("button.addPermission").addEventListener("click", () => {
             self.showAddDialog();
         });
-                
-        this.html.querySelector("button.addMe").addEventListener("click", ()=>{
+
+        this.html.querySelector("button.addMe").addEventListener("click", () => {
             let permission = new WebstrateComponents.Permission(webstrate.user.username, webstrate.user.provider, "arw");
             WebstrateComponents.PermissionManager.singleton.setPermission(permission);
         });
 
-        this.html.querySelector("button.savePermissions").addEventListener("click", ()=>{
-            if(WebstrateComponents.PermissionManager.singleton.save()) {
+        this.html.querySelector("button.savePermissions").addEventListener("click", () => {
+            if (WebstrateComponents.PermissionManager.singleton.save()) {
                 EventSystem.triggerEvent("PermissionManagerUI.Saved", this);
             }
         });
@@ -107,11 +112,13 @@ class PermissionManagerUI {
         while(tbody.firstChild) tbody.firstChild.remove();
 
         let selfInList = false;
+        let anonymousInList = false;
         permissions.forEach((perm)=>{
             let permissionTpl = WebstrateComponents.Tools.loadTemplate("#webstrate-components-permission-user-tpl");
 
             let prefix = perm.username.replaceAll(" ","-")+"_"+perm.provider+"_";
             if (perm.username === webstrate.user.username && perm.provider === webstrate.user.provider) selfInList = true;
+            if (perm.username === "anonymous" && perm.provider === "") anonymousInList = true;
 
             //Rename all input id and name attributes
             permissionTpl.querySelectorAll("input").forEach((input)=>{
@@ -164,9 +171,8 @@ class PermissionManagerUI {
         });
 
         // Show an addMe button if logged in and not already in list
-        if (webstrate.user.provider){
-            this.html.querySelector(".addMe").style.display = selfInList?"none":"initial";
-        }
+        this.html.querySelector(".addMe").style.display = webstrate.user.provider && selfInList ? "none" : "initial";
+        this.html.querySelector(".addAnonymous").style.display = anonymousInList ? "none" : "initial";
     }
 }
 
